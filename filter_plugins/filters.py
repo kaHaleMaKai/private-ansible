@@ -1,6 +1,7 @@
 from itertools import chain
+import re
 
-def _get_in(d, ks, **kwargs):
+def do_get_in(d, ks, **kwargs):
     if type(ks) == str:
         ks = ks.split(".")
     elif type(ks) not in (list, tuple):
@@ -13,7 +14,7 @@ def _get_in(d, ks, **kwargs):
 
 def _key_exists(d, ks):
     try:
-        val = _get_in(d, ks)
+        val = do_get_in(d, ks)
     except KeyError:
         return False
     else:
@@ -21,7 +22,7 @@ def _key_exists(d, ks):
 
 def _byval(d, ks, val):
     try:
-        ret = _get_in(d, ks)
+        ret = do_get_in(d, ks)
     except KeyError:
         return False
     else:
@@ -30,7 +31,7 @@ def _byval(d, ks, val):
         else:
             return ret == val
 
-def _has_cmd(li, name):
+def do_has_cmd(li, name):
     return do_byval(do_byval(li, "rc", 0),
                         "item.name", name)
 
@@ -46,11 +47,15 @@ def do_byval(li, ks, val):
         else:
             return {}
 
+def do_camel(string):
+    return re.sub('(^|_+)([a-z])', lambda m: m.group(2).upper(), string)
+
 class FilterModule(object):
     def filters(self):
         return {
-            'get_in': _get_in,
+            'get_in': do_get_in,
             'byval': do_byval,
-            'has_cmd': _has_cmd
+            'has_cmd': do_has_cmd,
+            'camel': do_camel
         }
 
