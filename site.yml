@@ -1,5 +1,4 @@
 - hosts: my-computers
-  remote_user: lars
   vars:
     reinstall_awesome: no
     reinstall_heidi: no
@@ -12,7 +11,9 @@
   - role: desktop-commons
     sudo: yes
     tags: desktop-commons
+    remote_user: lars
   - role: gitconfig
     sudo: no
     tags: git
+    remote_user: lars
 
