@@ -1,0 +1,20 @@
+- include: build-deps.yml
+
+- name: check if awesome has been installed
+  shell: >
+    type -p awesome >/dev/null 2>&1
+  register: awesome_installed
+
+- include: download.yml
+  when: awesome_installed.rc == 0
+
+- include: make.yml
+  when: awesome_installed.rc == 0
+
+- include: config.yml
+  tags: configure-awesome
+  when: awesome_installed.rc == 0
+
+- include: vicious.yml
+  tags: configure-awesome
+  when: awesome_installed.rc == 0

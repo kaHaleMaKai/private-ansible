@@ -1,0 +1,38 @@
+basic_packages:
+  - curl
+  - feh
+  - git
+  - htop
+  - libmysqlclient-dev
+  - mirage
+  - nmap
+  - parallel
+  - redshift
+  - screen
+  - subversion
+  - vim-gtk
+  - wget
+  - whois
+  - wine
+  - youtube-dl
+  - zsh
+  - gnupg2
+#  - lyx
+#  - texlive-base
+#  - texlive-extra-utils
+#  - texlive-font-utils
+#  - texlive-fonts-recommended
+#  - texlive-latex-base
+#  - texlive-latex-extra
+#  - texlive-latex-recommended
+#  - texlive-math-extra
+#  - texlive-pictures
+#  - texlive-pstricks
+#  - texlive-fonts-extra
+#  - texlive-formats-extra
+#  - texlive-generic-extra
+#  - texlive-plain-extra
+#  - texlive-publishers
+
+# vim: set ft=yaml
+# vim: ft=yaml

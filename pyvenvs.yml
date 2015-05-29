@@ -1,0 +1,5 @@
+- hosts: pyvenvs
+  roles:
+  - role: pyvenvs
+    tags: pyvenvs
+

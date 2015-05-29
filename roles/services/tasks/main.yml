@@ -1,0 +1,8 @@
+- name: configure services
+  service: name={{ item.name }}
+           state={{ item.state|default(omit) }}
+           enabled={{ item.enabled }}
+           pattern={{ item.pattern|default(omit) }}
+           arguments={{ item.arguments|default(omit) }}
+  with_items:
+    "{{ services }}"

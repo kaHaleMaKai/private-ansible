@@ -1,0 +1,54 @@
+---
+- name: add primary groups to system
+  group: name={{ item.name }}
+         state={{ item.state|default('present') }}
+         system={{ item.system|default('no') }}
+  with_items:
+    "{{ user_management.users|default([]) }}"
+
+- name: add secondary groups to system
+  group: name={{ item.name }}
+         state={{ item.state|default('present') }}
+         system={{ item.system|default('no') }}
+  with_items:
+    "{{ user_management.groups|default([]) }}"
+
+- name: add users to system
+  user: name={{ item.name }}
+        group={{ item.group|default(item.name) }}
+        groups={{ item.groups|default(omit) }}
+        append={{ item.append|default('yes') }}
+        comment={{ item.comment|default(omit) }}
+        createhome={{ item.createhome|default('no') }}
+        expires={{ item.expires|default(omit) }}
+        force={{ item.force|default(omit) }}
+        generate_ssh_key={{ item.generate_ssh_key|default(omit) }}
+        home={{ item.home|default('/nonexistent') }}
+        login_class={{ item.login_class|default(omit) }}
+        move_home={{ item.move_home|default(omit) }}
+        non_unique={{ item.non_unique|default(omit) }}
+        password={{ item.password|default(omit) }}
+        remove={{ item.remove|default(omit) }}
+        shell={{ item.shell|default('/bin/false') }}
+        skeleton={{ item.skeleton|default(omit) }}
+        ssh_key_bits={{ item.ssh_key_bits|default(omit) }}
+        ssh_key_comment={{ item.ssh_key_comment|default(omit) }}
+        ssh_key_file={{ item.ssh_key_file|default(omit) }}
+        ssh_key_passphrase={{ item.ssh_key_passphrase|default(omit) }}
+        ssh_key_type={{ item.ssh_key_type|default(omit) }}
+        state={{ item.state|default('present') }}
+        system={{ item.system|default('no') }}
+        uid={{ item.uid|default(omit) }}
+        update_password={{ item.update_password|default(omit) }}
+  with_items:
+    "{{ user_management.users|default([]) }}"
+
+- name: add .ssh directories for the inidivual users
+  file: path="{{ item.home }}/.ssh"
+        state=directory
+        owner={{ item.name }}
+        group={{ item.group|default(item.name) }}
+        mode=0700
+  when: item.home is defined and item.home != "/nonexistent"
+  with_items:
+    "{{ user_management.users|default([]) }}"

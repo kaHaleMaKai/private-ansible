@@ -1,0 +1,29 @@
+#---
+
+#- name: enlist all dirs below files
+  #command: ls '{{ playbook_dir }}/roles/fonts/files'
+  #register: subdirs
+  #delegate_to: localhost
+
+#- name: enlist all fonts below files
+  #shell: >
+    #ls '{{ playbook_dir }}/roles/fonts/files/{{ item.stdout }}'|xargs readlink -e
+  #register: fonts
+  #delegate_to: localhost
+
+#- name: setup fonts path
+  #file: path=
+        #mode={{ fonts.path_mode|default(defaults.path_mode) }}
+        #owner={{ fonts.owner|default(defaults.owner) }}
+        #group={{ fonts.group|default(defaults.group) }}
+        #state=directory
+  #sudo: yes
+  #with_items:
+    #"{{ subdirs.stdout }}"
+
+#- name: copy fonts into font subdir
+  #copy: src='item.stdout'
+        #dest={{ fonts.path|default(default_font_path) }}/{{ item }}
+  #with_items:
+    #"{{ subdirs.stdout }}"
+

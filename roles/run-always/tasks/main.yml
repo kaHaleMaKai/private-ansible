@@ -1,0 +1,53 @@
+- name: check for installed programs
+  tags:
+    - always
+  shell: |
+          {% if item.findby is not defined or item.findby in ('name', 'cmd') %}
+              command -v "{{ item.cmd | default(item.name) }}" >/dev/null 2>&1
+          {% elif item.findby == 'directory' %}
+              test -d "{{ item.path }}"
+          {% elif item.findby == 'file' %}
+              test -f "{{ item.path }}"
+          {% elif item.findby == 'custom' %}
+              {{ item.shellcmd }}
+          {% endif %}
+  ignore_errors: yes
+  register: all_cmds
+  with_items:
+    list_of_commands
+
+- name: asd
+  tags: asd
+  debug: var="{{ all_cmds.results|selectattr('rc')|list }}"
+
+
+- name: add apt repository keys
+  apt_key: keyserver={{ item.server }}
+           id={{ item.id }}
+           state={{ item.state|default('present') }}
+  with_items:
+    - server: keys.gnupg.net
+      owner: percona
+      id: 1C4CBDCDCD2EFD2A
+    - server: keyserver.ubuntu.com
+      id: EEA14886
+
+- name: add apt repositories to local list
+  apt_repository: repo="{{ item.1 }} {{ item.0.src }}"
+                  state="{{ item.0.state|default('present') }}"
+                  update_cache=no
+  with_subelements:
+    -
+      - src: "http://repo.percona.com/apt trusty main"
+        addr: ["deb", "deb-src"]
+      - src: "http://repository.spotify.com stable non-free"
+        addr: ["deb"]
+        state: absent
+    - addr
+
+- name: update apt cache
+  tags:
+    - always
+    - update-cache
+  apt: update_cache=yes
+  sudo: yes

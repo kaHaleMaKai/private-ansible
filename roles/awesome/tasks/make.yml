@@ -1,0 +1,24 @@
+- name: run make 
+  command: make
+  args:
+    chdir: "{{ awesome.build_dir }}"
+
+- name: run cmake on awesome tarball
+  command: >
+    cmake
+    {% for k,v in awesome.build_params.iteritems() %}-{{k}}={{v}} {% endfor %}
+    build/.
+  args:
+    chdir: "{{ awesome.build_dir }}"
+
+- name: install awesome
+  command: make install
+  sudo: yes
+  args:
+    chdir: "{{ awesome.build_dir }}"
+
+- name: remove source files
+  file: path="{{ item }}"
+  with_items:
+    - "{{ awesome.build_dir }}"
+    - "{{ awesome.build_dir }}.tar.bz2"

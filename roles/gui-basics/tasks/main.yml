@@ -1,0 +1,71 @@
+- name: install most basic gui packages
+  apt: name={{ item }}
+       state={{ item.state|default('latest') }}
+  sudo: yes
+  with_items:
+    - chromium-browser
+    - gksu
+    - libreoffice
+    - padevchooser
+    - pavucontrol
+    - pepperflashplugin-nonfree
+    - shutter
+    - thunderbird
+    - xfce4-mixer
+    - zim
+
+- name: download skype deb package
+  tags:
+    - skype
+  get_url: |
+            url="http://download.skype.com/linux/skype-ubuntu-precise_4.3.0.37-1_i386.deb"
+            dest="/tmp/skype.deb"
+  when: not all_cmds.results|has_cmd('skype')
+
+- name: install skype from deb package
+  tags:
+    - skype
+  apt: deb=/tmp/skype.deb
+  when: not all_cmds.results|has_cmd('skype')
+
+- name: download spotify deb package
+  tags:
+    - spotify
+  get_url: |
+    url="https://dl.dropboxusercontent.com/u/8593574/Spotify/spotify-client_0.8.8.323.gd143501.250-1_amd64.deb"
+    dest="/tmp"
+  when: not all_cmds.results|has_cmd('spotify')
+
+- name: install spotify from deb package
+  tags:
+    - spotify
+  apt: deb="/tmp/spotify-client_0.8.8.323.gd143501.250-1_amd64.deb"
+       state=present
+  when: not all_cmds.results|has_cmd('spotify')
+
+- name: download vidyo client deb
+  tags:
+    - vidyo
+  get_url: url="https://vidyoportal.cern.ch/upload/VidyoDesktopInstaller-ubuntu64-TAG_VD_3_3_0_027.deb"
+           dest=/tmp/vidyo.deb
+  when: not all_cmds.results|has_cmd('vidyo')
+
+- name: install vidyo client from deb
+  tags:
+    - vidyo
+  apt: deb=/tmp/vidyo.deb
+  when: not all_cmds.results|has_cmd('vidyo')
+
+- name: install virtualbox and vagrant from apt repository
+  tags:
+    - vagrant
+  apt: name={{ item }}
+       state=latest
+       update_cache=yes
+  sudo: yes
+  with_items:
+    - virtualbox
+    - virtualbox-dkms
+    - vagrant
+    - nfs-common
+    - nfs-kernel-server

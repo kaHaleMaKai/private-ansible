@@ -1,0 +1,5 @@
+- hosts: lvm
+  roles:
+  - role: lvm
+    tags: lvm
+

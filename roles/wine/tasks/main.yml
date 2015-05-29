@@ -1,0 +1,98 @@
+- name: create volume group for wine
+  lvg: pvs={{ wine.pvs|join(',') }}
+       vg={{ wine.lvm.vg }}
+       state=present
+  sudo: yes
+  when: wine.lvm.pvs is defined
+
+- name: create logical volume for wine
+  lvol: vg={{ wine.lvm.vg }}
+        lv={{ wine.lvm.lv }}
+        size={{ wine.lvm.size }}
+        state=present
+  sudo: yes
+  when: wine.lvm is defined
+
+- name: create filesystem on wine lv
+  tags: lvm
+  filesystem: dev=/dev/{{ wine.lvm.vg }}/{{ wine.lvm.lv }}
+              fstype=ext4
+  sudo: yes
+  when: wine.lvm is defined
+
+- name: create directory for wine prefixes
+  tags: wine
+  sudo: yes
+  file: path={{ wine.prefix_dir }}
+        state=directory
+        mode=0755
+        owner=root
+        group=root
+
+- name: create mountpoints for wine prefixes
+  file: path={{ wine.prefix_dir }}/{{ item.name }}
+        state={{ item.state|default('directory') }}
+        owner={{ ansible_user_id }}
+        group={{ ansible_user_id }}
+        mode=0775
+  sudo: yes
+  with_items:
+    wine.prefixes
+
+- name: mount the wine prefixes
+  tags: lvm
+  sudo: yes
+  mount: fstype=ext4
+         src=/dev/{{ wine.lvm.vg }}/{{ wine.lvm.lv }}
+         name={{ wine.prefix_dir }}
+         state={{ item.state|default('mounted') }}
+  when: wine.lvm is defined
+  with_items:
+    wine.prefixes
+
+- name: chown wine prefixes to ansible_user_id
+  file: path={{ wine.prefix_dir }}/{{ item.name }}
+        state=directory
+        owner={{ ansible_user_id }}
+        group={{ ansible_user_id }}
+        mode=0775
+  sudo: yes
+  when: wine.lvm is defined
+  with_items:
+    wine.prefixes
+
+- name: initialize new wine prefix
+  command: >
+    env WINEPREFIX={{ wine.prefix_dir }}/{{ item.name }} wineboot -i
+  with_items:
+    wine.prefixes
+
+- name: create download dir in heidi prefix
+  tags: heidi
+  file: path={{ wine.prefix_dir }}/heidi/drive_c/Downloads
+        state=directory
+        owner={{ ansible_user_id }}
+        group={{ ansible_user_id }}
+        mode=0775
+  when: reinstall_heidi is defined or not all_cmds.results|has_cmd('heidi')
+
+- name: download heidi installer
+  tags: heidi
+  get_url: url={{ wine.prefixes.download_url }}
+           dest={{ wine.prefix_dir }}/heidi/drive_c/Downloads/heidi-setup.exe
+  when: reinstall_heidi is defined or not all_cmds.results|has_cmd('heidi')
+
+- name: install heidi sql
+  tags: heidi
+  sudo_user: "{{ ansible_user_id }}"
+  command: >
+            env WINEPREFIX={{ wine.prefix_dir }}/heidi
+            wine
+            {{ wine.prefix_dir }}/heidi/drive_c/Downloads/heidi-setup.exe
+  when: reinstall_heidi is defined or not all_cmds.results|has_cmd('heidi')
+
+- name: setup heidi executable under $HOME/bin
+  tags: heidi
+  template: src=heidi.j2
+            dest={{ ansible_user_dir }}/bin/heidi
+            mode=0775

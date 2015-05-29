@@ -1,0 +1,75 @@
+vim:
+  rc: "{{ ansible_user_dir }}/.vimrc"
+  config_path: "{{ ansible_user_dir }}/.vim"
+  bundles: "{{ ansible_user_dir }}/.vim/bundle"
+  tmp_dir: /tmp/ftplugins
+  resources: "{{ ansible_user_dir }}/.vim/vimrc-res"
+  sessions: "{{ ansible_user_dir }}/.vim/vimrc-res/sessions"
+  after: "{{ ansible_user_dir }}/.vim/after"
+  ftplugin: "{{ ansible_user_dir }}/.vim/after/ftplugin"
+  syntax: "{{ ansible_user_dir }}/.vim/after/syntax"
+  bin_path: "{{ ansible_user_dir }}/bin"
+  ftdetect: "{{ ansible_user_dir }}/.vim/ftdetect"
+  ultisnippets:
+    ftdetect: "{{ ansible_user_dir }}/.vim/ultisnips_rep/ftdetect"
+  ag:
+    download_url: https://github.com/mizuno-as/silversearcher-ag
+    deps:
+      - automake
+      - pkg-config
+      - libpcre3-dev
+      - zlib1g-dev
+      - liblzma-dev
+  neobundle:
+    generic:
+      - bundle: tpope/vim-sensible
+      - bundle: tpope/vim-fugitive
+      - bundle: tpope/vim-surround
+      - bundle: tpope/vim-repeat
+      - bundle: scrooloose/nerdtree
+      - bundle: easymotion/vim-easymotion
+      - bundle: tacahiroy/ctrlp-funky
+      - bundle: itchyny/screensaver.vim
+      - bundle: kien/ctrlp.vim
+      - bundle: Xuyuanp/nerdtree-git-plugin
+      - bundle: low-ghost/nerdtree-fugitive
+      - bundle: bling/vim-airline
+      - bundle: scrooloose/syntastic
+      - bundle: ervandew/supertab
+      - bundle: vim-scripts/TaskList.vim
+      - bundle: flazz/vim-colorschemes
+      - bundle: scrooloose/nerdcommenter
+      - bundle: ironcamel/vimchat
+      - bundle: rking/ag.vim
+      - bundle: airblade/vim-gitgutter
+      - bundle: terryma/vim-multiple-cursors
+      - bundle: SirVer/ultisnips
+      - bundle: honza/vim-snippets.git
+      - bundle: airblade/vim-rooter.git
+      - bundle: Raimondi/delimitMate.git
+      - bundle: tfnico/vim-gradle
+    clojure:
+      - bundle: vim-scripts/paredit.vim
+      - bundle: tpope/vim-fireplace
+      - bundle: guns/vim-clojure-static
+      - bundle: tpope/vim-classpath
+    java:
+      - bundle: Yggdroot/indentLine
+      - bundle: vim-jp/vim-java
+      - bundle: craigemery/vim-autotag
+      - bundle: vim-scripts/taglist.vim
+    html:
+      - bundle: rstacruz/sparkup
+    yaml:
+      - bundle: stephpy/vim-yaml
+    python:
+      - bundle: klen/python-mode
+      - bundle: Bogdanp/pyrepl.vim
+    tex:
+      - bundle: vim-latex/vim-latex
+    markdown:
+      - bundle: tpope/vim-markdown
+      - bundle: blindFS/vim-reveal
+
+# vim: ft=yaml
+# vim: set ft=yaml

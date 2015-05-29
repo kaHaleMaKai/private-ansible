@@ -1,0 +1,5 @@
+- hosts: wine
+  roles:
+  - role: wine
+    tags: wine
+

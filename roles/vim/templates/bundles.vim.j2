@@ -1,0 +1,12 @@
+NeoBundleFetch 'Shougo/neobundle.vim'
+{% for category, items in vim.neobundle|dictsort %}
+" {{ category }} {{ '{{{' }}
+{% for item in items %}
+{% if (item.lazy is defined and item.lazy) or category != 'generic' %}
+NeoBundleLazy '{{ item.bundle }}'
+{% else %}
+NeoBundle '{{ item.bundle }}'
+{% endif %}
+{% endfor %}
+" {{ '}}}' }}
+{% endfor %}

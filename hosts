@@ -1,2 +1,18 @@
-[my-computers]
+kauai ansible_ssh_host=localhost
+
+[base]
+kauai
+[git]
+kauai
+[lvm]
+kauai
+[pyvenvs]
+kauai
+[shell-distrib]
+kauai
+[vim-distrib]
+kauai
+[wine]
+kauai
+[wm-distrib]
 kauai

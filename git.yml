@@ -1,0 +1,5 @@
+- hosts: git
+  roles:
+  - role: git
+    tags: git
+

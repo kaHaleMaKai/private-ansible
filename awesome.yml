@@ -1,0 +1,5 @@
+- hosts: awesome
+  roles:
+  - role: awesome
+    tags: awesome
+

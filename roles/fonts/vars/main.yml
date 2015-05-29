@@ -1,0 +1,6 @@
+defaults:
+  path: /usr/local/share/fonts
+  path_mode: "0755"
+  font_mode: "0644"
+  owner: root
+  group: root

@@ -1,0 +1,5 @@
+- hosts: shell-distrib
+  roles:
+  - role: shell
+    tags: shell
+

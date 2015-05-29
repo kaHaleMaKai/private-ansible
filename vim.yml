@@ -1,0 +1,5 @@
+- hosts: vim-distrib
+  roles:
+  - role: vim
+    tags: vim
+

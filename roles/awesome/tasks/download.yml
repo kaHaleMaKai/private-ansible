@@ -1,0 +1,10 @@
+- name: download awesome 3.5.6 source
+  get_url: url="{{ awesome.source }}"
+           dest="{{ awesome.build_dir }}.tar.bz2"
+           mode=0775
+           validate_certs=no
+
+- name: untar awesome 3.5.6 source
+  unarchive: src="{{ awesome.build_dir }}.tar.bz2"
+             dest="{{ awesome.build_dir }}"
+             mode=0775

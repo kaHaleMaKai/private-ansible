@@ -1,0 +1,5 @@
+#!/bin/bash
+
+env WINEPREFIX="{{ wine.prefix_dir }}/heidi" \
+    wine64 \
+    "{{ wine.prefix_dir }}/heidi/drive_c/Program Files/HeidiSQL/heidisql.exe" &

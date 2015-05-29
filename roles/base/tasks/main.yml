@@ -1,0 +1,6 @@
+- name: install most basic packages
+  apt: name={{ item }}
+       state="{{ base_packe_state }}"
+  sudo: yes
+  with_items:
+    basic_packages

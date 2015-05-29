@@ -1,0 +1,107 @@
+pyvenvs:
+  root_dir: /usr/local/pyvenvs
+  default_owner: pyenv-user
+  default_group: pyenv
+  list_of_venvs:
+    - name: selenium
+      lvm:
+        vg: vgroot
+        lv: lvselenium
+        size: 1G
+      owner:  pyenv-user
+      group: pyenv
+      python_version: 2
+      state: mounted
+      opts: relatime
+      force: yes
+      site_packages: no
+      apt:
+        - phantomjs
+      eggs:
+        - name: selenium
+        - name: ipython
+    - name: ansible
+      lvm:
+        vg: vgroot
+        lv: lvansible
+        size: 1G
+      owner:  pyenv-user
+      group: pyenv
+      python_version: 2
+      state: mounted
+      opts: relatime
+      force: yes
+      site_packages: no
+      apt:
+        - libffi-dev
+      eggs:
+        - name: ndg-httpsclient
+          version: 0.4.0
+        - name: ipython
+        - name: MySQL-python
+        - name: ansible
+        - name: nose
+        - name: hdfs
+        - name: requests_kerberos
+    #- name: datascience
+      #lvm:
+        #vg: vgroot
+        #lv: lvdatascience
+        #size: 1G
+        #fstype: ext4
+      #owner: pyenv-user
+      #python_version: 3.4
+      #site_packages: no
+      #group: pyenv
+      #state: mounted
+      #opts: noatime
+      #force: yes
+      #eggs:
+        #- name: ipython
+        #- name: green
+        #- name: coverage
+        #- name: matplotlib
+        #- name: numpy
+        #- name: scipy
+          #extra_args: --use-wheel
+        #- name: scikit-learn
+        #- name: pandas
+        #- name: seaborn
+        #- name: pyflakes
+        #- name: PySide
+      #apt:
+        #- libopenblas-dev
+        #- libblas-dev
+        #- liblapack-dev
+        #- libatlas-base-dev
+        #- gfortran
+        #- qt4-qmake
+        #- openssl
+        #- build-essential
+        #- git
+        #- cmake
+        #- libqt4-dev
+        #- libphonon-dev
+        #- python3.4-dev
+        #- libxml2-dev
+        #- libxslt1-dev
+        #- qtmobility-dev
+        #- libqtwebkit-dev
+    #- name: pinball
+      #lvm:
+        #vg: vgroot
+        #lv: lvpinball
+        #size: 1G
+      #owner:  pyenv-user
+      #group: pyenv
+      #python_version: 2
+      #state: mounted
+      #opts: noatime
+      #force: yes
+      #site_packages: no
+      #eggs:
+        #- name: pydot
+        #- name: pinball
+
+# vim: set ft=yaml
+# vim: ft=yaml

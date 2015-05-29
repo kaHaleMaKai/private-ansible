@@ -1,0 +1,3 @@
+- name: git clone vicious into awesome config dir
+  git: repo="http://git.sysphere.org/vicious"
+       dest="{{ awesome.config_path }}/vicious"
