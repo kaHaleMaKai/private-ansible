@@ -1,0 +1,17 @@
+host_vars:
+  kauai:
+    git_user: "Lars Winderling"
+    git_email: lars.winderling@performance-advertising.de
+    home: /home/lars
+    lvm:
+      wine:
+        vg: vgroot
+        lv: lvwine
+        size: 2G
+      venvs:
+        vg: vgroot
+        lv: lvvenv
+    wine:
+      prefix_dir: /usr/local/wine
+    awesome:
+      version: 3.5.6

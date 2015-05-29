@@ -1,0 +1,18 @@
+- hosts: my-computers
+  remote_user: lars
+  vars:
+    reinstall_awesome: no
+    reinstall_heidi: no
+    reinstall_vimrc: no
+    home_dir: /home/lars
+    awesome:
+      config_dir: "{{ home_dir }}/.config/awesome"
+      theme_dir: "{{ home_dir }}/.config/awesome/themes"
+  roles:
+  - role: desktop-commons
+    sudo: yes
+    tags: desktop-commons
+  - role: gitconfig
+    sudo: no
+    tags: git
+
