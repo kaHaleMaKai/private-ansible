@@ -1,0 +1,7 @@
+---
+
+- name: Add all gitignore files
+  tags: gitignore
+  template:
+    src=dot.gitignore.j2
+    dest=~/.gitignore

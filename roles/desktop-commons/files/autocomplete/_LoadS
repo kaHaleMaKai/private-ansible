@@ -1,0 +1,17 @@
+#compdef LoadS
+
+_LoadS() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments \
+    '1: :->session'
+
+  case $state in
+    session)
+      _arguments "1:sessions:($(ls ~/.vim/vimrc-res/sessions))"
+    ;;
+  esac
+}
+
+_LoadS "$1"

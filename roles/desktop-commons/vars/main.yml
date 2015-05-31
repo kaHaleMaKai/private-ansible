@@ -1,0 +1,77 @@
+installations:
+  - name: ag
+    path: somewhere/silver/searcher
+    method: git
+    url: https://github.com/mizuno-as/silversearcher-ag
+    dest: silversearcher-ag
+    install: source
+    shell:
+      cmd: "./build.sh && make install"
+    deps:
+      - automake
+      - pkg-config
+      - libpcre3-dev
+      - zlib1g-dev
+      - liblzma-dev
+  - name: skype
+    findby: cmd
+  - name: spotify
+  - name: awesome
+  - name: vidyo
+    cmd: VidyoDesktop
+  - name: vimrc
+    findby: custom
+    shellcmd: >
+                grep '^" vimrc from ansible$'
+                     "{{ host_vars[ansible_hostname].home }}"
+                     >/dev/null 2>&1
+  - name: ohmyzsh
+    findby: directory
+    path: "{{ host_vars[ansible_hostname].home }}/.oh-my-zsh"
+  - name: heidi
+    findby: directory
+    path:  "{{ host_vars[ansible_hostname].wine.prefix_dir }}/heidi/drive_c/Program Files/HeidiSQL"
+
+ssh_config:
+  defaults:
+    forward_agent: yes
+    send_env: "LC_*"
+    identity_file: "~/.ssh/id_rsa"
+    strict_host_key_checking: no
+    port: 22
+    user: root
+  hosts:
+    - host: pmdev-bd
+      user: lwinderling
+    - host: docker-db
+      name: localhost
+      user: lars
+      port: 3022
+    - host: db1b
+      name: db1.bricks5.pmd5.org
+    - host: db2b
+      name: db2.bricks5.pmd5.org
+    - host: crawlerdb1p
+      name: crawlerdb1p.performance-media.de
+    - host: jenkins
+      name: jenkins.pmd.local
+    - host: paweb
+      name: web1.bricks2.pmd5.org
+    - host: db1b
+      name: db1.bricks5.pmd5.local
+    - host: db2b
+      name: db2.bricks5.pmd5.local
+    - host: padb1
+    - host: padb1-test
+    - host: fbdb1
+    - host: sadb1
+    - host: pacs2
+    - host: fb
+    - host: sengine
+    - host: padb1archiv
+    - host: sesam
+    - host: sesam-abc
+    - host: bimsdb
+    - host: pmwork2
+    - host: dbrestore
+    - host: repository

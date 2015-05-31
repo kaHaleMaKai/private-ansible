@@ -1,0 +1,42 @@
+---
+
+git_config:
+  user:
+    name: Lars Winderling
+    email: lars.winderling@performance-advertising.de
+  color:
+    branch: auto
+    diff: auto
+    interactive: auto
+    status: auto
+    ui: auto
+  diff:
+    tool: vimdiff
+  difftool:
+    prompt:
+      false
+  core:
+    editor: vim
+    excludesfile: "~/.gitignore"
+  push:
+    default: current
+  merge:
+    tool: diffconflicts
+  mergetool:
+    keepBackup: false
+  'mergetool "diffconflicts"':
+    cmd: 'diffconflicts vim $BASE $LOCAL $REMOTE $MERGED'
+    trustExitCode: true
+
+  alias:
+    lg1: "log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+    lg2: "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
+    lg: '!"git lg1"'
+
+git_ignore:
+  - "*.log"
+  - ".vagrant"
+  - "*.pyc"
+  - "._*"
+  - "~*"
+

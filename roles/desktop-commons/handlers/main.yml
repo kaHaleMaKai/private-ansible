@@ -1,0 +1,35 @@
+#- name: neobundle check
+  #command: vim '+NeoBundleInstall(!)'
+
+#- name: install program
+  #debug: "msg={{ item.item.name }}"
+  #when: item.item.install != "source"
+  #with_items:
+    #has_cmd.results
+
+#- name: git clone sources
+  #git: repo={{ item.item.url }}
+       #dest=/tmp/{{ item.item.dest|default('.') }}
+  #sudo: no
+  #when: item.rc == 127 and item.item.method == "git"
+  #with_items:
+    #has_cmd.results
+
+#- name: download sources
+  #debug: msg="hello, world"
+
+#- name: install from source
+  #shell: "{{ item.item.shell.cmd }}"
+  #args:
+    #chdir: "/tmp/{{ item.item.dest|default('.') }}"
+  #when: item.rc == 127 and item.item.install == "source"
+  #with_items:
+    #has_cmd.results
+
+#- name: install build dependencies
+  #debug: msg={{ item.item.deps }}
+  ##apt: name={{ item.1 }}
+       ##state=present
+  #when: item.rc == 127 and item.item.deps is defined
+  #with_items:
+    #installations

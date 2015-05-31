@@ -1,0 +1,35 @@
+# /* vim: set ts=8 sw=2 softtabstop=2: */
+{% if ssh_config is defined %}
+{# --- #}
+{% if ssh_config.hosts is defined %}
+
+# list of hosts
+{% for item in ssh_config.hosts %}
+Host {{ item["host"] }}
+{# --- #}
+{% for key, val in item.iteritems() %}
+{% if key == "name" %}
+  HostName {{ val }}
+{% elif key != "host" %}
+  {{ key|camel }} {{ val }}
+{% endif %}
+{# --- #}
+{% endfor %}
+{# --- #}
+{% if item|length > 1 %}
+
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if ssh_config.defaults is defined %}
+
+# defaults for all hosts
+{# --- #}
+Host *
+{# --- #}
+{% for key, val in ssh_config.defaults.iteritems() %}
+  {{ key|camel }} {{ val }}
+{% endfor %}
+{% endif %}
+{# --- #}
+{% endif %}
