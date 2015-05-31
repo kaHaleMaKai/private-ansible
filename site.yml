@@ -8,12 +8,13 @@
       config_dir: "{{ home_dir }}/.config/awesome"
       theme_dir: "{{ home_dir }}/.config/awesome/themes"
   roles:
-  - role: desktop-commons
-    sudo: yes
-    tags: desktop-commons
-    remote_user: lars
-  - role: gitconfig
-    sudo: no
-    tags: git
-    remote_user: lars
+    - {role: installations, sudo: yes}
+  #- role: desktop-commons
+    #sudo: yes
+    #tags: desktop-commons
+    #remote_user: lars
+  #- role: gitconfig
+    #sudo: no
+    #tags: git
+    #remote_user: lars
 

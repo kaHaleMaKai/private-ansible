@@ -28,25 +28,6 @@
         state: absent
     - addr
 
-- name: check for installed programs
-  tags:
-    - always
-  shell: |
-          {% if item.findby is not defined or item.findby in ('name', 'cmd') %}
-              command -v "{{ item.cmd | default(item.name) }}" >/dev/null 2>&1
-          {% elif item.findby == 'directory' %}
-              test -d "{{ item.path }}"
-          {% elif item.findby == 'file' %}
-              test -f "{{ item.path }}"
-          {% elif item.findby == 'custom' %}
-              {{ item.shellcmd }}
-          {% endif %}
-  sudo: no
-  ignore_errors: yes
-  register: all_cmds
-  with_items:
-    installations
-
 - name: update apt cache
   tags:
     - always
