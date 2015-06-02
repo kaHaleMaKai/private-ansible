@@ -55,6 +55,7 @@
     - screen
     - rpm2cpio
     - subversion
+    - nmap
 
 # TODO: throws an error when executed for the first time
 - name: install oh-my-zsh
@@ -106,6 +107,7 @@
     - shutter
     - chromium-browser
     - pepperflashplugin-nonfree
+    - gksu
 
 - name: download skype deb package
   tags:
@@ -458,35 +460,6 @@
     - vagrant
     - nfs-common
     - nfs-kernel-server
-
-- name: install silversearchers dependencies
-  tags:
-    - ag
-    - vim
-  apt: name={{ item.1 }}
-       state=latest
-       update_cache=no
-  when: not all_cmds.results|has_cmd('ag')
-  with_subelements:
-    - installations|byval('name', 'ag')
-    - deps
-
-- name: git clone silversearcher
-  tags:
-    - ag
-  git: repo="https://github.com/mizuno-as/silversearcher-ag"
-    dest=/tmp/silversearcher-ag
-  sudo: no
-  when: not all_cmds.results|has_cmd('ag')
-
-- name: build and install silversearcher
-  tags:
-    - ag
-    - vim
-  shell: ./build.sh && make install
-  args:
-    chdir: /tmp/silversearcher-ag
-  when: not all_cmds.results|has_cmd('ag')
 
 - name: create vim-related executables
   tags:

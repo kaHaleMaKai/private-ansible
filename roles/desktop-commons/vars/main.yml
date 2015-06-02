@@ -35,6 +35,7 @@ ssh_config:
     - host: fb
     - host: sengine
     - host: padb1archiv
+    - host: padb1archiv2
     - host: sesam
     - host: sesam-abc
     - host: bimsdb

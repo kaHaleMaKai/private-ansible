@@ -1,4 +1,6 @@
 - hosts: my-computers
+  remote_user: lars
+  sudo: yes
   vars:
     reinstall_awesome: no
     reinstall_heidi: no
@@ -8,13 +10,14 @@
       config_dir: "{{ home_dir }}/.config/awesome"
       theme_dir: "{{ home_dir }}/.config/awesome/themes"
   roles:
-    - {role: installations, sudo: yes}
-  #- role: desktop-commons
-    #sudo: yes
-    #tags: desktop-commons
-    #remote_user: lars
-  #- role: gitconfig
-    #sudo: no
-    #tags: git
-    #remote_user: lars
-
+    - role: run-before-installations
+      sudo: no
+      tags: always
+    - role: extended-installations
+      tags: installations
+    - role: desktop-commons
+      tags: desktop-commons
+      remote_user: lars
+    - role: gitconfig
+      sudo: no
+      tags: git
