@@ -338,7 +338,6 @@
         state=directory
         mode=0775
   sudo: no
-  when: reinstall_vimrc or not all_cmds.results|has_cmd('vimrc')
   with_items:
     - vimrc-res
     - after/ftplugin
@@ -363,7 +362,6 @@
     - vimrc
   copy: src={{ item }}
         dest={{ host_vars[ansible_hostname].home }}/.vim/after/ftplugin
-  when: reinstall_vimrc or not all_cmds.results|has_cmd('vimrc')
   sudo: no
   with_fileglob:
     ftplugin/*.vim
