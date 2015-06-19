@@ -1,0 +1,120 @@
+- name: setup pyvenvs root dir
+  tags:
+    - pyvenv
+  file: path={{ pyvenvs.root_dir }}
+        state=directory
+        mode=0755
+
+- name: setup logical volumes for pyenvs
+  tags:
+    - pyvenv
+  lvol: lv={{ item.lvm.lv }}
+        vg={{ item.lvm.vg }}
+        size={{ item.lvm.size }}
+        state={{ (item.state is defined and item.state != 'mounted' and item.state != 'unmounted')|ternary(item.state, 'present') }}
+        force={{ item.force|default('no') }}
+  when: item.lvm is defined
+  with_items:
+    pyvenvs.list_of_venvs
+
+- name: initialize filesystems on the lvs for the pyvenvs
+  tags:
+    - pyvenv
+  filesystem: dev=/dev/{{ item.lvm.vg }}/{{ item.lvm.lv }}
+              type={{ item.lvm.fstype|default('ext4') }}
+  when: item.lvm is defined and (item.state is undefined or item.state != 'absent')
+  with_items:
+    pyvenvs.list_of_venvs
+
+- name: setup mount points for pyvens
+  tags:
+    - pyvenv
+  file: path={{ pyvenvs.root_dir }}/{{ item.name }}
+        state={{ (item.state is defined and item.state == 'absent')|ternary('absent', 'directory') }}
+        owner={{ item.owner|default(pyvenvs.default_owner) }}
+        group={{ item.group|default(pyvenvs.default_group) }}
+        mode=0775
+  with_items:
+    pyvenvs.list_of_venvs
+
+- name: mount the pyvenvs on the specified mount points
+  tags:
+    - pyvenv
+  mount: name={{ pyvenvs.root_dir }}/{{ item.name }}
+         src=/dev/{{ item.lvm.vg }}/{{ item.lvm.lv }}
+         state={{ item.state|default('present') }}
+         opts={{ item.opts|default(omit) }}
+         fstype={{ item.lvm.fstype|default('ext4') }}
+  when: item.lvm is defined and (item.state is undefined or item.state != 'absent')
+  with_items:
+    pyvenvs.list_of_venvs
+
+- name: setup mount points for pyvens
+  tags:
+    - pyvenv
+  file: path={{ pyvenvs.root_dir }}/{{ item.name }}
+        state={{ (item.state is defined and item.state == 'absent')|ternary('absent', 'directory') }}
+        owner={{ item.owner|default(pyvenvs.default_owner) }}
+        group={{ item.group|default(pyvenvs.default_group) }}
+        mode=0775
+  when: item.lvm is defined and (item.state is undefined or item.state != 'absent')
+  with_items:
+    pyvenvs.list_of_venvs
+
+- name: install easy_install3 dependencies
+  tags:
+    - python
+    - python3
+    - pyvenv
+  apt: name={{ item }}
+       state=latest
+  with_items:
+    - python3-setuptools
+    - python3-dev
+    - build-essential
+
+# easy_install module will first get a state attribute in version 2.0
+- name: install pip3 using easy_install3
+  tags:
+    - python
+    - python3
+  easy_install: name=pip
+                executable=easy_install3
+
+- name: install virtualenv egg for python2 and python3
+  tags:
+    - python
+    - python3
+    - pyvenv
+  pip: name=virtualenv
+       executable={{ item }}
+  with_items:
+    - pip2
+    - pip3
+
+- name: install all eggs via pip
+  tags:
+    - pyvenv
+    - python
+  pip: name={{ item.1.name }}
+       executable={{ (item.0.python_version|string == '3')|ternary('pip'~item.0.python_version, omit) }}
+       version={{ item.0.version|default(omit) }}
+       virtualenv_site_packages={{ item.0.site_packages|default(omit) }}
+       extra_args={{ item.1.extra_args|default(omit) }}
+       virtualenv={{ pyvenvs.root_dir}}/{{ item.0.name }}
+  sudo_user: "{{ item.0.owner|default('root') }}"
+  with_subelements:
+    - pyvenvs.list_of_venvs
+    - eggs
+
+- name: setup venv-up command
+  tags:
+    - pyvenv
+  template: src={{ item.name }}.j2
+            dest={{ item.dest }}/{{ item.name }}
+            mode={{ item.mode }}
+  with_items:
+    - name: _venv-up
+      dest: "{{ host_vars[ansible_hostname].home }}/.config/zsh"
+      mode: "0660"
+

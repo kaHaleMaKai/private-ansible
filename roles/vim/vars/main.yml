@@ -1,0 +1,10 @@
+vim:
+  rc: "{{ ansible_user_dir }}/.vimrc"
+  config_path: "{{ ansible_user_dir }}/.vim"
+  bundles: "{{ ansible_user_dir }}/.vim/bundle"
+  resources: "{{ ansible_user_dir }}/.vim/vimrc-res"
+  sessions: "{{ ansible_user_dir }}/.vim/vimrc-res/sessions"
+  after: "{{ ansible_user_dir }}/.vim/after"
+  ftplugin: "{{ ansible_user_dir }}/.vim/after/ftplugin"
+  syntax: "{{ ansible_user_dir }}/.vim/after/syntax"
+  bin_path: /usr/local/bin

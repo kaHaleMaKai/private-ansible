@@ -42,3 +42,23 @@ ssh_config:
     - host: pmwork2
     - host: dbrestore
     - host: repository
+    - host: agg
+      name: pmagg1.pmd.local
+administration:
+  groups:
+    - name: pyenv
+      state: present
+      system: no
+      append: no
+    - name: wine
+      state: present
+      system: no
+  users:
+    - name: pyenv-user
+      state: present
+      groups: pyenv
+    - name: wine-user
+      state: present
+      group: wine
+    - name: lars
+      groups: pyenv,wine

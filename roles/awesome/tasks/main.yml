@@ -1,0 +1,79 @@
+- name: install awesomes build dependencies
+  apt: name={{ item }}
+       update_cache=no
+       state=latest
+  with_items:
+    awesome.deps
+  when: reinstall_awesome or not all_cmds.results|has_cmd('awesome')
+
+- name: download awesome 3.5.6 source
+  get_url: url=https://awesome.naquadah.org/download/awesome-3.5.6.tar.bz2
+           dest=/tmp/awesome-3.5.6.tar.bz2
+           mode=0775
+           validate_certs=no
+  sudo: no
+  when: reinstall_awesome or not all_cmds.results|has_cmd('awesome')
+
+- name: untar awesome 3.5.6 source
+  unarchive: src=/tmp/awesome-3.5.6.tar.bz2
+             dest=/tmp
+             mode=0775
+  sudo: no
+  when: reinstall_awesome or not all_cmds.results|has_cmd('awesome')
+
+- name: run make on awesome tarball
+  command: "{{ item }}
+  args:
+    chdir: /tmp/awesome-3.5.6
+  with_items:
+    - make
+    - >
+        cmake
+        "{% for k,v in awesome.build_params %}-{{k}}={{v}}{% endfor %}"
+        build/.
+    - make install
+  when: reinstall_awesome or not all_cmds.results|has_cmd('awesome')
+
+- name: create config dir for awesome under home dir
+  file: path={{ awesome.config_path }}
+        state=directory
+  sudo: no
+
+- name: copy awesome config files into newly created config dir
+  tags:
+    - configure-awesome
+  copy: src={{ item.src }}
+        dest={{ item.dest | default(awesome.config_path) }}
+        owner={{ item.owner | default(ansible_user_id) }}
+        group={{ item.group | default(ansible_user_id) }}
+        mode={{ item.mode | default('0666') }}
+  sudo: yes
+  with_items:
+    -  src: /usr/local/share/xsessions/awesome.desktop
+       dest: /usr/share/xsessions/awesome.desktop
+       owner: root
+       group: root
+       mode: '0644'
+    - src: .
+      mode: '0664'
+      owner: "{{ ansible_env.SUDO_USER }}"
+      group: "{{ ansible_env.SUDO_USER }}"
+
+- name: copy template rc.lua into awesome dir
+  tags:
+    - configure-awesome
+  template: src=rc.lua.j2
+            dest={{ awesome.config_path }}/rc.lua
+            owner={{ ansible_env.SUDO_USER }}
+            group={{ ansible_env.SUDO_USER }}
+            mode=0664
+  sudo: no
+
+- name: git clone vivious into awesome config dir
+  tags:
+    - configure-awesome
+    - vicious
+  git: repo="http://git.sysphere.org/vicious"
+       dest="{{ awesome.config_path }}/vicious"
+  sudo: no
+  when: reinstall_awesome or not all_cmds.results|has_cmd('awesome')

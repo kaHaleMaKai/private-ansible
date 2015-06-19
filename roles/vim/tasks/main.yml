@@ -1,0 +1,73 @@
+- name: install vim-gtk from apt-repositories (-gtk for xterm-clipboard support)
+  tags:
+    - apt
+  apt: name={{ item }}
+       state=latest
+  with_items:
+    - vim-gtk
+
+- name: install neobundle for vim
+  shell: "curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh"
+  sudo: no
+  args:
+    creates: "{{ vim.bundles }}/neobundle.vim"
+
+- name: create vim-related folders
+  file: path={{ item }}
+        state=directory
+        mode=0775
+  sudo: no
+  with_items:
+    - "{{ vim.resources }}"
+    - "{{ vim.ftplugin }}"
+    - "{{ vim.syntax }}"
+
+- name: copy vim-related files into place
+  copy: src={{ item.src }}
+        dest={{ item.dest }}
+        force=yes
+  sudo: no
+  with_items:
+    - src: .vimrc
+      dest: "{{ vim.config_path }}"
+    - src: funcs.vim
+      dest: "{{ vim.resources }}"
+
+- name: copy ftplugin files into place
+  copy: src={{ item }}
+        dest={{ vim.ftplugin }}
+  sudo: no
+  with_fileglob:
+    ftplugin/*.vim
+
+- name: install vimchat dependencies
+  tags:
+    - vimchat
+  apt: name={{ item }}
+       state=latest
+       install_recommends=no
+  with_items:
+    - python-xmpp
+    - python-notify
+    - python-dns
+
+- name: donwload silversearcher-ag source from github
+  git: repo"=https://github.com/mizuno-as/silversearcher-ag"
+       dest=/tmp
+  sudo: no
+
+- name: install silversearcher-ag from source
+  tags:
+    - silversearcher
+    - ag
+  shell: ./build.sh && make install
+
+- name: create vim-related executables
+  tags:
+    - vim-bin
+  copy: src={{ item }}
+        dest={{ vim.bin_path }}
+        mode=075
+        force=yes
+  with_fileglob:
+    bin/*

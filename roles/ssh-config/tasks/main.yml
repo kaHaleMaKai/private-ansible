@@ -1,0 +1,6 @@
+- name: setup .ssh config
+  remote_user: lars
+  template: src=dot.ssh.config.j2
+            dest={{ ansible_user_dir }}/.ssh/config
+            mode=0664
+  sudo: no

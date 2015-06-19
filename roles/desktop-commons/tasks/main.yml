@@ -43,7 +43,7 @@
   with_items:
     - git
     - redshift
-    - vim
+    - vim-gtk
     - wine
     - percona-server-client-5.6
     - zsh
@@ -92,6 +92,8 @@
     - src: .zshrc
       dest: "{{ host_vars[ansible_hostname].home }}/.zshrc"
     - src: autocomplete
+      dest: "{{ host_vars[ansible_hostname].home }}/.config/zsh"
+    - src: zsh-fns
       dest: "{{ host_vars[ansible_hostname].home }}/.config/zsh"
 
 - name: install most basic gui packages
@@ -209,35 +211,33 @@
   file: path={{ awesome.config_dir }}
         state=directory
   sudo: no
-  when: reinstall_awesome or not all_cmds.results|has_cmd('awesome')
 
 - name: copy awesome config files into newly created config dir
   tags: awesome
   copy: src={{ item.src }}
-        dest={{ item.dest | default(awesome.config_dir) }}
+        dest={{ item.dest | default(local_config_dir) }}
         owner={{ item.owner | default(ansible_user_id) }}
         group={{ item.group | default(ansible_user_id) }}
         mode={{ item.mode | default('0666') }}
   sudo: yes
-  when: reinstall_awesome or not all_cmds.results|has_cmd('awesome')
   with_items:
     -  src: /usr/local/share/xsessions/awesome.desktop
        dest: /usr/share/xsessions/awesome.desktop
        owner: root
        group: root
-       mode: '0600'
-    - src: /usr/local/share/awesome/icons
-    - src: /usr/local/share/awesome/themes
-    - src: /usr/local/share/awesome/lib
-    - src: /usr/local/etc/xdg/awesome/rc.lua
-      mode: '0644'
+       mode: '0644'
+    - src: awesome
+      mode: '0664'
+      owner: "{{ ansible_env.SUDO_USER }}"
+      group: "{{ ansible_env.SUDO_USER }}"
 
-- name: set default terminal for awesome
-  tags: awesome
-  lineinfile: dest={{ awesome.config_dir }}/rc.lua
-              regexp='^terminal = "xterm"'
-              line='terminal = "xfce4-terminal"'
-  when: reinstall_awesome or not all_cmds.results|has_cmd('awesome')
+- name: copy template rc.lua into awesome dir
+  tags: awesome1
+  template: src=awesome/rc.lua.j2
+            dest={{ awesome.config_dir }}/rc.lua
+            owner={{ ansible_env.SUDO_USER }}
+            group={{ ansible_env.SUDO_USER }}
+            mode=0664
   sudo: no
 
 - name: git clone vivious into awesome config dir
@@ -470,6 +470,7 @@
   with_items:
     - bin/LoadS
     - bin/ListS
+    - bin/RemoveS
 
 - name: setup .ssh config
   tags:
@@ -478,3 +479,29 @@
             dest={{ host_vars[ansible_hostname].home }}/.ssh/config
             mode=0664
   sudo: no
+
+- name: create all additional user groups
+  tags:
+    - administration
+  group: name={{ item.name }}
+         state={{ item.state|default('present') }}
+         system={{ item.system|default('no') }}
+  with_items:
+    administration.groups
+
+- name: create all additional users accounts
+  tags:
+    - administration
+  user: name={{ item.name }}
+        group={{ item.group|default(omit) }}
+        groups={{ item.groups|default(omit) }}
+        state={{ item.state|default('present') }}
+        append={{ item.append|default('yes') }}
+        createhome={{ item.createhome|default(omit) }}
+        move_home={{ item.move_home|default(omit) }}
+        remove={{ item.remove|default('no') }}
+        shell={{ item.shell|default(omit) }}
+        system={{ item.system|default('no') }}
+  with_items:
+    administration.users
+

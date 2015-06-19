@@ -1,0 +1,30 @@
+- name: install zsh from apt repository
+  apt: name={{ item }}
+       state=latest
+  when: not all_cmds.results|has_cmd('zsh')
+
+- name: install oh-my-zsh
+  shell: wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+  sudo: no
+  when: not all_cmds.results|has_cmd('ohmyzsh')
+
+- name: set zsh as default shell
+  user: user={{ remote_user }}
+        shell=/usr/bin/zsh
+
+- name: create config dir for zsh
+  file: path={{ zsh.config_path }}
+        state=directory
+  sudo: no
+
+- name: copy zsh files into place
+  copy: src={{ item.src }}
+        dest={{ item.dest }}
+  sudo: no
+  with_items:
+    - src: .zshrc
+      dest: "{{ zsh.rc }}"
+    - src: autocomplete
+      dest: "{{ zsh.config_path }}"
+    - src: zsh-fns
+      dest: "{{ zsh.config_path }}"

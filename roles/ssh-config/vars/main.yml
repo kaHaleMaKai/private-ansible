@@ -1,0 +1,44 @@
+ssh_config:
+  defaults:
+    forward_agent: yes
+    send_env: "LC_*"
+    identity_file: "~/.ssh/id_rsa"
+    strict_host_key_checking: no
+    port: 22
+    user: root
+  hosts:
+    - host: pmdev-bd
+      user: lwinderling
+    - host: docker-db
+      name: localhost
+      user: lars
+      port: 3022
+    - host: db1
+      name: db1.esome.info
+    - host: db2
+      name: db2.esome.info
+    - host: crawlerdb1p
+      name: crawlerdb1p.performance-media.de
+    - host: jenkins
+      name: jenkins.pmd.local
+    - host: paweb
+      name: web1.bricks2.pmd5.org
+    - host: padb1
+    - host: padb1-test
+    - host: fbdb1
+    - host: sadb1
+    - host: pacs2
+    - host: fb
+    - host: sengine
+    - host: padb1archiv
+    - host: sesam
+    - host: sesam-abc
+    - host: bimsdb
+    - host: pmwork
+    - host: pmwork2
+    - host: dbrestore
+    - host: repository
+    - host: agg
+      name: pmagg1.pmd.local
+    - host: agg-test
+      name: pmagg1-test.pmd.local
