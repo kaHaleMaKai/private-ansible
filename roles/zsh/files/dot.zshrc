@@ -63,7 +63,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="${PATH}:/home/lwinderling/bin:/home/lwinderling/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+export PATH="${PATH}:/home/lars/bin:/home/lars/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
 
 fpath=(~/.config/zsh/autocomplete $fpath)
 # compsys initialization
@@ -105,6 +105,6 @@ append_last_command_to_file() {
 }
 
 for f in ~/.config/zsh/fns/*; do
-    source ~/.config/zsh/fns/"$f"
+    source "$f"
 done
 # vi:sw=2 ts=2:setlocal:

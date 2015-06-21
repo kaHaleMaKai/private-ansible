@@ -7,4 +7,12 @@ vim:
   after: "{{ ansible_user_dir }}/.vim/after"
   ftplugin: "{{ ansible_user_dir }}/.vim/after/ftplugin"
   syntax: "{{ ansible_user_dir }}/.vim/after/syntax"
-  bin_path: /usr/local/bin
+  bin_path: "{{ ansible_user_dir }}/bin"
+  ag:
+    download_url: https://github.com/mizuno-as/silversearcher-ag
+    deps:
+      - automake
+      - pkg-config
+      - libpcre3-dev
+      - zlib1g-dev
+      - liblzma-dev

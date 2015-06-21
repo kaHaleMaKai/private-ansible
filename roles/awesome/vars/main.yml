@@ -1,5 +1,18 @@
 awesome:
+  terminal: xfce4-terminal
+  theme: my-theme
   config_path: "{{ ansible_user_dir }}/.config/awesome"
+  theme_dir: "{{ ansible_user_dir }}/.config/awesome/themes"
+  autostart:
+    - prg: light-locker
+    - prg: xfce4-power-manager
+    - prg: nm-applet
+  shortcuts:
+    - cmd: xflock4
+      mode: spawn
+      modkey: yes
+      extrakey: "Control"
+      key: l
   build_params:
     DCMAKE_PREFIX_PATH: /usr
     DSYSCONFDIR: /etc

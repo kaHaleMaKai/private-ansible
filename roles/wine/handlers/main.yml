@@ -1,0 +1,4 @@
+- name: initialize new wine prefix
+  command: "env WINEPREFIX={{ wine.prefix_dir }}/{{  }} wineboot -i"
+  remote_user: "{{ wine.owner }}"
+  sudo: no

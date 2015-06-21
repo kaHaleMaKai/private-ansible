@@ -1,33 +1,11 @@
 - hosts: my-computers
   remote_user: lars
-  vars:
-    local_config_dir: "{{ home_dir }}/.config"
-    awesome:
-      terminal: xfce4-terminal
-      theme: my-theme
-      config_dir: "{{ home_dir }}/.config/awesome"
-      theme_dir: "{{ home_dir }}/.config/awesome/themes"
-      autostart:
-        - prg: light-locker
-        - prg: xfce4-power-manager
-        - prg: nm-applet
-      shortcuts:
-        - cmd: xflock4
-          mode: spawn
-          modkey: yes
-          extrakey: "Control"
-          key: l
+  sudo: no
   roles:
-    - role: run-before-installations
+    - role: run-always
       tags: always
-    - role: extended-installations
-      tags: installations
-      sudo: yes
-    - role: desktop-commons
-      tags: desktop-commons
-      sudo: yes
-    - role: gitconfig
-      tags: git
+    - role: git-config
+      tags: [git, git-config]
     - role: zsh
       tags: zsh
     - role: vim
@@ -35,6 +13,10 @@
     - role: gui-basics
       tags: gui-basics
     - role: ssh-config
-      tags:
-        - ssh
-        - ssh-config
+      tags: [ssh, ssh-config]
+    - role: awesome
+      tags: awesome
+    - role: administration
+      tags: administration
+    - role: wine
+      tags: wine

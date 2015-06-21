@@ -8,7 +8,6 @@
 
 - name: install neobundle for vim
   shell: "curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh"
-  sudo: no
   args:
     creates: "{{ vim.bundles }}/neobundle.vim"
 
@@ -16,7 +15,6 @@
   file: path={{ item }}
         state=directory
         mode=0775
-  sudo: no
   with_items:
     - "{{ vim.resources }}"
     - "{{ vim.ftplugin }}"
@@ -26,7 +24,6 @@
   copy: src={{ item.src }}
         dest={{ item.dest }}
         force=yes
-  sudo: no
   with_items:
     - src: .vimrc
       dest: "{{ vim.config_path }}"
@@ -36,7 +33,6 @@
 - name: copy ftplugin files into place
   copy: src={{ item }}
         dest={{ vim.ftplugin }}
-  sudo: no
   with_fileglob:
     ftplugin/*.vim
 
@@ -51,16 +47,28 @@
     - python-notify
     - python-dns
 
-- name: donwload silversearcher-ag source from github
-  git: repo"=https://github.com/mizuno-as/silversearcher-ag"
-       dest=/tmp
-  sudo: no
+- name: download silversearcher-ag source from github
+  tags: ag
+  git: repo={{ vim.ag.download_url }}
+       dest=/tmp/silversearcher-ag
+
+- name: install silversearcher dependencies
+  tags:
+    - silversearcher
+    - ag
+  sudo: yes
+  apt: name={{ item }}
+       state=latest
+  with_items:
+    vim.ag.deps
 
 - name: install silversearcher-ag from source
   tags:
     - silversearcher
     - ag
-  shell: ./build.sh && make install
+  shell: ./build.sh && sudo make install
+  args:
+    chdir: /tmp/silversearcher-ag
 
 - name: create vim-related executables
   tags:

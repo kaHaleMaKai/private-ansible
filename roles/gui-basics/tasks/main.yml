@@ -1,6 +1,7 @@
 - name: install most basic gui packages
   apt: name={{ item }}
-       state={{ item }}
+       state={{ item.state|default('latest') }}
+  sudo: yes
   with_items:
     - libreoffice
     - thunderbird
@@ -18,7 +19,6 @@
   get_url: |
             url="http://download.skype.com/linux/skype-ubuntu-precise_4.3.0.37-1_i386.deb"
             dest="/tmp/skype.deb"
-  sudo: no
   when: not all_cmds.results|has_cmd('skype')
 
 - name: install skype from deb package
@@ -33,7 +33,6 @@
   get_url: |
     url="https://dl.dropboxusercontent.com/u/8593574/Spotify/spotify-client_0.8.8.323.gd143501.250-1_amd64.deb"
     dest="/tmp"
-  sudo: no
   when: not all_cmds.results|has_cmd('spotify')
 
 - name: install spotify from deb package
@@ -48,7 +47,6 @@
     - vidyo
   get_url: url="https://vidyoportal.cern.ch/upload/VidyoDesktopInstaller-ubuntu64-TAG_VD_3_3_0_027.deb"
            dest=/tmp/vidyo.deb
-  sudo: no
   when: not all_cmds.results|has_cmd('vidyo')
 
 - name: install vidyo client from deb
@@ -63,6 +61,7 @@
   apt: name={{ item }}
        state=latest
        update_cache=yes
+  sudo: yes
   with_items:
     - virtualbox
     - virtualbox-dkms
