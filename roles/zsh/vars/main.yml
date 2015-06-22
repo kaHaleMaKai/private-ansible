@@ -1,3 +1,0 @@
-zsh:
-  config_path: "{{ ansible_user_dir }}/.config/zsh"
-  rc: "{{ ansible_user_dir }}/.zshrc"

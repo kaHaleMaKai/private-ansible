@@ -1,4 +1,277 @@
-host_vars:
-  kauai:
-    git_user: "Lars Winderling"
-    git_email: lars.winderling@performance-advertising.de
+pyvenvs:
+  root_dir: /usr/local/pyvenvs
+  default_owner: pyenv-user
+  default_group: pyenv
+  list_of_venvs:
+    - name: bricks
+      lvm:
+        vg: vgroot
+        lv: lvpybricks
+        size: 1G
+        fstype: ext4
+      owner: pyenv-user
+      python_version: 3
+      site_packages: no
+      group: pyenv
+      state: mounted
+      opts: relatime
+      eggs:
+        - name: ipython
+        - name: profitbricks
+
+wine:
+  prefix_dir: /usr/local/wine
+  lvm:
+    vg: vgroot
+    lv: lvwine
+    size: 2G
+  user: wine-user
+  group: wine
+  prefixes:
+    - name: heidi
+      download_url: "http://www.heidisql.com/installers/HeidiSQL_9.2.0.4947_Setup.exe"
+
+administration:
+  groups:
+    - name: pyenv
+      state: present
+      system: no
+      append: no
+    - name: wine
+      state: present
+      system: no
+  users:
+    - name: pyenv-user
+      state: present
+      groups: pyenv
+    - name: wine-user
+      state: present
+      group: wine
+    - name: lars
+      groups: pyenv,wine
+
+basic_packages:
+  - curl
+  - feh
+  - git
+  - htop
+  - mirage
+  - nmap
+  - parallel
+  - percona-server-client-5.6
+  - redshift
+  - rpm2cpio
+  - screen
+  - subversion
+  - vim-gtk
+  - wget
+  - wine
+  - zsh
+
+vim:
+  rc: "{{ ansible_user_dir }}/.vimrc"
+  config_path: "{{ ansible_user_dir }}/.vim"
+  bundles: "{{ ansible_user_dir }}/.vim/bundle"
+  resources: "{{ ansible_user_dir }}/.vim/vimrc-res"
+  sessions: "{{ ansible_user_dir }}/.vim/vimrc-res/sessions"
+  after: "{{ ansible_user_dir }}/.vim/after"
+  ftplugin: "{{ ansible_user_dir }}/.vim/after/ftplugin"
+  syntax: "{{ ansible_user_dir }}/.vim/after/syntax"
+  bin_path: "{{ ansible_user_dir }}/bin"
+  ag:
+    download_url: https://github.com/mizuno-as/silversearcher-ag
+    deps:
+      - automake
+      - pkg-config
+      - libpcre3-dev
+      - zlib1g-dev
+      - liblzma-dev
+
+zsh:
+  config_path: "{{ ansible_user_dir }}/.config/zsh"
+  rc: "{{ ansible_user_dir }}/.zshrc"
+
+list_of_commands:
+  - name: ag
+  - name: skype
+    findby: cmd
+  - name: spotify
+  - name: awesome
+  - name: vidyo
+    cmd: VidyoDesktop
+  - name: vimrc
+    findby: custom
+    shellcmd: >
+                grep '^" vimrc from ansible$'
+                     "{{ ansible_user_dir }}"
+                     >/dev/null 2>&1
+  - name: ohmyzsh
+    findby: directory
+    path: "{{ ansible_user_dir }}/.oh-my-zsh"
+  - name: heidi
+    findby: directory
+    path:  "{{ wine.prefix_dir }}/heidi/drive_c/Program Files/HeidiSQL"
+
+
+#installations:
+  #- name: ag
+    #path: somewhere/silver/searcher
+    #method: git
+    #url: https://github.com/mizuno-as/silversearcher-ag
+    #dest: silversearcher-ag
+    #install: source
+    #shell:
+      #cmd: "./build.sh && sudo make install"
+    #deps:
+      #- automake
+      #- pkg-config
+      #- libpcre3-dev
+      #- zlib1g-dev
+      #- liblzma-dev
+  #- name: skype
+    #findby: cmd
+    #method: deb
+    #url: "http://download.skype.com/linux/skype-ubuntu-precise_4.3.0.37-1_i386.deb"
+    #dest: skype.deb
+  #- name: spotify
+  #- name: awesome
+  #- name: vidyo
+    #cmd: VidyoDesktop
+  #- name: vimrc
+    #findby: custom
+    #shellcmd: >
+                #grep '^" vimrc from ansible$'
+                     #"{{ host_vars[ansible_hostname].home }}"
+                     #>/dev/null 2>&1
+  #- name: ohmyzsh
+    #findby: directory
+    #path: "{{ host_vars[ansible_hostname].home }}/.oh-my-zsh"
+  #- name: heidi
+    #findby: directory
+    #path:  "{{ host_vars[ansible_hostname].wine.prefix_dir }}/heidi/drive_c/Program Files/HeidiSQL"
+
+git_config:
+  user:
+    name: Lars Winderling
+    email: lars.winderling@performance-advertising.de
+  color:
+    branch: auto
+    diff: auto
+    interactive: auto
+    status: auto
+    ui: auto
+  diff:
+    tool: vimdiff
+  difftool:
+    prompt:
+      false
+  core:
+    editor: vim
+    excludesfile: "~/.gitignore"
+  push:
+    default: current
+  merge:
+    tool: diffconflicts
+  mergetool:
+    keepBackup: false
+  'mergetool "diffconflicts"':
+    cmd: 'diffconflicts vim $BASE $LOCAL $REMOTE $MERGED'
+    trustExitCode: true
+  alias:
+    lg1: "log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
+    lg2: "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
+    lg: '!"git lg1"'
+
+git_ignore:
+  - "*.log"
+  - ".vagrant"
+  - "*.pyc"
+  - "._*"
+  - "~*"
+
+ssh_config:
+  defaults:
+    forward_agent: yes
+    send_env: "LC_*"
+    identity_file: "~/.ssh/id_rsa"
+    strict_host_key_checking: no
+    port: 22
+    user: root
+  hosts:
+    - host: pmdev-bd
+      user: lwinderling
+    - host: docker-db
+      name: localhost
+      user: lars
+      port: 3022
+    - host: db1
+      name: db1.esome.info
+    - host: db2
+      name: db2.esome.info
+    - host: crawlerdb1p
+      name: crawlerdb1p.performance-media.de
+    - host: jenkins
+      name: jenkins.pmd.local
+    - host: paweb
+      name: web1.bricks2.pmd5.org
+    - host: padb1
+    - host: padb1-test
+    - host: fbdb1
+    - host: sadb1
+    - host: pacs2
+    - host: fb
+    - host: sengine
+    - host: padb1archiv
+    - host: sesam
+    - host: sesam-abc
+    - host: bimsdb
+    - host: pmwork
+    - host: pmwork2
+    - host: dbrestore
+    - host: repository
+    - host: agg
+      name: pmagg1.pmd.local
+    - host: agg-test
+      name: pmagg1-test.pmd.local
+
+awesome:
+  terminal: xfce4-terminal
+  theme: my-theme
+  config_path: "{{ ansible_user_dir }}/.config/awesome"
+  theme_dir: "{{ ansible_user_dir }}/.config/awesome/themes"
+  autostart:
+    - prg: light-locker
+    - prg: xfce4-power-manager
+    - prg: nm-applet
+  shortcuts:
+    - cmd: xflock4
+      mode: spawn
+      modkey: yes
+      extrakey: "Control"
+      key: l
+  build_params:
+    DCMAKE_PREFIX_PATH: /usr
+    DSYSCONFDIR: /etc
+  deps:
+    - cmake
+    - liblua5.1-dev
+    - imagemagick
+    - libxcb-randr0-dev
+    - libxcb-xtest0-dev
+    - libxcb-xinerama0-dev
+    - libxcb-shape0-dev
+    - libxcb-keysyms1-dev
+    - libxcb-icccm4-dev
+    - libx11-xcb-dev
+    - lua-lgi-dev
+    - libstartup-notification0-dev
+    - libxdg-basedir-dev
+    - libxcb-image0-dev
+    - libxcb-util0-dev
+    - libgdk-pixbuf2.0-dev
+    - lua5.1
+    - libxcb-cursor-dev
+    - libcairo2-dev
+    - libdbus-1-dev
+
+# vim:ft=yaml
