@@ -25,8 +25,8 @@
         dest={{ item.dest }}
         force=yes
   with_items:
-    - src: .vimrc
-      dest: "{{ vim.config_path }}"
+    - src: dot.vimrc
+      dest: "{{ ansible_user_dir }}/.vimrc"
     - src: funcs.vim
       dest: "{{ vim.resources }}"
 
@@ -51,6 +51,7 @@
   tags: ag
   git: repo={{ vim.ag.download_url }}
        dest=/tmp/silversearcher-ag
+  when: reinstall_vim is defined or not all_cmds.results|has_cmd('ag')
 
 - name: install silversearcher dependencies
   tags:
@@ -61,6 +62,7 @@
        state=latest
   with_items:
     vim.ag.deps
+  when: reinstall_vim is defined or not all_cmds.results|has_cmd('ag')
 
 - name: install silversearcher-ag from source
   tags:
@@ -69,13 +71,14 @@
   shell: ./build.sh && sudo make install
   args:
     chdir: /tmp/silversearcher-ag
+  when: reinstall_vim is defined or not all_cmds.results|has_cmd('ag')
 
 - name: create vim-related executables
   tags:
     - vim-bin
   copy: src={{ item }}
         dest={{ vim.bin_path }}
-        mode=075
+        mode=0775
         force=yes
   with_fileglob:
     bin/*
