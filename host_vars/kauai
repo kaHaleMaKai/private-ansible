@@ -10,15 +10,19 @@ pyvenvs:
         size: 1G
         fstype: ext4
       owner: pyenv-user
-      python_version: 3
+      python_version: 2
       site_packages: no
       group: pyenv
       state: mounted
       opts: relatime
+      force: yes
       eggs:
         - name: ipython
         - name: profitbricks
-
+        - name: pyzmq
+        - name: jinja2
+        - name: tornado
+        - name: jsonschema
 wine:
   prefix_dir: /usr/local/wine
   lvm:
