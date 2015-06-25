@@ -127,6 +127,7 @@ vim:
 zsh:
   config_path: "{{ ansible_user_dir }}/.config/zsh"
   rc: "{{ ansible_user_dir }}/.zshrc"
+  autocomplete: "{{ ansible_user_dir }}/.config/zsh/autocomplete"
 
 list_of_commands:
   - name: ag
