@@ -25,10 +25,12 @@
         dest={{ item.dest }}
         force=yes
   with_items:
-    - src: dot.vimrc
-      dest: "{{ ansible_user_dir }}/.vimrc"
     - src: funcs.vim
       dest: "{{ vim.resources }}"
+
+- name: template .vimrc
+  template: src=dot.vimrc.j2
+            dest={{ ansible_user_dir }}/.vimrc
 
 - name: copy ftplugin files into place
   copy: src={{ item }}

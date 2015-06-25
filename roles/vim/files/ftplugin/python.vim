@@ -566,3 +566,4 @@ endif
 "endif
 
 let b:current_syntax = "python"
+NeoBundleSource python-mode

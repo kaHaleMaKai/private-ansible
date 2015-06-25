@@ -25,7 +25,6 @@ endif
 
 set modeline
 set hlsearch
-hi Search cterm=reverse
 set background=dark
 set tags=tags;/
 set t_Co=256
@@ -53,30 +52,17 @@ set expandtab
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'tpope/vim-sensible'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'bling/vim-airline'
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'ervandew/supertab'
-NeoBundle 'vim-scripts/TaskList.vim'
-NeoBundle 'flazz/vim-colorschemes'
-NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'https://gitlab.com/pycqa/flake8.git'
-NeoBundle 'scrooloose/nerdcommenter'
-NeoBundleLazy 'ironcamel/vimchat'
-NeoBundle 'rking/ag.vim'
+{% for category, items in vim.neobundle|dictsort %}
+" {{ category }}
+{% for item in items %}
+{% if item.lazy is defined and item.lazy %}
+NeoBundleLazy '{{ item.name }}'
+{% else %}
+NeoBundle '{{ item.name }}'
+{% endif %}
+{% endfor %}
 
-" clojure specific
-NeoBundleLazy 'vim-scripts/paredit.vim'
-NeoBundleLazy 'tpope/vim-fireplace'
-NeoBundleLazy 'guns/vim-clojure-static'
-NeoBundleLazy 'tpope/vim-classpath'
-
-"yaml
-NeoBundleLazy 'stephpy/vim-yaml'
+{% endfor %}
 
 call neobundle#end()
 
@@ -91,7 +77,7 @@ if !exists("g:colorscheme_sourced")
     exe "hi " . opt . " ctermbg=none"
   endfor
   hi Normal ctermbg=none
-  hi Normal ctermbg=none
+  hi Search cterm=reverse
 endif
 
 set nu
@@ -131,3 +117,15 @@ au BufNewFile,BufRead *.ino set filetype=arduino
 au BufNewFile,BufRead *.jsm set filetype=javascript
 
 exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
+"
+" Add the virtualenv's site-packages to vim path
+py << EOF
+import os.path
+import sys
+import vim
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  sys.path.insert(0, project_base_dir)
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF

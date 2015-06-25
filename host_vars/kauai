@@ -90,6 +90,39 @@ vim:
       - libpcre3-dev
       - zlib1g-dev
       - liblzma-dev
+  neobundle:
+    generic:
+      - name: tpope/vim-sensible
+      - name: tpope/vim-fugitive
+      - name: tpope/vim-surround
+      - name: tpope/vim-repeat
+      - name: scrooloose/nerdtree
+      - name: bling/vim-airline
+      - name: scrooloose/syntastic
+      - name: ervandew/supertab
+      - name: vim-scripts/TaskList.vim
+      - name: flazz/vim-colorschemes
+      - name: scrooloose/nerdcommenter
+      - name: https://gitlab.com/pycqa/flake8.git
+      - name: scrooloose/nerdcommenter
+      - name: ironcamel/vimchat
+        lazy: yes
+      - name: rking/ag.vim
+    clojure:
+      - name: vim-scripts/paredit.vim
+        lazy: yes
+      - name: tpope/vim-fireplace
+        lazy: yes
+      - name: guns/vim-clojure-static
+        lazy: yes
+      - name: tpope/vim-classpath
+        lazy: yes
+    yaml:
+      - name: stephpy/vim-yaml
+        lazy: yes
+    python:
+      - name: https://github.com/klen/python-mode
+        lazy: yes
 
 zsh:
   config_path: "{{ ansible_user_dir }}/.config/zsh"
