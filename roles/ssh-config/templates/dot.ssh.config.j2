@@ -4,21 +4,35 @@
 {% if ssh_config.hosts is defined %}
 
 # list of hosts
-{% for item in ssh_config.hosts %}
-Host {{ item["host"] }}
+{% if ssh_config.hosts.domains is defined %}
+{% for domain in ssh_config.hosts.domains %}
+# -------- domain: {{ domain.name }} -------- #
+{% for item in domain.machines %}
+Host {{ item.host }}
 {# --- #}
+  HostName {{ item.name|default(item.host~"."~domain.name) }}
 {% for key, val in item.iteritems() %}
-{% if key == "name" %}
-  HostName {{ val }}
-{% elif key != "host" %}
+{% if key != "host" and key != 'name' %}
   {{ key|camel }} {{ val }}
 {% endif %}
 {# --- #}
 {% endfor %}
 {# --- #}
-{% if item|length > 1 %}
 
+{% endfor %}
+{% endfor %}
 {% endif %}
+{% endif %}
+{% if ssh_config.hosts.no_domain is defined %}
+{% for item in ssh_config.hosts.no_domain %}
+Host {{ item.host }}
+{% for key, val in item|dictsort %}
+{% if key == 'name' %}
+  HostName {{ val }}
+{% elif key != 'host' %}
+  {{ key|camel }} {{ val }}
+{% endif %}
+{% endfor %}
 {% endfor %}
 {% endif %}
 {% if ssh_config.defaults is defined %}

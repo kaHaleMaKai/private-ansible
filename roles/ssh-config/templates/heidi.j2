@@ -1,3 +1,0 @@
-#!/bin/bash
-
-env WINEPREFIX="{{ host_vars[ansible_hostname].wine.prefix_dir }}/heidi" wine64 "{{ host_vars[ansible_hostname].wine.prefix_dir }}/heidi/drive_c/Program Files/HeidiSQL/heidisql.exe" &
