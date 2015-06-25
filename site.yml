@@ -20,3 +20,5 @@
       tags: administration
     - role: wine
       tags: wine
+    - role: pyvenvs
+      tags: pyvenvs
