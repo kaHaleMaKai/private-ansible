@@ -97,6 +97,8 @@ vim:
       - name: tpope/vim-surround
       - name: tpope/vim-repeat
       - name: scrooloose/nerdtree
+      - name: Xuyuanp/nerdtree-git-plugin
+      - name: low-ghost/nerdtree-fugitive
       - name: bling/vim-airline
       - name: scrooloose/syntastic
       - name: ervandew/supertab
