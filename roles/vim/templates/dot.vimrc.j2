@@ -47,6 +47,7 @@ set laststatus=2
 set splitbelow
 set splitright
 set sw=2
+set wildmenu
 set expandtab
 
 call neobundle#begin(expand('~/.vim/bundle/'))
@@ -56,9 +57,9 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " {{ category }}
 {% for item in items %}
 {% if item.lazy is defined and item.lazy %}
-NeoBundleLazy '{{ item.name }}'
+NeoBundleLazy '{{ item.bundle }}'
 {% else %}
-NeoBundle '{{ item.name }}'
+NeoBundle '{{ item.bundle }}'
 {% endif %}
 {% endfor %}
 
@@ -83,14 +84,6 @@ endif
 set nu
 let mapleader = '-'
 
-map <c-j> <c-w>j
-map <c-k> <c-w>k
-map <c-l> <c-w>l
-map <c-h> <c-w>h
-map <leader>td <Plug>TaskList
-cmap w!! w !sudo tee > /dev/null %
-nnoremap <silent> <leader>,<space> :let @/=''<CR>:<CR>
-
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -110,13 +103,15 @@ let g:vimrc_res_path = g:vim_path . "/vimrc-res"
 let g:SESSION_PATH = g:vimrc_res_path . '/sessions'
 let g:NR_OF_SESSIONS = 10
 let g:delete_trailing_ws = true
+let g:ctrlp_extensions = ['funky']
+
+exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
+exe "so " . g:vimrc_res_path . "/" . "maps.vim"
 
 " autocommands
 au BufWrite * :call DeleteTrailingWS()
 au BufNewFile,BufRead *.ino set filetype=arduino
 au BufNewFile,BufRead *.jsm set filetype=javascript
-
-exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
 "
 " Add the virtualenv's site-packages to vim path
 py << EOF

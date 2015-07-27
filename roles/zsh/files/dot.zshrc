@@ -6,10 +6,6 @@ export ZSH=$HOME/.oh-my-zsh
 # Set Common env variables
 export JAVA_HOME='/usr/lib/jvm/java-7-openjdk-amd64'
 
-# python3 venvs
-# set default venv, sourced automatically on terminal startup
-DEFAULT_VENV="data-science"
-
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -63,7 +59,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="${PATH}:/home/lars/bin:/home/lars/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games"
+export PATH="${PATH}:/home/lars/bin:/home/lars/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/lib/postgresql/9.3/bin"
 
 fpath=(~/.config/zsh/autocomplete $fpath)
 # compsys initialization
@@ -107,4 +103,5 @@ append_last_command_to_file() {
 for f in ~/.config/zsh/fns/*; do
     source "$f"
 done
-# vi:sw=2 ts=2:setlocal:
+
+# vim: ft=sh

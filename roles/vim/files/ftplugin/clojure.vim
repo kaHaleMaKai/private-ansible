@@ -1,12 +1,6 @@
-NeoBundleSource paredit.vim
-NeoBundleSource vim-fireplace
-NeoBundleSource vim-clojure-static
-NeoBundleSource vim-classpath
-
 nnoremap <leader>- :Eval<CR>
 nnoremap <leader>_ cp_
 nnoremap <leader><S-p> :%Eval<CR>
-nnoremap <leader>c :Connect nrepl://localhost:
 nnoremap <leader>k :Source <C-R><C-W><CR>
 nnoremap <silent> <leader>;; :call PareditSmartJumpOpening(0)<CR>:call PareditWrap("(",")")<CR>acomment<C-R>=PareditEnter()<C-M><ESC>:call PareditSmartJumpOpening(0)<CR>
 inoremap <leader>. `
@@ -27,6 +21,12 @@ nnoremap <silent> <C-j> :call PareditFindDefunFwd()<CR>
 nnoremap <silent> <leader>m :call search('[(\[\{]', 'W')<CR>
 nnoremap <silent> <leader>n :call search('[)\]\}]', 'bW')<CR>
 nnoremap <silent> <leader>ic :call search('\[', 'Wc')<CR>Xi<C-r>=PareditEnter()<C-m><C-r>=PareditEnter()<C-m><C-o>k<C-r>=PareditInsertOpening('"', '"')<C-m>
+
+func! s:ConnectToNRepl(port)
+  exe "Connect nrepl://localhost:" . a:port
+endfunc
+
+command! -nargs=1 NREPL call s:ConnectToNRepl(<q-args>)
 
 function! s:EvalVisualRange()
   let s:_register = @"

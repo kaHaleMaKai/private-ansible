@@ -68,7 +68,7 @@ if !exists("user_funcs_imported")
   endfunction
   command! -nargs=1 EditColorScheme call s:EditColorScheme(<q-args>)
 
-  function! Reduce(ffn, list) "{{{3
+  function! Reduce(ffn, list)
     if empty(a:list)
       return ''
     else
@@ -272,4 +272,63 @@ if !exists("user_funcs_imported")
   endfunc
 
   command! -nargs=0 StartVimChat call s:FnStartVimChat()
+
+  func! s:GetGitTopLevelDirFromRevParse(curdir)
+    let toplevel = system('git -C ' . a:curdir . ' rev-parse --show-toplevel')
+    return toplevel
+  endfunc
+
+  func! GGG()
+    return s:GetGitTopLevelDir()
+  endfunc
+
+  func! GGGR(curdir)
+    return s:GetGitTopLevelDirFromRevParse(a:curdir)
+  endfunc
+
+  func! s:GetGitTopLevelDir()
+    let bufdir = expand('%:p:h')
+    if bufdir[0] == '/'
+      let toplevel = s:GetGitTopLevelDirFromRevParse(bufdir)
+      if v:shell_error == 0
+        return toplevel
+      endif
+    endif
+
+    let curdir = getcwd()
+    let toplevel = s:GetGitTopLevelDirFromRevParse(curdir)
+    if v:shell_error != 0
+      echoerr "[ERROR] current working dir is not part of a git repository"
+    else
+      return toplevel
+    endif
+  endfunc
+
+  command! -nargs=0 GWD echo s:GetGitTopLevelDir()
+
+  func! s:AgInGitRepository(pattern)
+    let search_cmd = 'vimgrep'
+    if exists(':Ag') == 2
+      let search_cmd = 'Ag'
+    endif
+    exe search_cmd . '! ' .  a:pattern . ' ' . s:GetGitTopLevelDir()
+  endfunc
+
+  command! -nargs=1 AG call s:AgInGitRepository(<q-args>)
+
+  func! s:NERDTreeOpenGitRoot()
+    exe ':NERDTree ' . s:GetGitTopLevelDir()
+  endfunc
+
+  func! s:NERDTreeReopenWithGitRoot()
+    call s:NERDTreeOpenGitRoot()
+    wincmd p
+    exe ':NERDTreeFind'
+  endfunc
+
+  command! -nargs=0 NERDTreeGitRoot call s:NERDTreeOpenGitRoot()
+  command! -nargs=0 NERDTreeGitRootFind call s:NERDTreeReopenWithGitRoot()
+
 endif
+
+" vim: ft=vim

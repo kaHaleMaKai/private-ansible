@@ -3,6 +3,23 @@ pyvenvs:
   default_owner: pyenv-user
   default_group: pyenv
   list_of_venvs:
+    - name: ansible
+      lvm:
+        vg: vgroot
+        lv: lvansible
+        size: 500M
+      owner:  pyenv-user
+      group: pyenv
+      python_version: 2
+      state: mounted
+      opts: relatime
+      force: yes
+      site_packages: no
+      eggs:
+        - name: ipython
+        - name: MySQL-python
+        - name: ansible
+        - name: nose
     - name: bricks
       lvm:
         vg: vgroot
@@ -44,6 +61,10 @@ administration:
     - name: wine
       state: present
       system: no
+    - name: spark
+      state: present
+      system: no
+      append: no
   users:
     - name: pyenv-user
       state: present
@@ -51,31 +72,39 @@ administration:
     - name: wine-user
       state: present
       group: wine
+    - name: spark-user
+      state: present
+      groups: spark
     - name: lars
-      groups: pyenv,wine
+      groups: pyenv,wine,postgres,spark
 
 basic_packages:
   - curl
   - feh
   - git
   - htop
+  - libmysqlclient-dev
   - mirage
   - nmap
   - parallel
   - percona-server-client-5.6
+  - postgresql-9.3
   - redshift
   - rpm2cpio
   - screen
   - subversion
   - vim-gtk
   - wget
+  - whois
   - wine
+  - youtube-dl
   - zsh
 
 vim:
   rc: "{{ ansible_user_dir }}/.vimrc"
   config_path: "{{ ansible_user_dir }}/.vim"
   bundles: "{{ ansible_user_dir }}/.vim/bundle"
+  tmp_dir: /tmp/ftplugins
   resources: "{{ ansible_user_dir }}/.vim/vimrc-res"
   sessions: "{{ ansible_user_dir }}/.vim/vimrc-res/sessions"
   after: "{{ ansible_user_dir }}/.vim/after"
@@ -92,38 +121,43 @@ vim:
       - liblzma-dev
   neobundle:
     generic:
-      - name: tpope/vim-sensible
-      - name: tpope/vim-fugitive
-      - name: tpope/vim-surround
-      - name: tpope/vim-repeat
-      - name: scrooloose/nerdtree
-      - name: Xuyuanp/nerdtree-git-plugin
-      - name: low-ghost/nerdtree-fugitive
-      - name: bling/vim-airline
-      - name: scrooloose/syntastic
-      - name: ervandew/supertab
-      - name: vim-scripts/TaskList.vim
-      - name: flazz/vim-colorschemes
-      - name: scrooloose/nerdcommenter
-      - name: https://gitlab.com/pycqa/flake8.git
-      - name: scrooloose/nerdcommenter
-      - name: ironcamel/vimchat
+      - bundle: tpope/vim-sensible
+      - bundle: tpope/vim-fugitive
+      - bundle: tpope/vim-surround
+      - bundle: tpope/vim-repeat
+      - bundle: scrooloose/nerdtree
+      - bundle: easymotion/vim-easymotion
+      - bundle: tacahiroy/ctrlp-funky
+      - bundle: itchyny/screensaver.vim
+      - bundle: kien/ctrlp.vim
+      - bundle: Xuyuanp/nerdtree-git-plugin
+      - bundle: low-ghost/nerdtree-fugitive
+      - bundle: bling/vim-airline
+      - bundle: scrooloose/syntastic
+      - bundle: ervandew/supertab
+      - bundle: vim-scripts/TaskList.vim
+      - bundle: flazz/vim-colorschemes
+      - bundle: scrooloose/nerdcommenter
+      - bundle: ironcamel/vimchat
         lazy: yes
-      - name: rking/ag.vim
+      - bundle: rking/ag.vim
+      - bundle: airblade/vim-gitgutter
     clojure:
-      - name: vim-scripts/paredit.vim
+      - bundle: vim-scripts/paredit.vim
         lazy: yes
-      - name: tpope/vim-fireplace
+      - bundle: tpope/vim-fireplace
         lazy: yes
-      - name: guns/vim-clojure-static
+      - bundle: guns/vim-clojure-static
         lazy: yes
-      - name: tpope/vim-classpath
+      - bundle: tpope/vim-classpath
         lazy: yes
     yaml:
-      - name: stephpy/vim-yaml
+      - bundle: stephpy/vim-yaml
         lazy: yes
     python:
-      - name: https://github.com/klen/python-mode
+      - bundle: klen/python-mode
+        lazy: yes
+      - bundle: Bogdanp/pyrepl.vim
         lazy: yes
 
 zsh:
@@ -242,7 +276,7 @@ ssh_config:
         - name: pmd.local
           machines:
             - host: pmdev-bd
-              user: lwinderling
+              user: root
             - host: jenkins
             - host: paweb
             - host: padb1
@@ -251,6 +285,7 @@ ssh_config:
             - host: sadb1
             - host: pacs2
             - host: fb
+            - host: blackhole
             - host: sengine
             - host: padb1archiv
             - host: sesam

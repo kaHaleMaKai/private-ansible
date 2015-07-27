@@ -20,23 +20,49 @@
     - "{{ vim.ftplugin }}"
     - "{{ vim.syntax }}"
 
-- name: copy vim-related files into place
-  copy: src={{ item.src }}
-        dest={{ item.dest }}
-        force=yes
+- name: template vim files
+  template: src={{ item.src }}
+            dest={{ item.dest }}
   with_items:
-    - src: funcs.vim
-      dest: "{{ vim.resources }}"
+    - src: dot.vimrc.j2
+      dest: "{{ ansible_user_dir }}/.vimrc"
+    - src: maps.vim.j2
+      dest: "{{ vim.resources }}/maps.vim"
+    - src: funcs.vim.j2
+      dest: "{{ vim.resources }}/funcs.vim"
 
-- name: template .vimrc
-  template: src=dot.vimrc.j2
-            dest={{ ansible_user_dir }}/.vimrc
-
-- name: copy ftplugin files into place
-  copy: src={{ item }}
-        dest={{ vim.ftplugin }}
+- name: create dirs for assembling ftplugin files later on
+  file: dest={{ vim.tmp_dir }}/{{ item|basename }}
+        state=directory
+        mode=0775
+        owner={{ ansible_user_id }}
+        group={{ ansible_user_id }}
   with_fileglob:
     ftplugin/*.vim
+
+- name: copy ftplugin files into tmp dir
+  copy: src={{ item }}
+        dest={{ vim.tmp_dir }}/{{ item|basename }}/99_main.vim
+  with_fileglob:
+    ftplugin/*.vim
+
+- name: template neobundle sources for ftplugins
+  template: src=neobundle-source.vim.j2
+            dest={{ vim.tmp_dir }}/{{ item|basename }}/10_neobundle-sources.vim
+  with_fileglob:
+    ftplugin/*.vim
+
+- name: concat neobundle sources and ftplugin files
+  assemble: src={{ vim.tmp_dir }}/{{ item|basename }}
+            dest={{ vim.ftplugin }}/{{ item|basename }}
+            remote_src=yes
+            mode=0664
+            owner={{ ansible_user_id }}
+            group={{ ansible_user_id }}
+  with_fileglob:
+    ftplugin/*.vim
+  notify:
+    - remove ftplugin tmp dir
 
 - name: install vimchat dependencies
   tags:
@@ -50,7 +76,6 @@
     - python-dns
 
 - name: download silversearcher-ag source from github
-  tags: ag
   git: repo={{ vim.ag.download_url }}
        dest=/tmp/silversearcher-ag
   when: reinstall_vim is defined or not all_cmds.results|has_cmd('ag')

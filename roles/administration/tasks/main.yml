@@ -4,6 +4,7 @@
   group: name={{ item.name }}
          state={{ item.state|default('present') }}
          system={{ item.system|default('no') }}
+  sudo: yes
   with_items:
     administration.groups
 
@@ -20,5 +21,6 @@
         remove={{ item.remove|default('no') }}
         shell={{ item.shell|default(omit) }}
         system={{ item.system|default('no') }}
+  sudo: yes
   with_items:
     administration.users

@@ -4,6 +4,8 @@
   roles:
     - role: run-always
       tags: always
+    - role: basics
+      tags: basics
     - role: git-config
       tags: [git, git-config]
     - role: zsh

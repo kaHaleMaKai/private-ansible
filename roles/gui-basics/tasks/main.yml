@@ -3,15 +3,16 @@
        state={{ item.state|default('latest') }}
   sudo: yes
   with_items:
+    - chromium-browser
+    - gksu
     - libreoffice
+    - padevchooser
+    - pavucontrol
+    - pepperflashplugin-nonfree
+    - shutter
     - thunderbird
     - xfce4-mixer
-    - pavucontrol
-    - padevchooser
-    - shutter
-    - chromium-browser
-    - pepperflashplugin-nonfree
-    - gksu
+    - zim
 
 - name: download skype deb package
   tags:

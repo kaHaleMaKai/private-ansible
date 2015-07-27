@@ -1,5 +1,11 @@
 - name: install most basic packages
   apt: name={{ item }}
        state=latest
+  sudo: yes
   with_items:
     basic_packages
+
+- name: keep postgres from starting on startup
+  service: name=postgresql
+           enabled=no
+  sudo: yes

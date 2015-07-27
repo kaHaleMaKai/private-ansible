@@ -1,0 +1,3 @@
+- name: remove ftplugin tmp dir
+  file: path={{ vim.tmp_dir }}
+        state=absent

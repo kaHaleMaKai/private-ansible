@@ -1,0 +1,23 @@
+cmap w!! w !sudo tee > /dev/null %
+nnoremap <silent> <leader>,<space> :nohlsearch<CR>
+{% if vim.neobundle is defined %}
+{% for section, bundles in vim.neobundle|dictsort %}
+{% for bundle in bundles %}
+{% if bundle.bundle|lower|search('/nerdtree$') %}
+nnoremap <silent> <leader>nf :NERDTreeFind<CR>
+nnoremap <silent> <leader>nsf :NERDTreeFind<CR> \| :wincmd p<CR>
+nnoremap <silent> <leader>ng :NERDTreeGitRoot<CR>
+nnoremap <silent> <leader>nF :NERDTreeGitRootFind<CR>
+nnoremap <silent> <leader>nsF :NERDTreeGitRootFind<CR> \| :wincmd p<CR>
+{% elif bundle.bundle|lower|search('/easymotion$') %}
+map <Leader>S <Plug>(easymotion-s2)
+{% elif bundle.bundle|lower|search('/ctrlp-funky$') %}
+nnoremap <Leader>fu :CtrlPFunky<Cr>
+nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
+{% elif bundle.bundle|lower|search('/vim-gitgutter$') %}
+nnoremap <silent> <Leader><Leader>gg :GitGutterStageHunk<CR>
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}
+" vim: ft=vim
