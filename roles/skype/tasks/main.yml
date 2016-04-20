@@ -1,0 +1,6 @@
+- name: check if skype has been installed
+  shell: type -p skype
+  register: skype_installed
+
+- include: install.yml
+  when: skype_installed.rc == 0

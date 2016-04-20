@@ -1,0 +1,11 @@
+- name: download skype deb package
+  get_url: url="http://download.skype.com/linux/skype-ubuntu-precise_4.3.0.37-1_i386.deb"
+           dest="/tmp/skype.deb"
+
+- name: install skype from deb package
+  apt: deb=/tmp/skype.deb
+  sudo: yes
+
+- name: remove deb
+  file: path=/tmp/skype.deb
+        state=absent
