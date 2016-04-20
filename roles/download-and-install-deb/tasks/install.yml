@@ -1,0 +1,11 @@
+- name: download skype deb package
+  get_url: url="{{ url }}"
+           dest="/tmp/newly-downloaded-package.deb"
+
+- name: install program from deb package
+  apt: deb="/tmp/newly-downloaded-package.deb"
+  sudo: yes
+
+- name: remove deb
+  file: path="/tmp/newly-downloaded-package.deb"
+        state=absent

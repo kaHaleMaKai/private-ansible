@@ -1,0 +1,6 @@
+- name: check if program has been installed
+  shell: type -p "{{ binary }}"
+  register: proram_installed
+
+- include: install.yml
+  when: program_installed.rc == 0

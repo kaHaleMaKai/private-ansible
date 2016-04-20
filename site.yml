@@ -8,6 +8,21 @@
 - include: vim
 - include: wine
 
+  # FIXME
+- hosts: kauai
+  vars:
+    binary: deb_list.skype.binary
+    url: deb_list.skype.url
+  roles:
+    - download-and-install-deb
+
+- hosts: kauai
+  vars:
+    binary: deb_list.spotify.binary
+    url: deb_list.spotify.url
+  roles:
+    - download-and-install-deb
+
 #- hosts: my-computers
   #remote_user: lars
   #sudo: no
