@@ -1,22 +1,38 @@
 basic_packages:
+  - chromium-browser
   - curl
   - feh
   - git
+  - gksu
+  - gnupg2
   - htop
   - libmysqlclient-dev
+  - libreoffice
   - mirage
+  - nfs-common
+  - nfs-kernel-server
   - nmap
+  - padevchooser
   - parallel
+  - pavucontrol
+  - pepperflashplugin-nonfree
   - redshift
   - screen
+  - shutter
   - subversion
+  - thunderbird
+  - vagrant
   - vim-gtk
+  - virtualbox
+  - virtualbox-dkms
   - wget
   - whois
   - wine
+  - xfce4-mixer
   - youtube-dl
+  - zim
   - zsh
-  - gnupg2
+
 #  - lyx
 #  - texlive-base
 #  - texlive-extra-utils
