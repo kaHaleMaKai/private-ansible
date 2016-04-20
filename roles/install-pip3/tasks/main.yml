@@ -1,5 +1,0 @@
----
-- name: install ansible from pip
-  pip: name=ansible
-       state=latest
-       executable=
