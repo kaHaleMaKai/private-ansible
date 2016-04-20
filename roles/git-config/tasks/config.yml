@@ -1,13 +1,15 @@
 ---
+- name: setup ~/bin
+  file: path="{{ ansible_user_dir }}/bin"
+        state=directory
+        owner="{{ ansible_user_id }}"
+        group="{{ ansible_user_id }}"
 
 - name: Configure .gitconfig file
-  tags: gitconfig
-  template: src=gitconfig.j2
-            dest=~/.gitconfig
+  template: src=dot.gitconfig.j2
+            dest="{{ ansible_user_dir }}/.gitconfig"
 
 - name: Copy further files into place
-  tags: gitconfig
   copy: src=diffconflicts
-        dest=/usr/local/bin
+        dest="{{ ansible_user_dir }}/bin/diffconflicts"
         mode=0755
-  sudo: yes
