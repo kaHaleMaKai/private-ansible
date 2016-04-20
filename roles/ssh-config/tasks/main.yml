@@ -1,4 +1,4 @@
 - name: setup .ssh config
   template: src=dot.ssh.config.j2
-            dest={{ ansible_user_dir }}/.ssh/config
+            dest="{{ ansible_user_dir }}/.ssh/config"
             mode=0664

@@ -1,12 +1,13 @@
-- include: awesome
-- include: base
-- include: git
-- include: lvm
-- include: pyvenvs
-- include: shell
-- include: site
-- include: vim
-- include: wine
+- include: awesome.yml
+- include: base.yml
+- include: git.yml
+- include: lvm.yml
+- include: pyvenvs.yml
+- include: shell.yml
+- include: ssh-config.yml
+- include: site.yml
+- include: vim.yml
+- include: wine.yml
 
   # FIXME
 - hosts: kauai

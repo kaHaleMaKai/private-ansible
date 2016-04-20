@@ -1,0 +1,4 @@
+- hosts: ssh-config
+  roles:
+  - role: ssh-config
+    tags: ssh-config

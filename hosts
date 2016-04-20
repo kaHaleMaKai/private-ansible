@@ -8,6 +8,10 @@ kauai
 kauai
 [pyvenvs]
 kauai
+[git]
+kauai
+[ssh-config]
+kauai
 [shell-distrib]
 kauai
 [vim-distrib]
