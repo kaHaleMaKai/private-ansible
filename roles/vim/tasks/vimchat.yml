@@ -1,0 +1,10 @@
+- name: install vimchat dependencies
+  tags:
+    - vimchat
+  apt: name={{ item }}
+       state=present
+       install_recommends=no
+  with_items:
+    - python-xmpp
+    - python-notify
+    - python-dns

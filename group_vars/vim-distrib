@@ -12,14 +12,6 @@ vim:
   ftdetect: "{{ ansible_user_dir }}/.vim/ftdetect"
   ultisnippets:
     ftdetect: "{{ ansible_user_dir }}/.vim/ultisnips_rep/ftdetect"
-  ag:
-    download_url: https://github.com/mizuno-as/silversearcher-ag
-    deps:
-      - automake
-      - pkg-config
-      - libpcre3-dev
-      - zlib1g-dev
-      - liblzma-dev
   neobundle:
     generic:
       - bundle: tpope/vim-sensible

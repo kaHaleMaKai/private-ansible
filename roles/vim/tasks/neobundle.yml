@@ -1,0 +1,4 @@
+- name: install neobundle for vim
+  shell: "curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | sh"
+  args:
+    creates: "{{ vim.bundles }}/neobundle.vim"
