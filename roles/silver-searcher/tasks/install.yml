@@ -1,0 +1,30 @@
+---
+- name: download silversearcher-ag source from github
+  git: repo={{ vim.ag.download_url }}
+       dest=/tmp/silversearcher-ag
+
+- name: install silversearcher dependencies
+  sudo: yes
+  apt: name={{ item }}
+       state=present
+  with_items:
+    - automake
+    - pkg-config
+    - libpcre3-dev
+    - zlib1g-dev
+    - liblzma-dev
+
+- name: build silversearcher-ag
+  shell: ./build.sh
+  args:
+    chdir: /tmp/silversearcher-ag
+
+- name: make install silversearcher-ag
+  shell: make install
+  sudo: yes
+  args:
+    chdir: /tmp/silversearcher-ag
+
+- name: remove sources
+  file: path=/tmp/silversearcher-ag
+        state=absent

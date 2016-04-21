@@ -1,0 +1,6 @@
+- name: check if silversearcher has been installed
+  command: type -p ag
+  register: ag_installed
+
+- include: install.yml
+  when: ag_installed.rc != 0
