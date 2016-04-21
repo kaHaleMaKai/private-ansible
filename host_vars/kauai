@@ -71,13 +71,9 @@ user_management:
     - name: hdp-user
       groups: hdp
 
-deb_list::
-  skype:
-    - binary: skype
-      url: "http://download.skype.com/linux/skype-ubuntu-precise_4.3.0.37-1_i386.deb"
-  spotify:
-  - binary: spotify
-    url: "https://dl.dropboxusercontent.com/u/8593574/Spotify/spotify-client_0.8.8.323.gd143501.250-1_amd64.deb"
+silversearcher_url: "https://github.com/mizuno-as/silversearcher-ag"
+skype_url: "http://download.skype.com/linux/skype-ubuntu-precise_4.3.0.37-1_i386.deb"
+spotify_url: "https://dl.dropboxusercontent.com/u/8593574/Spotify/spotify-client_0.8.8.323.gd143501.250-1_amd64.deb"
 
 # vim: set ft=yaml
 # vim: ft=yaml

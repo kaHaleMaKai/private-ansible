@@ -1,0 +1,4 @@
+dependencies:
+  - role: download-and-install-deb
+    binary: ag
+    url: skype_url

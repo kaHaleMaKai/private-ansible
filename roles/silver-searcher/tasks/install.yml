@@ -1,6 +1,6 @@
 ---
 - name: download silversearcher-ag source from github
-  git: repo={{ vim.ag.download_url }}
+  git: repo="{{ silversearcher_url }}"
        dest=/tmp/silversearcher-ag
 
 - name: install silversearcher dependencies
