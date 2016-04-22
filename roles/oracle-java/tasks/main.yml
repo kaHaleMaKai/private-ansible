@@ -10,4 +10,4 @@
     - oracle-java7-installer
     - oracle-java8-installer
 - name: Install Oracle's Java JRE
-  apt: name=oracle-java8-installer state=installed
+  apt: name=oracle-java8-installer state=present
