@@ -1,79 +1,47 @@
-administration:
-  groups:
-    - name: pyenv
-      state: present
-      system: no
-      append: no
-    - name: wine
-      state: present
-      system: no
-    - name: spark
-      state: present
-      system: no
-      append: no
-  users:
-    - name: pyenv-user
-      state: present
-      groups: pyenv
-    - name: wine-user
-      state: present
-      group: wine
-    - name: spark-user
-      state: present
-      groups: spark
-    - name: lars
-      groups: pyenv,wine,postgres,spark,audio
-
-list_of_commands:
-  - name: ag
-  - name: skype
-    findby: cmd
-  - name: spotify
-  - name: awesome
-  - name: vidyo
-    cmd: VidyoDesktop
-  - name: vimrc
-    findby: custom
-    shellcmd: >
-                grep '^" vimrc from ansible$'
-                     "{{ ansible_user_dir }}"
-                     >/dev/null 2>&1
-  - name: ohmyzsh
-    findby: directory
-    path: "{{ ansible_user_dir }}/.oh-my-zsh"
-  - name: heidi
-    findby: directory
-    path:  "{{ wine.prefix_dir }}/heidi/drive_c/Program Files/HeidiSQL"
-
-user_management:
-  groups:
-    - name: pyvenv
-    - name: wine
-    - name: postgres
-    - name: spark
-    - name: mysql
-    - name: hdp
-    - name: docker
-      system: yes
-  users:
-    - name: lars
-      groups: adm,cdrom,sudo,audio,dip,plugdev,lpadmin,sambashare,postgres,pyenv,wine,spark,mysql,syslog,video,www-data,dialout,docker
-      home: /home/lars
-      shell: /usr/bin/zsh
-      createhome: yes
-    - name: pyenv-user
-      groups: pyenv
-    - name: wine-user
-      groups: wine
-    - name: spark-user
-      groups: spark
-    - name: mysql
-    - name: hdp-user
-      groups: hdp
-
 silversearcher_url: "https://github.com/mizuno-as/silversearcher-ag"
 skype_url: "http://download.skype.com/linux/skype-ubuntu-precise_4.3.0.37-1_i386.deb"
 spotify_url: "https://dl.dropboxusercontent.com/u/8593574/Spotify/spotify-client_0.8.8.323.gd143501.250-1_amd64.deb"
+heidi_url: "http://www.heidisql.com/installers/HeidiSQL_9.3.0.5072_Setup.exe"
+
+wine:
+  prefix_dir: /usr/local/wine
+
+pyvenvs:
+  prefix_dir: /opt/pyvenvs
+
+user_management:
+  groups:
+    - name: sambashare
+    - name: wine
+    - name: pyvenv
+  users:
+    - name: lars
+      append: no
+      groups:
+        - adm
+        - audio
+        - cdrom
+        - dialout
+        - dip
+        - lpadmin
+        - plugdev
+        - pyvenv
+        - sambashare
+        - sudo
+        - syslog
+        - video
+        - wine
+        - www-data
+    createhome: yes
+    shell: /usr/bin/zsh
+  - name: wine
+    createhome: yes
+    shell: /bin/bash
+    home: "{{ wine.prefix_dir }}"
+  - name: pyvenv
+    createhome: yes
+    shell: /bin/bash
+    home: "${{ pvenvs.prefix_dir }}"
 
 # vim: set ft=yaml
 # vim: ft=yaml
