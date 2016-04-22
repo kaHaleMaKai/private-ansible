@@ -1,0 +1,16 @@
+- name: create config dir for zsh
+  file: path={{ zsh.config_path }}
+        state=directory
+
+- name: copy zsh files into place
+  copy: src={{ item.src }}
+        dest={{ item.dest }}
+  with_items:
+    - src: dot.zshrc
+      dest: "{{ zsh.rc }}"
+    - src: autocomplete
+      dest: "{{ zsh.config_path }}"
+
+- name: template autocompletes
+  template: src=_venv-up.j2
+            dest="{{ zsh.config_path }}/autocomplete/_venv-up"

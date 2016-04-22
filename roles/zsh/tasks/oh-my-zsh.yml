@@ -1,0 +1,7 @@
+- name: check if oh-my-zsh has been installed
+command: test -e "{{ ansible_user_dir }}/.oh-my-zsh"
+  register: oh_my_zsh_installed
+
+- name: install oh-my-zsh
+  shell: wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O - | sh
+  when: oh_my_zsh_installed.rc != 0

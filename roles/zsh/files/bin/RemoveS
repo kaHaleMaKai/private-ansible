@@ -1,4 +1,0 @@
-#!/bin/bash
-set -euo pipefail
-
-(cd ~/.vim/vimrc-res/sessions && for arg in "$@"; do rm "${arg}.vim"; done)
