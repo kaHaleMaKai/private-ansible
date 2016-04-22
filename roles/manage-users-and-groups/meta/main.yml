@@ -1,0 +1,6 @@
+---
+dependencies:
+  - base
+
+# base installs custom shells
+# such as zsh or fish
