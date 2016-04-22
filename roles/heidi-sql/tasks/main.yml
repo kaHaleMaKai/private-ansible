@@ -1,0 +1,5 @@
+# create lv for wine, may be for each new prefix separately
+# create nice user/group for wine
+
+- include: init-prefix.yml
+- include: install.yml

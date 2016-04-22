@@ -1,0 +1,9 @@
+---
+- name: check if wine prefix has been initialized
+  command: test -e "{{ wine.prefix_dir }}/heidi/drive_c"
+  register: prefix_initialized
+
+- name: initialize new wine prefix
+  command: >
+    env WINEPREFIX="{{ wine.prefix_dir }}"/heidi wineboot -i
+  when: prefix_initialized.rc != 0

@@ -1,0 +1,26 @@
+- name: create download dir in heidi prefix
+  file: path="{{ wine.prefix_dir }}/heidi/drive_c/Downloads"
+        state=directory
+        mode=0775
+
+- name: save heidi download url
+  template: src=download.url.j2
+    dest="{{ wine.prefix_dir }}/heidi/drive_c/Downloads/download.url"
+
+- name: download heidi installer
+  get_url: url="{{ heidi_url }}"
+           dest"={{ wine.prefix_dir }}/heidi/drive_c/Downloads/heidi-setup.exe"
+
+- name: install heidi sql
+  tags: heidi
+  sudo_user: "{{ ansible_user_id }}"
+  command: >
+            env WINEPREFIX="{{ wine.prefix_dir }}/heidi"
+            wine
+            "{{ wine.prefix_dir }}/heidi/drive_c/Downloads/heidi-setup.exe"
+
+- name: setup heidi executable under $HOME/bin
+  tags: heidi
+  template: src=heidi.j2
+            dest="{{ ansible_user_dir }}/bin/heidi"
+            mode=0775
