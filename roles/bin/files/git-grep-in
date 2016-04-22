@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euo pipefail
+
+pattern="${1}"
+files="${2:-\*}"
+
+newest_rev="${3:-}"
+oldest_rev="${4:-}"
+
+get-git-root() {
+  git rev-list --max-parents=0 HEAD
+}
+
+git-get-revs() {
+  local revs=''
+  if [[ -z "$newest_rev" ]]; then
+    if [[ -z "$oldest_rev" ]]; then
+      revs='--all'
+    else
+      revs="HEAD..${oldest_rev}"
+    fi
+  else
+    if [[ -z "$oldest_rev" ]]; then
+      revs="${newest_rev}..$(get-git-root)"
+    else
+      revs="${newest_rev}..${oldest_rev}"
+    fi
+  fi
+  git rev-list "$revs"
+}
+
+git grep  "$pattern" $(git-get-revs) -- "$files"
+
+# vim: set ft=sh
+# vim: ft=sh

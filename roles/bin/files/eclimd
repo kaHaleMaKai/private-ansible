@@ -1,0 +1,111 @@
+#!/bin/bash
+set -euo pipefail
+
+cli_args=""
+eclimd=/opt/eclipse/eclimd
+eclim=/opt/eclipse/eclim
+eclimd_ps='java.*application org.eclim.application'
+
+is-in() {
+  local el="$1"
+  shift
+  while (($#)); do
+    if [[ "$el" = "$1" ]]; then
+      return 0
+    fi
+    shift
+  done
+  return 1
+}
+
+get-pid() {
+  ps x \
+  | grep "$eclimd_ps" \
+  | grep -v grep  \
+  | awk '{print $1}' \
+  2>/dev/null
+}
+
+process-is-running() {
+  get-pid &>/dev/null
+}
+
+process-is-listening() {
+  [[ "$(lsof -ti tcp:9091)" = "$(get-pid)" ]]
+}
+
+is-running() {
+  process-is-running && process-is-listening
+}
+
+is-not-running() {
+  is-running \
+  && return 1 \
+  || return 0
+}
+
+wait-while-running() {
+  pid=$(get-pid)
+  while is-running; do
+    sleep 1
+  done
+}
+
+if [[ -z "${1:-}" ]]; then
+  set -- status
+fi
+
+while (($#)); do
+  case "$1" in
+    --workspace) workspace="$2"
+               command=start
+               shift 2
+      ;;
+    workspace) workspace="$2"
+               command=start
+               shift 2
+      ;;
+    *) command="$1" \
+       && shift
+      ;;
+  esac
+done
+
+case "$command" in
+  start) \
+    if [[ -n "${workspace:-}" ]]; then
+      cli_args="${cli_args} -Dosgi.instance.area.default=${workspace}"
+    fi
+    is-running \
+    && echo "[INFO] eclimd server already started" >&2 \
+    || $eclimd ${cli_args} &>/dev/null &
+    ;;
+  kill) \
+    if is-running; then
+      kill $(get-pid)
+    fi
+    ;;
+  restart) \
+    $0 stop
+    wait-while-running
+    $0 start
+    ;;
+  status) \
+    if is-running; then
+      echo "eclimd is running"
+    elif process-is-running; then
+      echo "elimd is starting, not listening yet"
+    else
+      echo "elimd is not running"
+    fi
+    ;;
+  stop) \
+    if is-running; then
+      $0 shutdown
+    fi
+    ;;
+  *) $eclim -command "$command" ${cli_args} &>/dev/null
+    ;;
+esac
+
+# ft=sh

@@ -1,0 +1,71 @@
+#!/bin/bash
+set -euo pipefail
+
+args=""
+while (( $# )); do
+  if [[ "${1:0:1}" = "@" ]]; then
+    host="${1:1}"
+  else
+    args="${args} ${1}"
+  fi
+  shift
+done
+echo $args
+set -- $args
+
+case "${host:-}" in
+  esome) host=bims.esome.info
+    ;;
+  *) host=bims.pmd.local
+    ;;
+esac
+
+engine_name="$1"
+case "$1" in
+  report) engine=report
+    ;;
+  rule) engine=rule_engine
+    ;;
+  *) echo "unknown engine: '$1'" >&2 && exit 1
+    ;;
+esac
+shift
+
+if [[ "$1" =~ ^[1-9][0-9]*$ ]]; then
+  job_id="$1"
+else
+  echo "mal formatted job id: '$2'" >&2 && exit 1
+fi
+shift
+
+if (($#)) && [[ "${1:-}" = "params" ]]; then
+  params=""
+  shift
+  if [[ $1 =~ [^:]+:[^:]+ ]]; then
+    params="$1"
+  else
+    echo "[ERROR] mal formatted param '$1' (expected key:val)" >&2 && exit 1
+  fi
+  shift
+  while (( $# )); do
+    if [[ $1 =~ [^:]+:[^:]+ ]]; then
+      params="${params};${1}"
+    else
+      echo "[ERROR] mal formatted param '$1' (expected key:val)" >&2 && exit 1
+    fi
+    shift
+  done
+fi
+
+url="http://${host}/index.php"
+echo "running bims "$engine_name" job "$job_id"..."
+
+declare -A data
+data[modul]="${engine}"
+data[show]='check_single'
+data[job_id]="${job_id}"
+if [[ -n "${params:-}" ]]; then
+  data[query_params]="${params}"
+  echo "params: ${params}"
+fi
+curl $(for key in "${!data[@]}"; do echo "-d ${key}=${data[$key]}"; done) $url

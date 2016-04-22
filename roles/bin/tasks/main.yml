@@ -1,0 +1,8 @@
+---
+- name: setup ~/bin
+  file: path="{{ ansible_user_dir }}/bin"
+        state=directory
+
+- name: copy executables into ~/bin
+  copy: src="{{ item }}"
+        dest="{{ ansible_user_dir }}/bin/item"

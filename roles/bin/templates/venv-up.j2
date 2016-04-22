@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+
+active_venv="{{ pyvenvs.prefix_dir }}/${1}"
+activate_cmd="{{ pyvenvs.prefix_dir }}/${1}/bin/activate"
+activate_link="${HOME}/bin/recent-venv"
+active_venv_link="${HOME}/cur-venv"
+
+rm -rf "$activate_link"
+rm -rf "$active_venv_link"
+ln -s -T "$activate_cmd" "$activate_link"
+ln -s -T "$active_venv" "$active_venv_link"
+
+source "$activate_cmd"
+
+# vim: set ft=sh
+# vim: ft=sh

@@ -1,0 +1,92 @@
+#!/bin/bash
+set -euo pipefail
+
+current_branch="$(git rev-parse --abbrev-ref HEAD)"
+echo "$current_branch" >&2
+
+case "$current_branch" in
+  stage) other_branch=master
+    ;;
+  production-new) other_branch=stage
+    ;;
+  *) echo "[ERROR] error: not on branches stage or production-new" >&2 &&
+       exit 1
+    ;;
+esac
+
+echo "[INFO] redirecting all additional text to stderr" >&2
+echo "[INFO] current branch is ${current_branch}" >&2
+echo "[INFO] picking cherries from branch ${other_branch}" >&2
+echo "" >&2
+
+apply=0
+list=''
+type_of_list=''
+include=''
+exclude=''
+after=''
+since=''
+until=''
+  before=''
+
+while (($#)); do
+  case "$1" in
+    --apply) apply=1
+      ;;
+    --exclude=*) list="${1/*=}" && type_of_list='exclude' && exclude=1
+      ;;
+    --include=*) list="${1/*=}" && type_of_list='include' && include=1
+      ;;
+    --after=*) after="--after='${1/*=}'"
+      ;;
+    --since=*) since="--since='${1/*=}'"
+      ;;
+    --until=*) until="--until='${1/*=}'"
+      ;;
+    --before=*) before="--before='${1/*=}'"
+      ;;
+    *) break
+      ;;
+  esac
+  shift
+done
+
+if [[ -n "$exclude" ]] && [[ -n "$include" ]]; then
+  echo '[ERROR] only one of --include, --exclude can be defined' >&2
+fi
+
+refs="[rR][eE][fF][sS]:.*#${1}([^0-9]|$)"
+shift
+while (( $# )); do
+  refs="$refs|[rR][eE][fF][sS]:.*#${1}([^0-9]|$)"
+  shift
+done
+
+parse-refs() {
+  local list="${1//,/|}"
+  local type_of_list="$2"
+
+  awk \
+    -v list="$list" \
+    -v type_of_list="$type_of_list" \
+    '{ if (!list || (type_of_list == "include" && match($2, list) == 1) || (type_of_list == "exclude" && match($2, list) != 1))
+         print $2 }'
+}
+
+if [[ "${apply:-0}" -eq 1 ]]; then
+  git log $since $after $until $before "$other_branch" -E --grep="$refs" --date=raw |
+    awk '/^commit/ { commit=$2 }
+         /^Date/   { date=$2; print date, commit }' |
+    sort -n |
+    uniq |
+    parse-refs "$list" "$type_of_list" |
+    xargs -I {} git cherry-pick {}
+else
+  git log $since $after $until $before "$other_branch" -E --grep="$refs" --date=raw |
+    awk '/^commit/ { commit=$2 }
+         /^Date/   { date=$2; print date, commit }' |
+    sort -n |
+    uniq |
+    parse-refs "$list" "$type_of_list" |
+    xargs -I {} git log {} -n 1 --pretty=format:'%h :: %ad/%an, %s [%H]'$'\n' --date=iso | xargs -I {} echo "{}"
+fi

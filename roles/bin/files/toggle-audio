@@ -1,0 +1,44 @@
+#!/bin/bash
+set -euo pipefail
+
+NEW_STATE="${1:-toggle}"
+
+is-muted() {
+  control="$1"
+  amixer sget "$control" \
+  | grep '\[off\]' &>/dev/null
+}
+
+headphones-connected() {
+  sed -n  '/^Node 0x02/,+6p' /proc/asound/card0/codec\#0 \
+  | grep 'val.*0x00 0x00' &>/dev/null
+}
+
+get-output-device() {
+  headphones-connected \
+  && echo "Headphone" \
+  || echo "Speaker"
+}
+
+get-alternative-device() {
+  headphones-connected \
+  && echo "Speaker" \
+ ||  echo "Headphone"
+}
+
+
+if is-muted Master; then
+  if [[ "$NEW_STATE" = 'toggle' ]] || [[ "$NEW_STATE" = 'on' ]]; then
+    amixer sset Master on
+    amixer sset "$(get-output-device)" on
+  fi
+else
+  if [[ "$NEW_STATE" = 'toggle' ]] || [[ "$NEW_STATE" = 'off' ]]; then
+    amixer sset Master off
+    amixer sset "$(get-output-device)" off
+  fi
+fi
+
+amixer sset "$(get-alternative-device)" off
+
+# vim: ft=sh

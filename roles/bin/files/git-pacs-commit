@@ -1,0 +1,2 @@
+#!/bin/bash
+git commit --verbose --template=<(echo "refs: #$(git-get-ticket)")

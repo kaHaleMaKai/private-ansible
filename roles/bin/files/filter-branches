@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+
+GIT_DIR="$1"
+SCRIPT="$2"
+
+g="git -C ${GIT_DIR}"
+
+$g filter-branch -f --tree-filter "$(cat "$SCRIPT")" HEAD
+
+# vim: set ft=sh
+# vim: ft=sh

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+xrandr --output LVDS1 --auto --output DP2 --off --output HDMI3 --off
+awsetbg "${HOME}/wallpapers/in-use/small.png"

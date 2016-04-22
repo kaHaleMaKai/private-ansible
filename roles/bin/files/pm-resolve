@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+cat > /etc/resolv.conf <<'EOF'
+nameserver 192.168.0.12
+nameserver 192.168.4.10
+search pmd.local
+EOF
+dpkg-reconfigure --unseen-only resolvconf
+#dpkg-reconfigure resolvconf
+exit
