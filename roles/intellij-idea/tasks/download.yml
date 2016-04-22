@@ -1,0 +1,7 @@
+- name: download intellij idea
+  get_url: url="{{ idea.download_url }}"
+           dest="/tmp/idea.tar.gz"
+
+- name: untar the tarball
+  unarchive: src="/tmp/idea.tar.gz"
+             dest="/tmp/idea.jar"
