@@ -1,50 +1,27 @@
-lvm:
+lvm_group_vars:
   vgs:
-    - vg: vgroot
-      pvs: [/dev/sda1, /dev/sda2]
+    - vg: vgmain
+      pvs: ...
   volumes:
-    - lv: lvansible
-      vg: vgroot
-      size: 500M
-      mountpoint: /usr/local/pyenvs/ansible
-      owner: pyenv-user
-      group: pyenv
-    - lv: lvboot
-      vg: vgroot
-      size: 300M
-      mountpoint: /boot
-    - lv: lvdatascience
-      vg: vgroot
-      size: 1G
-      mountpoint: /usr/local/pyenvs/datascience
-      owner: pyenv-user
-      group: pyenv
-    - lv: lvhome
-      vg: vgroot
-      size: 30G
-      mountpoint: /home
-    - lv: lvpybricks
-      vg: vgroot
-      size: 1G
-      mountpoint: /usr/local/pyenvs/bricks
-      owner: pyenv-user
-      group: pyenv
     - lv: lvroot
-      vg: vgroot
-      size: 30G
+      vg: vgmain
+      size: 10G
       mountpoint: /
-    - lv: lvwine
-      vg: vgroot
-      size: 20G
-      mountpoint: /usr/local/wine
-      owner: wine-user
-      group: wine
-    - lv: lvhdp
-      vg: vgroot
-      size: 60G
-      mountpoint: /opt/hdp/sandbox
-      owner: lars
-      group: lars
+    - lv: lvtmp
+      vg: vgmain
+      size: 1G
+      mountpoint: /tmp
+      owner: root
+      group: root
+      mode: '1777'
+    - lv: home
+      vg: vgmain
+      size: 5G
+      mountpoint: /home
+    - lv: /var
+      vg: vgmain
+      size: 1G
+      mountpoint: /var
 
 # vim: set ft=yaml
 # vim: ft=yaml

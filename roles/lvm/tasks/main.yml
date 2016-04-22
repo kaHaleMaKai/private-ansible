@@ -2,7 +2,7 @@
 # Set up partitions using logical volume management (LVM)
 
 - name: Install LVM package
-  apt: name=lvm2 state=installed
+  apt: name=lvm2 state=present
 
 - include: vgs.yml
 - include: lvs.yml
