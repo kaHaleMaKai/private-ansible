@@ -31,25 +31,20 @@ vim:
       - bundle: vim-scripts/TaskList.vim
       - bundle: flazz/vim-colorschemes
       - bundle: scrooloose/nerdcommenter
-      - bundle: ironcamel/vimchat
       - bundle: rking/ag.vim
       - bundle: airblade/vim-gitgutter
       - bundle: terryma/vim-multiple-cursors
       - bundle: SirVer/ultisnips
       - bundle: honza/vim-snippets.git
-      - bundle: airblade/vim-rooter.git
       - bundle: Raimondi/delimitMate.git
-      - bundle: tfnico/vim-gradle
+      - bundle: Yggdroot/indentLine
     clojure:
       - bundle: vim-scripts/paredit.vim
       - bundle: tpope/vim-fireplace
       - bundle: guns/vim-clojure-static
       - bundle: tpope/vim-classpath
-    java:
-      - bundle: Yggdroot/indentLine
-      - bundle: vim-jp/vim-java
-      - bundle: craigemery/vim-autotag
-      - bundle: vim-scripts/taglist.vim
+    gradle:
+      - bundle: tfnico/vim-gradle
     html:
       - bundle: rstacruz/sparkup
     yaml:
@@ -62,6 +57,12 @@ vim:
     markdown:
       - bundle: tpope/vim-markdown
       - bundle: blindFS/vim-reveal
+    php:
+      - bundle: joonty/vdebug
+      - bundle: shawncplus/phpcomplete.vim
+      - bundle: craigemery/vim-autotag
+      - bundle: vim-scripts/taglist.vim
+      - bundle: embear/vim-localvimrc
 
 # vim: ft=yaml
 # vim: set ft=yaml

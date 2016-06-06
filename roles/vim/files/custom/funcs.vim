@@ -17,7 +17,7 @@ if !exists("g:user_funcs_imported")
     lockvar s:type_dict
   endif
 
-  func! DefineTypes(...)
+  func! DefineTypes(...) abort "{{{
     let scope = strpart(a:0 ? a:1 : 'g', 0, 1) . ':'
     if !exists(scope."types_defined")
       for [k, v] in items(s:type_dict)
@@ -28,7 +28,7 @@ if !exists("g:user_funcs_imported")
       endfor
       exe 'let '.scope.'types_defined = g:true'
     endif
-  endfunc
+  endfunc "}}}
   call DefineTypes()
 
   " types to be interpreted as iterable
@@ -53,12 +53,12 @@ if !exists("g:user_funcs_imported")
 
 
   let Time = {}
-  func! Time.GetHours() dict
+  func! Time.GetHours() dict abort "{{{
     return str2nr(strftime("%H"))
-  endfunc
-  func! Time.GetMinutes() dict
+  endfunc "}}}
+  func! Time.GetMinutes() dict abort "{{{
     return str2nr(strftime("%M"))
-  endfunc
+  endfunc "}}}
   lockvar Time
 
   " ++++++++++++++++++++ functions ++++++++++++++++++++
@@ -66,25 +66,25 @@ if !exists("g:user_funcs_imported")
   " Check if variable is iterable.
   "
   " types string, list and dict are defined as iterable
-  func! IsIterable(var)
+  func! IsIterable(var) abort "{{{
     return index(s:iterableTypes, type(a:var)) > -1
-  endfunc
+  endfunc "}}}
 
   " Check if variable is indexable
   "
   " type list and dict are defined as indexable
-  func! IsIndexable(Obj)
+  func! IsIndexable(Obj) abort "{{{
     return index(s:indexableTypes, type(a:Obj)) > -1
-  endfunc
+  endfunc "}}}
 
-  func! IsValueType(Obj)
+  func! IsValueType(Obj) abort "{{{
     return index(s:valueTypes, type(a:Obj)) > -1
-  endfunc
+  endfunc "}}}
 
   " Check if el is in iterable
   "
   " @throws TypeError
-  func! Contains(iterable, el)
+  func! Contains(iterable, el) abort "{{{
     let type = type(a:iterable)
     let res = g:false
     if type == g:str
@@ -97,20 +97,20 @@ if !exists("g:user_funcs_imported")
       throw 'TypeError: Contains() expects first argument to be iterable'
     endif
     return res
-  endfunc
+  endfunc "}}}
 
 
-  func! Max(...)
+  func! Max(...) abort "{{{
     return max(a:000)
-  endfunc
+  endfunc "}}}
 
-  func! GetArg(idx, ...)
+  func! GetArg(idx, ...) abort "{{{
     if type(a:idx) != g:int
       throw 'TypeError: GetArg expects first argument to be int'
     else
       return a:000[a:idx]
     endif
-  endfunc
+  endfunc "}}}
 
   " Get key from container, optionally safely.
   "
@@ -120,7 +120,7 @@ if !exists("g:user_funcs_imported")
   " ...a:1 -- default in case lookup fails
   "
   " @throws TypeError, KeyNotFoundError
-  func! Get(container, key, ...)
+  func! Get(container, key, ...) abort "{{{
     if !IsIndexable(a:container)
       throw 'TypeError: ' . string(a:container) . ' is not indexable'
     endif
@@ -134,9 +134,9 @@ if !exists("g:user_funcs_imported")
       endif
     endtry
     return val
-  endfunc
+  endfunc "}}}
 
-  func! AsDict(arg, ...)
+  func! AsDict(arg, ...) abort "{{{
     if !a:0
       if !IsList(a:arg)
         throw 'TypeError: AsDict() expects list as argument'
@@ -160,17 +160,17 @@ if !exists("g:user_funcs_imported")
       let tmp = AsDict(li)
     endif
     return tmp
-  endfunc
+  endfunc "}}}
 
-  func! Min(...)
+  func! Min(...) abort "{{{
     return min(a:000)
-  endfunc
+  endfunc "}}}
 
-  func! Order(x, y)
+  func! Order(x, y) abort "{{{
     return a:x > a:y ? [a:y, a:x] : [a:x, a:y]
-  endfunc
+  endfunc "}}}
 
-  func! Bool(arg)
+  func! Bool(arg) abort "{{{
     let _type = type(a:arg)
     if _type == g:int
       return a:arg != s:empty_singletons[g:int]
@@ -185,11 +185,11 @@ if !exists("g:user_funcs_imported")
     elseif _type == g:float
       return a:arg != s:empty_singletons[g:float]
     endif
-  endfunc
+  endfunc "}}}
 
   let g:Truthy = function('Bool')
 
-  func! Match(expr, pattern, ...)
+  func! Match(expr, pattern, ...) abort "{{{
     let m = 0
     if a:0 == 0
       let m = match(a:expr, a:pattern)
@@ -199,32 +199,32 @@ if !exists("g:user_funcs_imported")
       let m = match(a:expr, a:pattern, a:1, a:2)
     endif
     return m > -1
-  endfunc
+  endfunc "}}}
 
-  func! DeleteTrailingWS()
+  func! DeleteTrailingWS() abort "{{{
     if g:delete_trailing_ws == 1
       exe "normal mz"
       %s/\s\+$//ge
       exe "normal `z"
     endif
-  endfunc
+  endfunc "}}}
 
-  func! s:ToggleTrailingWSDeletionFn()
+  func! s:ToggleTrailingWSDeletionFn() abort "{{{
     let g:delete_trailing_ws = !g:delete_trailing_ws
-  endfunc
+  endfunc "}}}
   command! -nargs=0 ToggleTrailingWSDeletion call s:ToggleTrailingWSDeletionFn()
 
-  func! s:UnsetTrailingWSDeletionFn()
+  func! s:UnsetTrailingWSDeletionFn() abort "{{{
     let g:delete_trailing_ws = 0
-  endfunc
+  endfunc "}}}
   command! -nargs=0 UnsetTrailingWSDeletion call s:UnsetTrailingWSDeletionFn()
 
-  func! s:SetTrailingWSDeletionFn()
+  func! s:SetTrailingWSDeletionFn() abort "{{{
     let g:delete_trailing_ws = 1
-  endfunc
+  endfunc "}}}
   command! -nargs=0 SetTrailingWSDeletion call s:SetTrailingWSDeletionFn()
 
-  func! s:WSFn(override, force)
+  func! s:WSFn(override, force) abort "{{{
     let current_ws_state = g:delete_trailing_ws
     let g:delete_trailing_ws = 0
     if a:override
@@ -241,19 +241,19 @@ if !exists("g:user_funcs_imported")
       endif
     endif
     let g:delete_trailing_ws = current_ws_state
-  endfunc
+  endfunc "}}}
 
   command! -nargs=0 WS call s:WSFn(0, 0)
   command! -nargs=0 WWS call s:WSFn(0, 1)
   command! -nargs=0 XS call s:WSFn(0, 0)
   command! -nargs=0 XXS call s:WSFn(0, 1)
 
-  func! s:ShowVimColors()
+  func! s:ShowVimColors() abort "{{{
     exe '! feh ' . g:VIMRC_PATH . '/' . 'vimrc-res/vimcolors.png &'
-  endfunction
+  endfunction "}}}
   command! ShowVimColors call s:ShowVimColors()
 
-  func! s:EditColorScheme(scheme)
+  func! s:EditColorScheme(scheme) abort "{{{
     let scheme = g:VIMRC_PATH . '/bundle/vim-colorschemes/colors/' . a:scheme . '.vim'
     let winnr = bufwinnr(bufname('vim-colorschemes'))
     echo scheme
@@ -265,10 +265,10 @@ if !exists("g:user_funcs_imported")
     silent! redraw
     silent! execute 'au! BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
   "   silent! execute 'wincmd p'
-  endfunction
+  endfunction "}}}
   command! -nargs=1 EditColorScheme call s:EditColorScheme(<q-args>)
 
-  func! Reduce(ffn, list)
+  func! Reduce(ffn, list) abort "{{{
     if empty(a:list)
       return ''
     else
@@ -280,40 +280,40 @@ if !exists("g:user_funcs_imported")
       endfor
       return s:acc
     endif
-  endfunction
+  endfunction "}}}
 
-  func! s:PrintLine()
+  func! s:PrintLine() abort "{{{
     exe 'echo ''' . substitute(getline('.'), '^\s\+\|\s\+$', '', '') . ''''
-  endfunction
+  endfunction "}}}
   command! -nargs=0 PrintLine call s:PrintLine()
 
-  func! s:ToDoBack()
+  func! s:ToDoBack() abort "{{{
       silent exe '.-1r ! tail -n 1 is.done' | silent exe 'silent :! sed -i "\$ d" is.done'
-  endfunction
+  endfunction "}}}
 
-  func! g:SetSpecificMaps()
+  func! g:SetSpecificMaps() abort "{{{
     if (expand('%:t')) == 'to.do'
       nnoremap <silent> <F5> :exe ':! echo "' . getline('.') . '" >> is.done'<CR>"_dd
       nnoremap <silent> <F6> :call <sid>ToDoBack()<CR>
     endif
-  endfunction
+  endfunction "}}}
 
-  func! g:Tabularize(range, ...)
+  func! g:Tabularize(range, ...) abort "{{{
     let range = a:range
     let args = copy(a:000)
     let formatters = map(copy(args), 'shellescape(''%s'', 1) . v:val')
     let cols = map(range(len(copy(args))), '''$'' . string(v:val+1)')
     exec(range . '!awk ''{printf "' . join(formatters, ', ') . '\n", ' . join(cols, ', ') . '}''')
-  endfunction
+  endfunction "}}}
 
-  func! s:AddToDo(todo)
+  func! s:AddToDo(todo) abort "{{{
     let filename = expand('%')
     exec '! echo ' . filename . ': ' . shellescape(a:todo, 1) . ' >> ~/to.do'
-  endfunction
+  endfunction "}}}
 
   command! -nargs=1 TODO call s:AddToDo(<q-args>)
 
-  func! s:LoadSession(session)
+  func! s:LoadSession(session) abort "{{{
     let session = substitute(a:session, '\(\.vim$\|^[^/]*/\)', '', 'g') . '.vim'
     silent exe 'so ' . g:SESSION_PATH . '/' . session
     echo 'loading session ' . session
@@ -322,15 +322,15 @@ if !exists("g:user_funcs_imported")
     wincmd q
     NERDTree
     wincmd =
-  endfunc
+  endfunc "}}}
   command! -nargs=1 LoadS call s:LoadSession(<q-args>)
 
-  func! s:GetSessionName()
+  func! s:GetSessionName() abort "{{{
     return s:current_session
-  endfunc
+  endfunc "}}}
   command! -nargs=0 GetS echo s:GetSessionName()
 
-  func! s:SaveSession(bang, ...)
+  func! s:SaveSession(bang, ...) abort "{{{
     let bang = a:bang ? '!' : ''
     if a:0 < 1 || a:1 == ''
       let session = s:current_session
@@ -345,14 +345,14 @@ if !exists("g:user_funcs_imported")
     endif
     let s:current_session = session
     return session
-  endfunc
+  endfunc "}}}
   command! -nargs=? -bang SaveS call s:SaveSession(<bang>0, <q-args>)
 
   " func! s:EnqueueSessions()
   "   let path = g:SESSION_PATH
   "   for i in
 
-  func! s:ListSessionsInShell()
+  func! s:ListSessionsInShell() abort "{{{
     let path = g:SESSION_PATH
     let delim = ''
     for i in range(1, 20)
@@ -367,10 +367,10 @@ if !exists("g:user_funcs_imported")
           \ . ' && ' . emptyline
           \ . ' && ' . line
           \ . ' && ' . emptyline
-  endfunc
+  endfunc "}}}
   command! -nargs=0 ListS call s:ListSessionsInShell()
 
-  func! s:RemoveSession(session)
+  func! s:RemoveSession(session) abort "{{{
     let path = g:SESSION_PATH
     let session = substitute(a:session, '\(\.vim$\|^[^/]*/\)', '', 'g') . '.vim'
     let file = shellescape(path . '/' . session)
@@ -380,13 +380,13 @@ if !exists("g:user_funcs_imported")
     else
       echo "no file found for session '" . a:session . "'"
     endif
-  endfunc
+  endfunc "}}}
 
   command! -nargs=1 RemoveS call s:RemoveSession(<f-args>)
 
   command! -nargs=0 AC call system("ACPI")
 
-  func! Map(Fn, li, ...)
+  func! Map(Fn, li, ...) abort "{{{
     let new_li = []
     if a:0
       if a:0 != 1
@@ -403,9 +403,9 @@ if !exists("g:user_funcs_imported")
       call add(new_li, call(a:Fn, [el], d))
     endfor
     return new_li
-  endfunc
+  endfunc "}}}
 
-  func! Reduce(Fn, li, ...)
+  func! Reduce(Fn, li, ...) abort "{{{
     let li = a:li
     let accu = a:0 ? a:1 : remove(li, 0)
     let d = a:0 == 2 ? a:2 : {}
@@ -413,9 +413,9 @@ if !exists("g:user_funcs_imported")
       let accu = call(a:Fn, [accu, remove(li, 0)], d)
     endfor
     return accu
-  endfunc
+  endfunc "}}}
 
-  func! Filter(Fn, li, ...)
+  func! Filter(Fn, li, ...) abort "{{{
     let new_li = []
     if a:0
       if a:0 != 1
@@ -434,38 +434,38 @@ if !exists("g:user_funcs_imported")
       endif
     endfor
     return new_li
-  endfunc
+  endfunc "}}}
 
-  func! Inc(val)
+  func! Inc(val) abort "{{{
     return a:val + 1
-  endfunc
+  endfunc "}}}
 
-  func! Dec(val)
+  func! Dec(val) abort "{{{
     return a:val - 1
-  endfunc
+  endfunc "}}}
 
-  func! Identity(Obj)
+  func! Identity(Obj) abort "{{{
     return a:Obj
-  endfunc
-    func! s:ToDoBack()
+  endfunc "}}}
+    func! s:ToDoBack() abort "{{{
         silent exe '.-1r ! tail -n 1 is.done' | silent exe 'silent :! sed -i "\$ d" is.done'
-    endfunction
+    endfunction "}}}
 
-  func! GetBufferNameFromQuickfix(qf_line)
+  func! GetBufferNameFromQuickfix(qf_line) abort "{{{
     let bufnr = a:qf_line.bufnr
     return bufname(bufnr)
-  endfunc
+  endfunc "}}}
 
-  func! StartsWith(str, start)
+  func! StartsWith(str, start) abort "{{{
     let _len = len(a:start)
     if !Bool(_len)
       return 1
     else
       return a:str[0:_len-1] == a:start
     endif
-  endfunc
+  endfunc "}}}
 
-  func! EndsWith(str, end)
+  func! EndsWith(str, end) abort "{{{
     let _len = len(a:end)
     if !Bool(_len)
       let res = g:true
@@ -473,22 +473,22 @@ if !exists("g:user_funcs_imported")
       let res = a:str[- _len : ] == a:end
     endif
     return res
-  endfunc
+  endfunc "}}}
 
-  func! FindProjectRoot(...)
+  func! FindProjectRoot(...) abort "{{{
     let s:_project_files = a:0 == 2 ? a:2 : s:default_project_files
     let cur_dir = fnamemodify(a:0 ? a:1 : ".",
       \                       ":p:h")
     if cur_dir == "/"
       return ""
     else
-      func! BaseName(path)
+      func! BaseName(path) abort "{{{
         return fnamemodify(a:path, ":t")
-      endfunc
+      endfunc "}}}
 
-      func! IsProjectFile(file)
+      func! IsProjectFile(file) abort "{{{
         return Contains(s:_project_files, a:file)
-      endfunc
+      endfunc "}}}
 
       let result = Filter('IsProjectFile',
         \                  Map('BaseName',
@@ -497,37 +497,37 @@ if !exists("g:user_funcs_imported")
       return Bool(result) ? cur_dir : FindProjectRoot(fnamemodify(cur_dir, ":h"),
             \                                         s:_project_files)
     endif
-  endfunc
+  endfunc "}}}
 
-  func! IsInt(Obj)
+  func! IsInt(Obj) abort "{{{
     return type(a:Obj) == g:int
-  endfunc
+  endfunc "}}}
 
-  func! IsString(Obj)
+  func! IsString(Obj) abort "{{{
     return type(a:Obj) == g:str
-  endfunc
+  endfunc "}}}
 
-  func! IsDict(Obj)
+  func! IsDict(Obj) abort "{{{
     return type(a:Obj) == g:dict
-  endfunc
+  endfunc "}}}
 
-  func! IsFloat(Obj)
+  func! IsFloat(Obj) abort "{{{
     return type(a:Obj) == g:float
-  endfunc
+  endfunc "}}}
 
-  func! IsFunction(Obj)
+  func! IsFunction(Obj) abort "{{{
     return type(a:Obj) == g:funcref
-  endfunc
+  endfunc "}}}
 
-  func! IsList(Obj)
+  func! IsList(Obj) abort "{{{
     return type(a:Obj) == g:list
-  endfunc
+  endfunc "}}}
 
-  func! IsClassDefined(ObjectName)
+  func! IsClassDefined(ObjectName) abort "{{{
     return Contains(s:classes, a:ObjectName)
-  endfunc
+  endfunc "}}}
 
-  func! GetClass(ObjectName)
+  func! GetClass(ObjectName) abort "{{{
     let ObjectName = a:ObjectName
     if !IsClassDefined(a:ObjectName)
       throw 'TypeError: variable is not a valid class identifier'
@@ -535,9 +535,9 @@ if !exists("g:user_funcs_imported")
       let Result = s:DeepcopyFields(s:classes[ObjectName])
     endif
     return Result
-  endfunc
+  endfunc "}}}
 
-  func! IsObject(Obj)
+  func! IsObject(Obj) abort "{{{
     let Obj = a:Obj
     return  IsDict(Obj) &&
           \ Contains(Obj, 'Class') &&
@@ -545,9 +545,9 @@ if !exists("g:user_funcs_imported")
           \ IsFunction(Obj.Class) &&
           \ IsFunction(Obj.ClassName) &&
           \ IsClassDefined(Obj.ClassName())
-  endfunc
+  endfunc "}}}
 
-  func! Type(Var)
+  func! Type(Var) abort "{{{
     let Var = a:Var
     if IsInt(Var)
       let res = g:int
@@ -565,34 +565,34 @@ if !exists("g:user_funcs_imported")
       let res = g:dict
     endif
     return res
-  endfunc
+  endfunc "}}}
 
-  func! First(li)
+  func! First(li) abort "{{{
     return a:li[0]
-  endfunc
+  endfunc "}}}
 
-  func! Last(li)
+  func! Last(li) abort "{{{
     return a:li[-1]
-  endfunc
+  endfunc "}}}
 
-  func! MatchesRegEx(str, pattern)
+  func! MatchesRegEx(str, pattern) abort "{{{
     return matchstr(a:str, a:pattern) != ''
-  endfunc
+  endfunc "}}}
 
-  func! s:GetGitTopLevelDirFromRevParse(curdir)
+  func! s:GetGitTopLevelDirFromRevParse(curdir) abort "{{{
     let toplevel = system('git -C ' . a:curdir . ' rev-parse --show-toplevel')
     return toplevel
-  endfunc
+  endfunc "}}}
 
-  func! GGG()
+  func! GGG() abort "{{{
     return s:GetGitTopLevelDir()
-  endfunc
+  endfunc "}}}
 
-  func! GGGR(curdir)
+  func! GGGR(curdir) abort "{{{
     return s:GetGitTopLevelDirFromRevParse(a:curdir)
-  endfunc
+  endfunc "}}}
 
-  func! s:GetGitTopLevelDir()
+  func! s:GetGitTopLevelDir() abort "{{{
     let bufdir = expand('%:p:h')
     if bufdir[0] == '/'
       let toplevel = s:GetGitTopLevelDirFromRevParse(bufdir)
@@ -608,29 +608,29 @@ if !exists("g:user_funcs_imported")
     else
       return toplevel
     endif
-  endfunc
+  endfunc "}}}
 
   command! -nargs=0 GWD echo s:GetGitTopLevelDir()
 
-  func! s:AgInGitRepository(pattern)
+  func! s:AgInGitRepository(pattern) abort "{{{
     let search_cmd = 'vimgrep'
     if exists(':Ag') == 2
       let search_cmd = 'Ag'
     endif
     exe search_cmd . '! ' .  a:pattern . ' ' . s:GetGitTopLevelDir()
-  endfunc
+  endfunc "}}}
 
   command! -nargs=1 AG call s:AgInGitRepository(<q-args>)
 
-  func! s:NERDTreeOpenGitRoot()
+  func! s:NERDTreeOpenGitRoot() abort "{{{
     exe ':NERDTree ' . s:GetGitTopLevelDir()
-  endfunc
+  endfunc "}}}
 
-  func! s:NERDTreeReopenWithGitRoot()
+  func! s:NERDTreeReopenWithGitRoot() abort "{{{
     call s:NERDTreeOpenGitRoot()
     wincmd p
     exe ':NERDTreeFind'
-  endfunc
+  endfunc "}}}
 
   command! -nargs=0 NERDTreeGitRoot call s:NERDTreeOpenGitRoot()
   command! -nargs=0 NERDTreeGitRootFind call s:NERDTreeReopenWithGitRoot()
@@ -639,28 +639,28 @@ if !exists("g:user_funcs_imported")
     let s:current_colorscheme = ""
   endif
 
-  func! GetColorscheme()
+  func! GetColorscheme() abort "{{{
 " return current colorscheme
 "
 " GetColorscheme: 0 -> str
 
     return s:current_colorscheme
-  endfunc
+  endfunc "}}}
 
-  func! GetColors()
+  func! GetColors() abort "{{{
     return GetColorscheme()
-  endfunc
+  endfunc "}}}
 
-  func! GetTypeName(type)
+  func! GetTypeName(type) abort "{{{
 " return name of type
 "
 " GetTypeName: arb -> str
 
     let _type = type(a:type)
     return s:type_dict[_type]
-  endfunc
+  endfunc "}}}
 
-  func! TypeToName(type)
+  func! TypeToName(type) abort "{{{
     if type(a:type) != g:int
       echoerr "wrong type of argument. got " GetTypeName(a:type) "while expecting int"
       throw g:arg_err
@@ -670,9 +670,9 @@ if !exists("g:user_funcs_imported")
       throw g:arg_err
     endif
     return s:type_dict[a:type]
-  endfunc
+  endfunc "}}}
 
-  func! SetColorscheme(...)
+  func! SetColorscheme(...) abort "{{{
 " set colorscheme and override background and search colors
 "
 " SetColorscheme: 0 ^ str -> bool
@@ -708,46 +708,43 @@ if !exists("g:user_funcs_imported")
       return g:false
     endif
 
-  endfunc
+  endfunc "}}}
 
-  function LoadColorschemeFromDict(d)
+  function LoadColorschemeFromDict(d) abort "{{{
     for [attr, vals] in d
       exe 'hi' attr join(values(map(copy(vals), 'join([v:key, v:val], "=")')), " ")
     endfor
-  endfunc
+  endfunc "}}}
 
-  func! GetMd5OfFile(file)
+  func! GetMd5OfFile(file) abort "{{{
     return split(system("md5sum ".a:file))[0]
-  endfunc
+  endfunc "}}}
 
-  func! GetFuncRef(Fn)
+  func! GetFuncRef(Fn) abort "{{{
     if type(a:Fn) == type("")
       return function(a:Fn)
     elsf
       return a:Fn
     endif
-  endfunc
+  endfunc "}}}
 
-  func! True(...)
+  func! True(...) abort "{{{
     return 1
-  endfunc
+  endfunc "}}}
 
-  func! False(...)
+  func! False(...) abort "{{{
     return 0
-  endfunc
+  endfunc "}}}
 
-  func! SplitString(s)
+  func! SplitString(s) abort "{{{
     let res = []
     for i in range(len(a:s))
       call add(res, a:s[i])
     endfor
     return res
-  endfunc
-  func! CallCompletion(findstart, base)
-    return g:Completion.Complete(a:findstart, a:base)
-  endfunc
+  endfunc "}}}
 
-  func! GetPassword(...)
+  func! GetPassword(...) abort "{{{
     let type = a:0 ? a:1 : 'alnum'
     if type == 'alnum'
       return strpart(system('apg -m 40 -x 40 -a 0 -s -n 1 2>/dev/null |tail -n 1'), 0, 40)
@@ -755,7 +752,17 @@ if !exists("g:user_funcs_imported")
       echoerr 'type ' . type . ' is not supported yet'
       return ''
     endif
-  endfunc
+  endfunc "}}}
 endif
 
+func! SetOpt(opt, val, ...) abort "{{{
+  exe 'set '.a:opt."=".a:val
+  if a:0
+    return a:1
+  else
+    return 0
+  endif
+endfunc "}}}
+
 " vim: ft=vim
+

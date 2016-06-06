@@ -6,6 +6,7 @@ basic_packages:
   - gksu
   - gnupg2
   - htop
+  - hamster-applet
   - libmysqlclient-dev
   - libreoffice
   - mirage
@@ -15,7 +16,6 @@ basic_packages:
   - padevchooser
   - parallel
   - pavucontrol
-  - pepperflashplugin-nonfree
   - redshift
   - screen
   - shutter

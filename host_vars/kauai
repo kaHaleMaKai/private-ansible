@@ -32,16 +32,16 @@ user_management:
         - video
         - wine
         - www-data
-    createhome: yes
-    shell: /usr/bin/zsh
-  - name: wine
-    createhome: yes
-    shell: /bin/bash
-    home: "{{ wine.prefix_dir }}"
-  - name: pyvenv
-    createhome: yes
-    shell: /bin/bash
-    home: "${{ pvenvs.prefix_dir }}"
+      createhome: yes
+      shell: /usr/bin/zsh
+    - name: wine
+      createhome: yes
+      shell: /bin/bash
+      home: "{{ wine.prefix_dir }}"
+    - name: pyvenv
+      createhome: yes
+      shell: /bin/bash
+      home: "${{ pvenvs.prefix_dir }}"
 
 # vim: set ft=yaml
 # vim: ft=yaml

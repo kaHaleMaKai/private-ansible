@@ -49,7 +49,6 @@ set mouse=a
 set ttyfast
 set ttymouse=xterm2
 set completeopt=menu,longest
-set completefunc=Completion.Complete
 set modeline
 set hlsearch
 set background=dark
@@ -117,11 +116,24 @@ let g:reveal_config = {
 let g:vimchat_browser_cmd = 'chromium-browser'
 let g:vimchat_extendedHighlighting = 1
 " 2}}}
+" vdebug {{{2
+let g:vdebug_keymap = {
+\    "run" : "r",
+\    "run_to_cursor" : "<CR>",
+\    "step_over" : "o",
+\    "step_into" : "i",
+\    "step_out" : "p",
+\    "close" : "c",
+\    "detach" : "d",
+\    "set_breakpoint" : "n",
+\    "get_context" : "g",
+\    "eval_under_cursor" : "e",
+\    "eval_visual" : "<Leader>e"
+\}
+" 2}}}
 " 1}}}
 " source vim resources {{{1
 exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
-exe "so " . g:vimrc_res_path . "/" . "Completion.vim"
-exe "so " . g:vimrc_res_path . "/" . "CompletionObject.vim"
 exe "so " . g:vimrc_res_path . "/" . "commands.vim"
 exe "so " . g:vimrc_res_path . "/" . "maps.vim"
 " color scheme {{{2
@@ -137,7 +149,7 @@ au BufNewFile,BufRead *.md  set filetype=markdown
 au BufNewFile,BufRead *.ino set filetype=arduino
 au BufNewFile,BufRead *.jsm set filetype=javascript
 au BufNewFile,BufRead *.j2 set filetype=j2
-au BufNewFile,BufRead *.gradle set filetype=gradle
+au BufNewFile,BufRead *.gradle set filetype=groovy
 " 1}}}
 
 " Add the virtualenv's site-packages to vim path {{{1

@@ -30,13 +30,23 @@ git_config:
     lg2: "log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
     lg: '!"git lg1"'
     grh: 'reset HEAD `git rev-parse --show-toplevel`'
+  'filter "tabspace"':
+    smudge: expand --tabs=4 --initial -
+    clean: unexpand --tabs=4 --first-only
 
-#git_ignore:
-#  - "*.log"
-#  - ".vagrant"
-#  - "*.pyc"
-#  - "._*"
-#  - "~*"
-#
+git_ignore:
+  - "*.log"
+  - ".vagrant"
+  - "*.pyc"
+  - "._*"
+  - "~*"
+  - "/tags"
+  - "/.new-tags"
+  - "/.copy-of-new-tags"
+  - "/vagrant*"
+  - "/.Vagrant*"
+  - "/Vagrant*"
+  - "/d201*/"
+
 # vim: set ft=yaml
 # vim: ft=yaml
