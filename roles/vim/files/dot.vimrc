@@ -131,6 +131,12 @@ let g:vdebug_keymap = {
 \    "eval_visual" : "<Leader>e"
 \}
 " 2}}}
+" local vimrc settings {{{2
+let g:localvimrc_event = ["BufEnter"]
+let g:localvimrc_ask = 0
+let g:localvimrc_whitelist = ["/usr/local/repos/pacs/"]
+"2}}}
+
 " 1}}}
 " source vim resources {{{1
 exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
