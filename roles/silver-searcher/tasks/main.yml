@@ -1,5 +1,5 @@
 - name: check if silversearcher has been installed
-  command: type -p ag
+  shell: type ag
   changed_when: false
   ignore_errors: true
   register: ag_installed
