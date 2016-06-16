@@ -1,3 +1,11 @@
 - include: neobundle.yml
+  tags: neobundle
+
 - include: custom-files.yml
-- include: vimchat.yml
+tags: vim-files
+
+- include: ultisnippets.yml
+  tags: ultisnippet
+
+- include: ftplugin.yml
+  tags: ftplugin

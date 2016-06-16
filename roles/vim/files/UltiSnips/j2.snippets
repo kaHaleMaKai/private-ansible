@@ -1,0 +1,68 @@
+snippet if "if block"
+{% if ${1} %}
+$2
+{% endif %}
+$0
+endsnippet
+
+snippet /{|}/ "bracket template" ri
+{{ $1 }}$0
+endsnippet
+
+snippet /B|b/ "bracket template" r
+{{ $1 }}$0
+endsnippet
+
+snippet def "default"  i
+|default($1)$0
+endsnippet
+
+snippet i "item"
+item
+endsnippet
+
+snippet isd "is defined"  i
+ is defined$0
+endsnippet
+
+snippet /el|else/ "else block"  r
+{% else %}
+$0
+endsnippet
+
+snippet elif "elif block"
+{% elif $1 %}
+$0
+endsnippet
+
+snippet ifel "if block"
+{% if ${1} %}
+$2
+{% else %}
+$3
+{% endif %}
+$0
+endsnippet
+
+snippet q
+{% if item.${1} is defined and item.$1 %}
+$1
+{% endif %}
+$0
+endsnippet
+
+snippet for "for block"
+{% for $1 %}
+$2
+{% endfor %}
+$0
+endsnippet
+
+snippet /{%|%|{%}/  "percentage block" ri
+{% $0 %}
+endsnippet
+
+snippet /endif|eif/ "endif block" r
+{% endif %}
+$0
+endsnippet

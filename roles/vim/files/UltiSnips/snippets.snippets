@@ -1,0 +1,21 @@
+snippet s
+snippet ${1:trigger} "${2:title}" ${3:"context"} ${4:flags}
+$0
+`!p snip.rv = 'endsnippet'`
+endsnippet
+
+snippet jend "Jump tp the end"
+post_jump "snip.cursor.set(*snip.snippet_end)"$0
+endsnippet
+
+snippet "f(.*)" "first character snippet" br
+snippet `!p snip.rv = match.group(1)[0]` "`!p snip.rv = match.group(1)`${2}"
+`!p snip.rv = match.group(1) + '$0'`
+`!p snip.rv = 'endsnippet'`
+
+$0
+endsnippet
+
+snippet "nonb(.*)" "nonchar before" ri
+"nonchar_before(snip, '`!p snip.rv = match.group(1) if match.group(1) else "x"`')" ei$0
+endsnippet

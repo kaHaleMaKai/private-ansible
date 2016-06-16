@@ -1,0 +1,31 @@
+snippet fn "arrow function w/o braces"
+($1) =>
+  $0
+endsnippet
+snippet fns "arrow function w/ braces"
+($1) => {
+  $0
+}
+endsnippet
+
+snippet l "console.log"  b
+console.log($1);$0
+endsnippet
+
+snippet if "if stmt"
+if ($1) {
+  $2
+}$0
+endsnippet
+
+snippet el "else stmt"
+else {
+  $1
+}$0
+endsnippet
+
+snippet elif "else if stmt"
+else if ($1) {
+  $2
+}$0
+endsnippet

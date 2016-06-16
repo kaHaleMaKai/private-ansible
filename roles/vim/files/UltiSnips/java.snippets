@@ -1,0 +1,455 @@
+global !p
+
+class DontMatch (object):
+    def empty_method(self, *args, **kwargs):
+	return True
+
+    def __getattr__(self, attr):
+      return self.empty_method
+
+def get_buffer(snip):
+  try:
+    buffer = snip.buffer
+  except AttributeError:
+    buffer = vim.current.window.buffer
+  return buffer
+
+def get_cursor(snip):
+  try:
+    line, col = (snip.line, snip.column)
+  except AttributeError:
+    line, col = [el-1 for el in vim.current.window.cursor]
+  return line, col
+
+def unpack(snip):
+  buffer = get_buffer(snip)
+  line, col = get_cursor(snip)
+  return buffer[line], line, col
+
+def match_Map(snip):
+  line, _, col = unpack(snip)
+  non_num = re.compile('[^a-zA-Z_0-9.]')
+  pos = col - 3
+  return pos <= 0 or non_num.match(line[pos])
+
+def set_fn_name(fn):
+  vim.command("let g:snip_fn = '{}'".format(fn))
+
+def nonchar_before(snip, expr):
+  line, _, col = unpack(snip)
+  non_num = re.compile('[^a-zA-Z_0-9.]')
+  pos = col - len(expr)
+  return pos <= 0 or non_num.match(line[pos])
+
+def match_expression(snip, expr, alt_expr=None):
+  line, _, col = unpack(snip)
+  match = re.match(expr, line[col - (len(expr)-1):])
+  if not match and alt_expr:
+    match = re.match(alt_expr, line[col - (len(alt_expr)-1):])
+  return match
+
+def let(var, val):
+  vim.command("let {} = '{}'".format(var, str(val)))
+
+def remove_expression(snip, expr, alt_expr=None):
+  line, linenr, col = unpack(snip)
+  idx = min(len(line)-1, col+1)
+  sep = " " if line[idx] != ")" else ""
+  start = (len(expr) if match_expression(snip, expr, alt_expr) else len(alt_expr)) - 1
+  snip.buffer[linenr] = line[:col-start] + sep + line[col+1:]
+  snip.cursor.set(linenr, col-start+1)
+
+def set_cursor_rel(snip, line=0, col=0):
+  set_fn_name("set_cursor_rel")
+  _, linenr, column = unpack(snip)
+  if line or col:
+    let("g:ifstmt", column+col)
+    vim.command("call cursor({}, {})".format(linenr+line+1, column+col+1))
+
+def find_empty_line(snip):
+  line, linenr, col = unpack(snip)
+  pattern = re.compile("^\\s*$")
+  if len(snip.buffer) <= linenr + 1:
+    snip.buffer.append('')
+    return linenr + 1
+  else:
+    for offset, line in enumerate(snip.buffer[linenr:]):
+      if pattern.match(line):
+	return linenr + offset
+    raise ValueError("no empty line found")
+
+def class_from_line(line):
+  match = re.match("^(\s*)(?P<access>public|private|protected)(\s*)(?P<final>final)?(\s*)(class)(\s*)(?P<class>[a-zA-Z0-9_]+)([^a-zA-Z0-9_]*)",
+		   line)
+  if match:
+    return match.group("class")
+  else:
+    return None
+
+def get_current_class(snip):
+  _, linenr, col = unpack(snip)
+  buffer = get_buffer(snip)
+  for line in (buffer[idx] for idx in range(linenr,-1,-1)):
+    class_name = class_from_line(line)
+    if class_name:
+      return class_name
+  raise ValueError("no class found")
+
+
+endglobal
+
+snippet {
+{
+    $0
+
+endsnippet
+
+snippet ind
+`!v indent(".")`
+endsnippet
+
+snippet get_classname
+`!p snip.rv = get_current_class(snip)`
+endsnippet
+
+snippet set "chainable setter"
+${VISUAL}
+
+public `!p snip.rv = snip.basename` ${VISUAL}(args${1}) {
+    ${2:body};
+    return this;
+}$0
+endsnippet
+
+snippet const "constant" b
+public static final ${1:type} ${2:name} = ${3};$0
+endsnippet
+
+snippet impl "implements"
+implements $0
+endsnippet
+
+snippet class "class switcher (class)"
+interface$0
+endsnippet
+
+snippet interface "class switcher (interface)"
+@interface$0
+endsnippet
+
+snippet "@interface" "class swticher (annotation)" r
+abstract class$0
+endsnippet
+
+snippet "abstract class" "class switcher (abstract class)"  r
+class$0
+endsnippet
+
+snippet ext "extends"
+extends $0
+endsnippet
+
+snippet cls "class def" b
+${1:public }${2:final }${3:static }${4:class }${5:Class} ${6:ext }${7:impl }{
+    $0
+}
+endsnippet
+
+snippet cons "constructor"
+${1:public }${2:final }`!p snip.rv = get_current_class(snip)`(args$3) {
+    $0
+}
+endsnippet
+
+snippet final "remove final keyword" "nonchar_before(snip, 'final')" ei
+$0
+endsnippet
+
+snippet static "remove static keyword" "nonchar_before(snip, 'static')" ei
+$0
+endsnippet
+
+snippet / [a-zA-Z0-9_]#/ "remove identifier" r
+$0
+endsnippet
+
+snippet clcon "class def" b
+${1:public }${2:final }${3:static }class ${4:Class} ${5:impl }{
+    ${6:public} $7(args${8}) {
+        ${9:body}
+    }
+    $0
+}
+endsnippet
+
+snippet meth "method def"
+${1:public }${2:final }${3:static }${4:type} ${5:name}($6) {
+    $0
+}
+endsnippet
+
+snippet /@o|@O/ "override" br
+@Override
+$0
+endsnippet
+
+snippet /->|-</ "lambda function" i
+(${1:}) -> $0
+endsnippet
+
+snippet ttu "tuple type"
+Tuple<${1}, ${2}> $0
+endsnippet
+
+snippet ntu "new tuple type"
+new Tuple<${1}, ${2}> $0
+endsnippet
+
+snippet =tu "tuple type assignment"
+Tuple<${1}, ${2}> ${3} = new Tuple<${1}, ${2}> $0;
+endsnippet
+
+snippet ttf "function type"
+Function<${1:K}, ${2:ret}> $0
+$0
+endsnippet
+
+snippet ntf "new function"
+new Function<${1:K}, ${2:ret}>() {
+    public $2 call($1 ${3:x}) {
+        ${4:body};
+    }
+};
+$0
+endsnippet
+
+snippet =tf "function assignment"
+Function<${1:K}, ${2:ret}> ${3:name} =
+    new Function<$1, $2>() {
+    public $2 call($1 ${4:x}) {
+        ${5:body};
+    }
+};
+$0
+endsnippet
+
+snippet ttf2 "function2 type"
+Function2<${1:K}, ${2:V}, ${3:ret}> $0
+endsnippet
+
+snippet ntf2 "new function2"
+new Function2<${1:K}, ${2:V}, ${3:ret}>() {
+    public $3 call($1 ${4:x}, $2 ${5:y}) {
+        ${6:body};
+    }
+};
+$0
+endsnippet
+
+snippet =tf2 "function2 assignment"
+Function2<${1:K}, ${2:V}, ${3:ret}> ${4:name} =
+    new Function2<$1, $2, $3>() {
+    public $3 call($1 ${5:x}, $2 ${6:y}) {
+        ${7:body};
+    }
+};
+$0
+endsnippet
+
+snippet Map "Java Map type"  "match_Map(snip)" ei
+Map<${1:K}, ${2:V}>$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet args "nonchar_before(snip, 'args')" ei
+${1:type} ${2:val}, args$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet enum "nonchar_before(snip, 'enum')" ei
+${1:var}, enum$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet argse "nonchar_before(snip, 'argse')" ei
+${1:var}, enum$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet enums "nonchar_before(snip, 'enums')" ei
+${1:type} ${2:val}, args$0
+endsnippet
+
+pre_expand "remove_expression(snip, ', argsd', 'argsd')"
+snippet argsd "match_expression(snip, ', argsd', 'argsd')" ei
+$0
+endsnippet
+
+pre_expand "remove_expression(snip, ', enumd', 'enumd')"
+snippet enumd "match_expression(snip, ', enumd', 'enumd')" ei
+$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet br "Broadcast type"
+Broadcast<${1:rype}>$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet tm "TreeMap type" i
+TreeMap<${1:type1}, ${2:type2}>$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet l "long type" "nonchar_before(snip, 'x')" ei
+long$0
+endsnippet
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet L "Long type" "nonchar_before(snip, 'x')" ei
+Long$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet d "double type" "nonchar_before(snip, 'x')" ei
+double$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet D "Double type" "nonchar_before(snip, 'x')" ei
+Double$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet i "int type" "nonchar_before(snip, 'x')" ei
+int$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet I "Integer type" "nonchar_before(snip, 'x')" ei
+Integer$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet S "String type" "nonchar_before(snip, 'x')" ei
+String$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet f "float type" "nonchar_before(snip, 'x')" ei
+float$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet F "Float type" "nonchar_before(snip, 'x')" ei
+Float$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet c "char type" "nonchar_before(snip, 'x')" ei
+char$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet C "Char type" "nonchar_before(snip, 'x')" ei
+Char$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet b "boolean" "nonchar_before(snip, 'x')" ei
+boolean$0
+endsnippet
+
+
+snippet < "angular brackets" i
+<$0>
+endsnippet
+
+snippet > "angular brackets" i
+<$0>
+endsnippet
+
+snippet , "comma"  i
+, $0
+endsnippet
+
+snippet Li "List" "nonchar_before(snip, 'Li')" ei
+List<$0>
+endsnippet
+
+snippet /nv|nval/ "new type and value" r
+${1:final }${2:type} ${3:name} = new $2($0);
+endsnippet
+
+snippet /v|val/ "type and value" rb
+${1:final }${2:type} ${3:name} = $0;
+endsnippet
+
+snippet rdd "JavaRDD type"
+JavaRDD<${1:type}> $0
+endsnippet
+
+snippet rdd2 "JavaPairRDD type"
+JavaPairRdd<${1:K}, ${2:V}> $0
+endsnippet
+
+snippet fucl "Function class"
+${1:public }${2:final }${3:static }class ${4:Name} implements Function<${5:T}, ${6:R}> {
+    public $6 call($5 ${7:vaf}) {
+        $0;
+    }
+}
+endsnippet
+
+snippet fu2cl "Function2 class"
+${1:public }${2:final }${3:static }class ${4:Name} implements Function2<${5:K}, ${6:V}, ${7:R}> {
+    public $7 call($5 ${8:key}, $6 ${9:val}) {
+        $0;
+    }
+}
+endsnippet
+
+snippet pfucl "PairFunction class"
+${1:public }${2:final }${3:static }class ${4:Name} implements PairFunction<${5:input}, ${6:R_K}, ${7:R_V}> {
+    public Tuple2<$6, $7>  call($5 ${8:var}) {
+        $0;
+    }
+}
+endsnippet
+
+snippet flfucl "FlatMapFunction class"
+${1:public} class ${2:Name} implements FlatMapFunction<${3:T}, ${4:R}> {
+    public Iterable<$4> call($3 ${5:vaf}) {
+        $0;
+    }
+}
+endsnippet
+
+snippet vfucl "VoidFunction class"
+${1:public} class ${2:Name} implements Function<${3:T}, ${4:R}> {
+    public $4 call($3 ${5:vaf}) {
+        $0;
+    }
+}
+endsnippet
+
+snippet public "public accessability chooser" "nonchar_before(snip, 'public')" ei
+private$0
+endsnippet
+
+snippet private "private accessability chooser" "nonchar_before(snip, 'private')" ei
+protected$0
+endsnippet
+
+snippet protected "protected accessability chooser""nonchar_before(snip, 'protected')" ei
+public$0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet fi "final" "nonchar_before(snip, 'fi')" ei
+final $0
+endsnippet
+
+post_jump "snip.cursor.set(*snip.snippet_end)"
+snippet st "static" "nonchar_before(snip, 'st')" ei
+static $0
+endsnippet

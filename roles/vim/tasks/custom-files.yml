@@ -1,50 +1,31 @@
 - name: create vim-related folders
   file: path={{ item }}
         state=directory
-        mode=0775
   with_items:
     - "{{ vim.resources }}"
     - "{{ vim.ftplugin }}"
     - "{{ vim.syntax }}"
 
 - name: create vim-related executables
-  tags:
-    - vim-bin
   copy: src={{ item }}
         dest={{ vim.bin_path }}
-        mode=0775
         force=yes
   with_fileglob:
     bin/*
 
 - name: copy custom .vim files
-  tags:
-    - vim-custom
   copy: src="{{ item }}"
         dest="{{ vim.resources }}"
-        mode=0775
         force=yes
   with_fileglob:
     custom/*
-
-- name: create folder for ultisnippets
-  file: path={{ vim.ftdetect }}
-        state=directory
-        owner={{ ansible_user_id }}
-        group={{ ansible_user_id }}
-        mode=0775
 
 - name: copy .vimrc
   tags: vimrc
   copy: src=dot.vimrc
         dest="{{ ansible_user_dir }}/.vimrc"
-        mode=0644
 
 - name: template vim files
-  tags:
-    - vim-templates
-    - vim-bundles
-    - vim-maps
   template: src={{ item.src }}
             dest={{ item.dest }}
   with_items:
@@ -52,49 +33,3 @@
       dest: "{{ vim.resources }}/bundles.vim"
     - src: maps.vim.j2
       dest: "{{ vim.resources }}/maps.vim"
-
-- name: create dirs for assembling ftplugin files later on
-  tags:
-    - ftplugin
-    - vim-ftplugin
-  file: dest={{ vim.tmp_dir }}/{{ item|basename }}
-        state=directory
-        mode=0775
-        owner={{ ansible_user_id }}
-        group={{ ansible_user_id }}
-  with_fileglob:
-    ftplugin/*.vim
-
-- name: copy ftplugin files into tmp dir
-  tags:
-    - ftplugin
-    - vim-ftplugin
-  copy: src={{ item }}
-        dest={{ vim.tmp_dir }}/{{ item|basename }}/99_main.vim
-  with_fileglob:
-    ftplugin/*.vim
-
-- name: template neobundle sources for ftplugins
-  tags:
-    - ftplugin
-    - vim-ftplugin
-  template: src=neobundle-source.vim.j2
-            dest={{ vim.tmp_dir }}/{{ item|basename }}/10_neobundle-sources.vim
-  with_fileglob:
-    ftplugin/*.vim
-
-- name: concat neobundle sources and ftplugin files
-  tags:
-    - ftplugin
-    - vim-ftplugin
-  assemble: src={{ vim.tmp_dir }}/{{ item|basename }}
-            dest={{ vim.ftplugin }}/{{ item|basename }}
-            remote_src=yes
-            mode=0664
-            owner={{ ansible_user_id }}
-            group={{ ansible_user_id }}
-  with_fileglob:
-    ftplugin/*.vim
-  notify:
-    - remove ftplugin tmp dir
-

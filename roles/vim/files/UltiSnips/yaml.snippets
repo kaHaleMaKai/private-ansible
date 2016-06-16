@@ -1,0 +1,105 @@
+snippet if "if block"
+{% if ${1} %}
+$2
+{% endif %}
+$0
+endsnippet
+
+snippet /{|}/ "bracket template" ri
+{{ $1 }}$0
+endsnippet
+
+snippet b "bracket template" i
+($1)$0
+endsnippet
+
+snippet v "bracket template" i
+[$1]$0
+endsnippet
+
+snippet B "bracket template" i
+{{ $1 }}$0
+endsnippet
+
+snippet def "default"  i
+|default($1)$0
+endsnippet
+
+snippet i "item"
+item$0
+endsnippet
+
+snippet i. "item"
+item.$0
+endsnippet
+
+snippet i.n "item.name"
+item.name$0
+endsnippet
+
+snippet isd "is defined"  i
+ is defined$0
+endsnippet
+
+snippet /el|else/ "else block"  r
+{% else %}
+$0
+endsnippet
+
+snippet elif "elif block"
+{% elif $1 %}
+$0
+endsnippet
+
+snippet ifel "if block"
+{% if ${1} %}
+$2
+{% else %}
+$3
+{% endif %}
+$0
+endsnippet
+
+snippet for "for block"
+{% for $1 %}
+$2
+{% endfor %}
+$0
+endsnippet
+
+snippet /{%|%|{%}/  "percentage block" ri
+{% $0 %}
+endsnippet
+
+snippet /endif|eif/ "endif block" r
+{% endif %}
+$0
+endsnippet
+
+snippet nt "named task"
+- name: ${1:name}
+  ${2:module}: ${3:args}
+
+$0
+endsnippet
+
+snippet wi "with_items"
+with_items:
+  $0
+endsnippet
+
+snippet .n ".name"  i
+.name $0
+endsnippet
+
+snippet -n "- name:"
+- name: $0
+endsnippet
+
+snippet no "negate no"  
+yes$0
+endsnippet
+
+snippet yes "negate yes"  
+no$0
+endsnippet

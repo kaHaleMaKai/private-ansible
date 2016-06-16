@@ -14,6 +14,7 @@ vim:
     ftdetect: "{{ ansible_user_dir }}/.vim/ultisnips_rep/ftdetect"
   neobundle:
     generic:
+      - bundle: tpope/vim-abolish
       - bundle: tpope/vim-sensible
       - bundle: tpope/vim-fugitive
       - bundle: tpope/vim-surround

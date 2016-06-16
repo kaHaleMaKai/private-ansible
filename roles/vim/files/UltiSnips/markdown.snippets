@@ -1,0 +1,27 @@
+global !p
+def get_transition(char):
+    transitions = {'n': 'none',
+		   'f': 'fade',
+		   's': 'slide',
+		   'v': 'concave',
+		   'x': 'convex',
+		   'z': 'zoom'}
+    transition = transitions.get(char, None)
+    result = ' tr="{}"'.format(transition) if transition else ''
+    return result
+
+endglobal
+
+snippet "c(.*)" "start code block"  br
+\`\`\``!p snip.rv = match.group(1)`
+$0
+\`\`\`
+endsnippet
+
+snippet "([0-9.]+)([ac-z]?)" "start a new section" r
+<!--sec`!p snip.rv = match.group(1) + get_transition(match.group(2))`-->$0
+endsnippet
+
+snippet "([0-9.]+)b" "use background image" r
+<!--sec`!p snip.rv = match.group(1)` bg="../images/${1}" bgsz="${2}px"-->$0
+endsnippet

@@ -1,0 +1,7 @@
+- name: create folder for ultisnippets
+  file: path="{{ vim.ftdetect }}"
+        state=directory
+
+- name: copy snippets
+  copy: src=UltiSnips
+        dest="{{ vim.config_path }}/"

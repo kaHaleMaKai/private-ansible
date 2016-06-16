@@ -87,6 +87,7 @@ let g:syntastic_always_populate_loc_list = true
 let g:syntastic_auto_loc_list = true
 let g:syntastic_check_on_open = true
 let g:syntastic_check_on_wq = false
+let g:syntastic_mode_map = { 'passive_filetypes': ['java'] }
 " 2}}}
 " CtrlP {{{
 let g:ctrlp_extensions = ['funky']
