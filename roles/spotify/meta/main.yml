@@ -1,6 +1,6 @@
 dependencies:
   - role: download-and-install-deb
-    binary: ag
+    binary: spotify
     url: spotify_url
 
 

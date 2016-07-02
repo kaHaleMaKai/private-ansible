@@ -2,7 +2,7 @@
   tags: neobundle
 
 - include: custom-files.yml
-tags: vim-files
+  tags: vim-files
 
 - include: ultisnippets.yml
   tags: ultisnippet
