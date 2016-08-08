@@ -1,5 +1,7 @@
 kauai ansible_ssh_host=localhost
 
+[awesome]
+kauai
 [base]
 kauai
 [git]

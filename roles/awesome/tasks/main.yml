@@ -1,11 +1,15 @@
-- include: build-deps.yml
-
 - name: check if awesome has been installed
   shell: >
     type awesome >/dev/null 2>&1
+    && awesome --version
+    | grep -F "v{{ awesome.version }}"
+    >/dev/null 2>&1
   changed_when: false
   ignore_errors: true
   register: awesome_installed
+
+- include: build-deps.yml
+  when: awesome_installed.rc > 0
 
 - include: download.yml
   when: awesome_installed.rc > 0

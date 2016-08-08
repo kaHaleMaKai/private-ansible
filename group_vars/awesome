@@ -1,6 +1,6 @@
 awesome:
   terminal: xfce4-terminal
-  source: "https://awesome.naquadah.org/download/awesome-3.5.6.tar.bz2"
+  version: 3.5.9
   build_dir: /tmp/awesome
   theme: my-theme
   config_path: "{{ ansible_user_dir }}/.config/awesome"
