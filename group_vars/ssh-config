@@ -33,20 +33,17 @@ ssh_config:
             - {host: agg, name: pmagg1}
             - {host: agg-test, name: pmagg1-test}
             - host: pmdev-bd
-            - {host: r10, name: r1c00}
-            - {host: r11, name: r1c01}
-            - {host: r12, name: r1c02}
-            - {host: r13, name: r1c03}
-            - {host: r14, name: r1c04}
-            - {host: r15, name: r1c05}
-            - {host: l10, name: r1c00, user: lwinderling}
-            - {host: l11, name: r1c01, user: lwinderling}
-            - {host: l12, name: r1c02, user: lwinderling}
-            - {host: l13, name: r1c03, user: lwinderling}
-            - {host: l14, name: r1c04, user: lwinderling}
-            - {host: l15, name: r1c05, user: lwinderling}
-            - {host: pacli, name: pacalculus-cli}
-            - {host: pmcli, name: pmcalculus-cli}
+            - {host: r2c00, name: r2c00, user: lwinderling}
+            - {host: r2c01, name: r2c01, user: lwinderling}
+            - {host: r2c02, name: r2c02, user: lwinderling}
+            - {host: r2c03, name: r2c03, user: lwinderling}
+            - {host: r2c04, name: r2c04, user: lwinderling}
+            - {host: r2c05, name: r2c05, user: lwinderling}
+            - {host: pa-hue, name: pa-hue, user: lwinderling}
+            - {host: pm-hue, name: pm-hue, user: lwinderling}
+            - {host: pahue, name: pa-hue, user: lwinderling}
+            - {host: pmhue, name: pm-hue, user: lwinderling}
+            - {host: hue, name: pa-hue, user: lwinderling}
         - name: esome.info
           machines:
             - host: db
