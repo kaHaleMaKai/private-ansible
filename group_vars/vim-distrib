@@ -64,6 +64,7 @@ vim:
       - bundle: craigemery/vim-autotag
       - bundle: vim-scripts/taglist.vim
       - bundle: embear/vim-localvimrc
+      - bundle: alvan/vim-php-manual
 
 # vim: ft=yaml
 # vim: set ft=yaml

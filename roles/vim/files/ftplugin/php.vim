@@ -4,7 +4,9 @@ set smarttab
 set softtabstop=4
 set tabstop=8
 set autoindent
-set expandtab
+set noexpandtab
+
+set includeexpr=substitute(v:fname,'^/','','')
 
 if exists(':Make') == 2
   augroup phpCtags
