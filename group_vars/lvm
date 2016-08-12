@@ -43,14 +43,21 @@ lvm_group_vars:
       owner: root
       group: root
       mode: '1777'
-    - lv: home
+    - lv: lvhome
       vg: vgroot
       size: 30G
       mountpoint: /home
+      root_reserve: 0
     - lv: lvboot
       vg: vgroot
       size: 300M
       mountpoint: /boot
+    - lv: lvoblivion
+      vg: vgroot
+      size: 5G
+      mountpoint: /media/oblivion
+      options: noatime
+      root_reserve: 0
 
 # vim: set ft=yaml
 # vim: ft=yaml

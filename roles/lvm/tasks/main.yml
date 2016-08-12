@@ -12,3 +12,5 @@
   become: yes
 - include: resize-fs.yml
   become: yes
+- include: root-reserve.yml
+  become: yes

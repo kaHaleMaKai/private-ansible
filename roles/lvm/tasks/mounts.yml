@@ -5,7 +5,8 @@
         mode="{{ item.mode|default('0755') }}"
         owner="{{ item.owner|default(omit) }}"
         group="{{ item.group|default(omit) }}"
-  with_items: lvm_vars.volumes is defined
+  when: lvm_vars.volumes is defined and
+        (item.state|default('present')) != 'absent'
   with_items:
     "{{ lvm_vars.volumes }}"
 
@@ -15,7 +16,9 @@
     src="/dev/{{item.vg|default(lvm_vars.vg)}}/{{item.lv}}"
     fstype="{{item.fstype | default('ext4')}}"
     state=mounted
+    opts="{{ item.options|default(omit) }}"
   when: lvm_vars.volumes is defined and
-        (lvm_vars.vg is defined or lvm_vars.vgs is defined)
+        (lvm_vars.vg is defined or lvm_vars.vgs is defined) and
+        (item.state|default('present')) != 'absent'
   with_items:
     "{{ lvm_vars.volumes }}"

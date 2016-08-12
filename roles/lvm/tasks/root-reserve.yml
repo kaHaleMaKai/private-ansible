@@ -1,0 +1,9 @@
+---
+- name: Reserve blocks for root
+  command: tune2fs -m "{{ item.root_reserve }}" "/dev/{{item.vg|default(lvm_vars.vg)}}/{{item.lv}}"
+  when: lvm_vars.volumes is defined and
+        (lvm_vars.vg is defined or lvm_vars.vgs is defined) and
+        (item.state|default('present')) != 'absent' and
+        item.root_reserve is defined
+  with_items:
+    "{{ lvm_vars.volumes }}"

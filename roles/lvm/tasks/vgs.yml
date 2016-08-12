@@ -6,7 +6,10 @@
   when: lvm_vars.vg is defined
 
 - name: Set up multiple volume groups
-  lvg: vg="{{item.vg}}" pvs="{{ item.pvs|join(',') }}"
+  lvg:
+    vg="{{item.vg}}"
+    pvs="{{ item.pvs|join(',') }}"
+    state="{{ item.vg_state|default('present') }}"
   when: lvm_vars.vgs is defined
   with_items:
     "{{ lvm_vars.vgs }}"
