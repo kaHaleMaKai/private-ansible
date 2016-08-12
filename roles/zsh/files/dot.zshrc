@@ -59,7 +59,11 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH="${PATH}:/home/lars/bin:/home/lars/bin:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/lib/postgresql/9.3/bin"
+PATH="${PATH}:/usr/lib/lightdm/lightdm:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/lib/postgresql/9.3/bin"
+for binPath in $(find in "${HOME}/bin" -maxdepth 2 -executable ! -type d -exec dirname {} \; | sort | uniq); do
+  PATH="${PATH}:${binPath}"
+done
+export PATH="$PATH"
 
 fpath=(~/.config/zsh/autocomplete $fpath)
 # compsys initialization

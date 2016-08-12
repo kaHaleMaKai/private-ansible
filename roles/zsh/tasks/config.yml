@@ -1,10 +1,10 @@
 - name: create config dir for zsh
-  file: path={{ zsh.config_path }}
+  file: path="{{ zsh.config_path }}"
         state=directory
 
 - name: copy zsh files into place
-  copy: src={{ item.src }}
-        dest={{ item.dest }}
+  copy: src="{{ item.src }}"
+        dest="{{ item.dest }}"
   with_items:
     - src: dot.zshrc
       dest: "{{ zsh.rc }}"

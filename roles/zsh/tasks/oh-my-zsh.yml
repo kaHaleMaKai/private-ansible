@@ -1,5 +1,7 @@
 - name: check if oh-my-zsh has been installed
-command: test -e "{{ ansible_user_dir }}/.oh-my-zsh"
+  command: test -e "{{ ansible_user_dir }}/.oh-my-zsh"
+  changed_when: false
+  failed_when: false
   register: oh_my_zsh_installed
 
 - name: install oh-my-zsh

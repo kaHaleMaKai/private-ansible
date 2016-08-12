@@ -1,5 +1,5 @@
 - hosts: shell-distrib
   roles:
-  - role: shell
-    tags: shell
+  - role: zsh
+    tags: zsh
 
