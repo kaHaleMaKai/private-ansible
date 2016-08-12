@@ -1,5 +1,5 @@
 - hosts: wine
   roles:
-  - role: wine
-    tags: wine
+    - role: heidi-sql
+      tags: heidi
 
