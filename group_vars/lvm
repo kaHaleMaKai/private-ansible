@@ -1,27 +1,56 @@
+# settings for new os
+# lvm_group_vars:
+#   vgs:
+#     - vg: vgmain
+#       pvs: ...
+#   volumes:
+#     - lv: lvroot
+#       vg: vgmain
+#       size: 10G
+#       mountpoint: /
+#     - lv: lvtmp
+#       vg: vgmain
+#       size: 1G
+#       mountpoint: /tmp
+#       owner: root
+#       group: root
+#       mode: '1777'
+#     - lv: home
+#       vg: vgmain
+#       size: 5G
+#       mountpoint: /home
+#     - lv: /var
+#       vg: vgmain
+#       size: 1G
+#       mountpoint: /var
+
+# settings for old os
 lvm_group_vars:
   vgs:
-    - vg: vgmain
-      pvs: ...
+    - vg: vgroot
+      pvs:
+      - /dev/sda1
+      - /dev/sda2
   volumes:
     - lv: lvroot
-      vg: vgmain
-      size: 10G
+      vg: vgroot
+      size: 30G
       mountpoint: /
     - lv: lvtmp
-      vg: vgmain
-      size: 1G
+      vg: vgroot
+      size: 5G
       mountpoint: /tmp
       owner: root
       group: root
       mode: '1777'
     - lv: home
-      vg: vgmain
-      size: 5G
+      vg: vgroot
+      size: 30G
       mountpoint: /home
-    - lv: /var
-      vg: vgmain
-      size: 1G
-      mountpoint: /var
+    - lv: lvboot
+      vg: vgroot
+      size: 300M
+      mountpoint: /boot
 
 # vim: set ft=yaml
 # vim: ft=yaml

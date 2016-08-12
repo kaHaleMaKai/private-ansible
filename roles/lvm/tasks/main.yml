@@ -5,6 +5,10 @@
   apt: name=lvm2 state=present
 
 - include: vgs.yml
+  become: yes
 - include: lvs.yml
+  become: yes
 - include: mounts.yml
+  become: yes
 - include: resize-fs.yml
+  become: yes

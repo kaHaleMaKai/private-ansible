@@ -1,16 +1,21 @@
 ---
 - name: Create mount points
-  file: path={{item.mountpoint}}
+  file: path="{{item.mountpoint}}"
         state=directory
-        mode={{ item.mode|default('0755') }}
-        owner={{ item.owner|default(omit) }}
-        group={{ item.group|default(omit) }}
+        mode="{{ item.mode|default('0755') }}"
+        owner="{{ item.owner|default(omit) }}"
+        group="{{ item.group|default(omit) }}"
   with_items: lvm_vars.volumes is defined
   with_items:
-    lvm_vars.volumes
+    "{{ lvm_vars.volumes }}"
 
 - name: Mount logical volumes
-  mount: name={{item.mountpoint}} src=/dev/{{item.vg|default(lvm_vars.vg)}}/{{item.lv}} fstype={{item.fstype | default('ext4')}} state=mounted
-  when: lvm_vars.volumes is defined and (lvm_vars.vg is defined or lvm_vars.vgs is defined)
+  mount:
+    name="{{item.mountpoint}}"
+    src="/dev/{{item.vg|default(lvm_vars.vg)}}/{{item.lv}}"
+    fstype="{{item.fstype | default('ext4')}}"
+    state=mounted
+  when: lvm_vars.volumes is defined and
+        (lvm_vars.vg is defined or lvm_vars.vgs is defined)
   with_items:
-    lvm_vars.volumes
+    "{{ lvm_vars.volumes }}"
