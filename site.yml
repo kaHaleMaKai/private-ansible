@@ -5,7 +5,6 @@
 - include: pyvenvs.yml
 - include: shell.yml
 - include: ssh-config.yml
-- include: site.yml
 - include: vim.yml
 - include: wine.yml
 
@@ -23,39 +22,3 @@
     url: deb_list.spotify.url
   roles:
     - download-and-install-deb
-
-#- hosts: my-computers
-  #remote_user: lars
-  #sudo: no
-  #roles:
-    #- role: run-always
-      #tags: always
-    #- role: manage-users-and-groups
-      #tags: users
-    #- role: services
-      #tags: services
-    #- role: basics
-      #tags: basics
-    #- role: lvm
-      #tags: lvm
-      #sudo: yes
-    #- role: git-config
-      #tags: [git, git-config]
-    #- role: zsh
-      #tags: zsh
-    #- role: vim
-      #tags: vim
-    #- role: gui-basics
-      #tags: gui-basics
-    #- role: ssh-config
-      #tags: [ssh, ssh-config]
-    #- role: awesome
-      #tags: awesome
-    #- role: administration
-      #tags: administration
-    #- role: wine
-      #tags: wine
-    #- role: pyvenvs
-      #tags: pyvenvs
-    #- role: oracle-java
-      #tags: oracle-java
