@@ -1,7 +1,7 @@
 - include: awesome.yml
 - include: base.yml
 - include: git.yml
-- include: lvm.yml
+- include: lvm.yml # test that
 - include: pyvenvs.yml
 - include: shell.yml
 - include: ssh-config.yml

@@ -3,6 +3,7 @@
         state=directory
 
 - name: copy zsh files into place
+  tags: zshrc
   copy: src="{{ item.src }}"
         dest="{{ item.dest }}"
   with_items:

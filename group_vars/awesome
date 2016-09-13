@@ -9,12 +9,19 @@ awesome:
     - prg: light-locker
     - prg: xfce4-power-manager
     - prg: nm-applet
+    - prg: touchpad
+    - prg: xfce4-volumed
   shortcuts:
     - cmd: xflock4
       mode: spawn
       modkey: yes
-      extrakey: "Control"
+      extrakey: Control
       key: l
+    - cmd: shutter
+      mode: spawn
+      modkey: yes
+      extrakey: Shift
+      key: s
   build_params:
     DCMAKE_PREFIX_PATH: /usr
     DSYSCONFDIR: /etc

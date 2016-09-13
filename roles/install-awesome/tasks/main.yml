@@ -17,10 +17,6 @@
 - include: make.yml
   when: awesome_installed.rc > 0
 
-- include: config.yml
-  tags: configure-awesome
-  when: awesome_installed.rc > 0
-
 - include: vicious.yml
   tags: configure-awesome
   when: awesome_installed.rc > 0

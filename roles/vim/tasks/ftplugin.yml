@@ -7,6 +7,7 @@
         mode=0775
         owner={{ ansible_user_id }}
         group={{ ansible_user_id }}
+  when: ft is not defined or (ft~".vim") == "{{ item|basename }}"
   with_fileglob:
     ftplugin/*.vim
 
@@ -16,6 +17,7 @@
     - vim-ftplugin
   copy: src={{ item }}
         dest={{ vim.tmp_dir }}/{{ item|basename }}/99_main.vim
+  when: ft is not defined or (ft~".vim") == "{{ item|basename }}"
   with_fileglob:
     ftplugin/*.vim
 
@@ -25,6 +27,7 @@
     - vim-ftplugin
   template: src=neobundle-source.vim.j2
             dest={{ vim.tmp_dir }}/{{ item|basename }}/10_neobundle-sources.vim
+  when: ft is not defined or (ft~".vim") == "{{ item|basename }}"
   with_fileglob:
     ftplugin/*.vim
 
@@ -38,9 +41,8 @@
             mode=0664
             owner={{ ansible_user_id }}
             group={{ ansible_user_id }}
+  when: ft is not defined or (ft~".vim") == "{{ item|basename }}"
   with_fileglob:
     ftplugin/*.vim
   notify:
     - remove ftplugin tmp dir
-
-

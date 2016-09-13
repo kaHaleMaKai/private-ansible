@@ -1,5 +1,7 @@
 - hosts: awesome
   roles:
-  - role: awesome
-    tags: awesome
+  - role: install-awesome
+    tags: install_awesome
+  - role: configure-awesome
+    tags: configure_awesome
 

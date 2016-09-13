@@ -18,9 +18,10 @@
     - src: lib
     - src: themes
 
-- name: copy template rc.lua into awesome dir
-  tags:
-    - configure-awesome
-  template: src=rc.lua.j2
-            dest="{{ awesome.config_path }}/rc.lua"
-            mode=0664
+- name: template rc.lua into awesome config dir
+  tags: awesome.rc
+  template:
+    src=rc.lua.j2
+    dest="{{ awesome.config_path }}/rc.lua"
+    mode=0664
+

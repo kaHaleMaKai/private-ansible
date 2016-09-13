@@ -99,6 +99,8 @@ alias :q='exit'
 alias :w='write_last_command_to_file'
 alias :a='append_last_command_to_file'
 
+alias gu='git add -u'
+
 write_last_command_to_file() {
 	$(history | tail -n 1 | awk '{$1=""; print $0}') > $1
 }
@@ -132,6 +134,12 @@ gcd() {
 
   return $exitStatus
 }
+
+getpass() {
+  local length="${1:-40}"
+  apg -m "$length" -x "$length" -a 1 -s
+}
+
 for f in ~/.config/zsh/fns/*; do
     source "$f"
 done
