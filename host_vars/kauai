@@ -43,5 +43,15 @@ user_management:
       shell: /bin/bash
       home: "${{ pvenvs.prefix_dir }}"
 
+kerberos_keytab_realm: PMD.LOCAL
+kerberos_keytabs:
+  - principal: lwinderling
+    password: "{{ ad_password }}"
+    owner: lars
+    group: lars
+    mode: '0440'
+    servers:
+      - kauai
+
 # vim: set ft=yaml
 # vim: ft=yaml

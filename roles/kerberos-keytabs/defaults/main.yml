@@ -1,0 +1,7 @@
+kerberos_keytab_path: /etc/security/keytabs
+kerberos_keytab_path_owner: root
+kerberos_keytab_path_group: root
+kerberos_keytab_file_ending: keytab
+kerberos_keytab_mode: '0400'
+kerberos_keytab_version: 3
+kerberos_keytab_encryption: aes256-cts

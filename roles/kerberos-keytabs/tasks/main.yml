@@ -1,0 +1,10 @@
+- name: assert that kerberos_keytab_realm is defined
+  assert:
+    that:
+      - "kerberos_keytabs is defined"
+      - "kerberos_keytab_realm is defined"
+  delegate_to: localhost
+
+- include: create-keytabs.yml
+  become: yes
+  become_method: sudo

@@ -1,0 +1,9 @@
+---
+- hosts: kauai
+  roles:
+    - role: kerberos-keytabs
+      tags: kerberos_keytabs
+  vars_prompt:
+    - name: "ad_password"
+      prompt: "Please, enter your AD password."
+      private: yes

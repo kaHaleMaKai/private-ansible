@@ -1,0 +1,42 @@
+- name: create directory for keberos keytabs if not present
+  file: path="{{ kerberos_keytab_path }}"
+        owner="{{ kerberos_keytab_path_owner }}"
+        group="{{ kerberos_keytab_path_group }}"
+        mode=0755
+        state=directory
+
+- name: remove unwanted keytabs
+  file: path="{{ kerberos_keytab_path }}/{{ item.0.principal }}.{{ kerberos_keytab_file_ending }}"
+        state=absent
+  when: inventory_hostname == item.1 and (item.0.state|default('present')) == 'absent'
+  with_subelements:
+    - "{{ kerberos_keytabs }}"
+    - servers
+
+- name: create keytabs for all users on that server
+  script: >
+    create-keytab.sh
+    '{{ item.0.principal }}'
+    '{{ kerberos_keytab_realm }}'
+    '{{ item.0.password }}'
+    '{{ kerberos_keytab_path }}/{{ item.0.principal }}.{{ kerberos_keytab_file_ending }}'
+    '{{ kerberos_keytab_version }}'
+    '{{ kerberos_keytab_encryption }}'
+  register: kt
+  changed_when: kt.stdout == 'changed'
+  failed_when: kt.stdout == 'failed'
+  when: inventory_hostname == item.1 and (item.0.state|default('present')) != 'absent'
+  with_subelements:
+    - "{{ kerberos_keytabs }}"
+    - servers
+
+- name: chown keytabs to specified users
+  file: path="{{ kerberos_keytab_path }}/{{ item.0.principal }}.{{ kerberos_keytab_file_ending }}"
+        state=file
+        owner="{{ item.0.owner|default(ansible_user_id) }}"
+        group="{{ item.0.group|default(item.0.owner|default(ansible_user_id)) }}"
+        mode="{{ item.0.mode|default(kerberos_keytab_mode) }}"
+  when: inventory_hostname == item.1 and (item.0.state|default('present')) != 'absent'
+  with_subelements:
+    - "{{ kerberos_keytabs }}"
+    - servers
