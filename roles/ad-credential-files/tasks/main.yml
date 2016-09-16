@@ -1,0 +1,12 @@
+- name: create ad-related credentials file
+  template:
+    src="{{ item.src }}"
+    dest="{{ ansible_user_dir }}/{{ item.dest }}"
+    owner=lars
+    group=lars
+    mode=0400
+  with_items:
+    - src: dot.openvpn.credentials.j2
+      dest: .openvpn.credentials
+    - src: dot.smbcredentials.j2
+      dest: .smbcredentials
