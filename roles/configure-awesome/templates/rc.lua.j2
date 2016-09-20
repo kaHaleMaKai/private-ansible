@@ -11,6 +11,14 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local vicious = require("vicious")
+-- set binary path (optional)
+local redshift = require("redshift")
+redshift.redshift = "/usr/bin/redshift"
+-- set additional redshift arguments (optional)
+redshift.options = "-c ~/.config/redshift.conf"
+-- 1 for dim, 0 for not dimmed
+redshift.init(1)
+
 
 -- {{ '{{{' }} Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -240,16 +248,24 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative( 1) end),
     awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative(-1) end),
 {% for shortcut in awesome.shortcuts %}
-    awful.key({ {{ shortcut.modkey|ternary("modkey,", "") }}
-                {{ ('"' ~ shortcut.extrakey ~ '"')|default("") }} },
-              {{ ('"'~shortcut.key~'"')|lower }},
+{% if shortcut.modkey is defined and shortcut.modkey %}
+    awful.key({ modkey,
+{% else %}
+   awful.key({
+{% endif %}
+{% if shortcut.extrakey is defined %}
+                "{{ shortcut.extrakey }}" },
+{% else %}
+                },
+{% endif %}
+              "{{ shortcut.key|lower }}",
               function ()
 {% if shortcut.mode == "spawn" %}
                 awful.util.spawn("{{ shortcut.cmd }}")
 {% elif shortcut.mode == "spawn_with_shell" %}
                 awful.util.spawn_with_shell("{{ shortcut.cmd }}")
-{% elif shortcut.mode == "custom" %}
-                shortcut.cmd
+{% elif shortcut.mode == "lua" %}
+                {{ shortcut.cmd }}
 {% endif %}
               end),
 {% endfor %}
@@ -508,12 +524,18 @@ function run_once(prg, arg_string, pname, screen)
 end
 
 
+{% if awesome.autostart is defined and awesome.autostart %}
+-- autostarts
 {% for item in awesome.autostart %}
-run_once("{{ item.prg }}",
-         {% if item.arg_string is defined %}"{{item.arg_string}}"{% else %}nil{% endif %},
-         {% if item.pname is defined %}"{{item.pname}}"{% else %}nil{% endif %},
-         {% if item.screen is defined %}"{{item.screen}}"{% else %}nil{% endif %})
+{% if item.no_run_once is defined and item.no_run_once %}
+awful.util.spawn_with_shell("{{ item.cmd }} {{ item.args|default('') }}")
+{% else %}
+run_once("{{ item.cmd }}",
+         {% if item.args is defined %}"{{ item.args }}"{% else %}nil{% endif %},
+         {% if item.process_name is defined %}"{{ item.process_name }}"{% else %}nil{% endif %},
+         {% if item.screen is defined %}"{{ item.screen }}"{% else %}nil{% endif %})
+{% endif %}
 {% endfor %}
+{% endif %}
 
 -- vim: ft=lua
-

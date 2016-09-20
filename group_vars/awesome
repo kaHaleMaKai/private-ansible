@@ -6,11 +6,14 @@ awesome:
   config_path: "{{ ansible_user_dir }}/.config/awesome"
   theme_dir: "{{ ansible_user_dir }}/.config/awesome/themes"
   autostart:
-    - prg: light-locker
-    - prg: xfce4-power-manager
-    - prg: nm-applet
-    - prg: touchpad
-    - prg: xfce4-volumed
+    - cmd: light-locker
+    - cmd: xfce4-power-manager
+    - cmd: nm-applet
+    - cmd: touchpad
+    - cmd: xfce4-volumed
+    - cmd: pactl unload-module module-bluetooth-discover && pactl load-module module-bluetooth-discover
+      no_run_once: yes
+    - cmd: blueman-applet
   shortcuts:
     - cmd: xflock4
       mode: spawn
@@ -22,6 +25,10 @@ awesome:
       modkey: yes
       extrakey: Shift
       key: s
+    - cmd: redshift.toggle()
+      mode: lua
+      modkey: yes
+      key: d
   build_params:
     DCMAKE_PREFIX_PATH: /usr
     DSYSCONFDIR: /etc
