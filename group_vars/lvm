@@ -58,6 +58,3 @@ lvm_group_vars:
       mountpoint: /media/oblivion
       options: noatime
       root_reserve: 0
-
-# vim: set ft=yaml
-# vim: ft=yaml

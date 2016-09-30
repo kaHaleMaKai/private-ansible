@@ -48,6 +48,3 @@ git_ignore:
   - "/Vagrant*"
   - "/d201*/"
   - ".lvimrc"
-
-# vim: set ft=yaml
-# vim: ft=yaml

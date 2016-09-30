@@ -54,6 +54,3 @@ kerberos_keytabs:
     mode: '0440'
     servers:
       - kauai
-
-# vim: set ft=yaml
-# vim: ft=yaml

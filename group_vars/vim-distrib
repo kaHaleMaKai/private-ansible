@@ -14,57 +14,53 @@ vim:
     ftdetect: "{{ ansible_user_dir }}/.vim/ultisnips_rep/ftdetect"
   neobundle:
     generic:
-      - bundle: tpope/vim-abolish
-      - bundle: tpope/vim-sensible
-      - bundle: tpope/vim-fugitive
-      - bundle: tpope/vim-surround
-      - bundle: tpope/vim-repeat
-      - bundle: scrooloose/nerdtree
-      - bundle: easymotion/vim-easymotion
-      - bundle: tacahiroy/ctrlp-funky
-      - bundle: itchyny/screensaver.vim
-      - bundle: kien/ctrlp.vim
-      - bundle: Xuyuanp/nerdtree-git-plugin
-      - bundle: low-ghost/nerdtree-fugitive
-      - bundle: bling/vim-airline
-      - bundle: scrooloose/syntastic
-      - bundle: ervandew/supertab
-      - bundle: vim-scripts/TaskList.vim
-      - bundle: flazz/vim-colorschemes
-      - bundle: scrooloose/nerdcommenter
-      - bundle: rking/ag.vim
-      - bundle: airblade/vim-gitgutter
-      - bundle: terryma/vim-multiple-cursors
-      - bundle: SirVer/ultisnips
-      - bundle: honza/vim-snippets.git
-      - bundle: Raimondi/delimitMate.git
-      - bundle: Yggdroot/indentLine
+      - tpope/vim-abolish
+      - tpope/vim-sensible
+      - tpope/vim-fugitive
+      - tpope/vim-surround
+      - tpope/vim-repeat
+      - scrooloose/nerdtree
+      - easymotion/vim-easymotion
+      - tacahiroy/ctrlp-funky
+      - kien/ctrlp.vim
+      - Xuyuanp/nerdtree-git-plugin
+      - low-ghost/nerdtree-fugitive
+      - bling/vim-airline
+      - scrooloose/syntastic
+      - ervandew/supertab
+      - vim-scripts/TaskList.vim
+      - flazz/vim-colorschemes
+      - scrooloose/nerdcommenter
+      - rking/ag.vim
+      - airblade/vim-gitgutter
+      - terryma/vim-multiple-cursors
+      - SirVer/ultisnips
+      - honza/vim-snippets.git
+      - Raimondi/delimitMate.git
+      - Yggdroot/indentLine
     clojure:
-      - bundle: vim-scripts/paredit.vim
-      - bundle: tpope/vim-fireplace
-      - bundle: guns/vim-clojure-static
-      - bundle: tpope/vim-classpath
+      - vim-scripts/paredit.vim
+      - tpope/vim-fireplace
+      - guns/vim-clojure-static
+      - tpope/vim-classpath
     gradle:
-      - bundle: tfnico/vim-gradle
+      - tfnico/vim-gradle
     html:
-      - bundle: rstacruz/sparkup
+      - rstacruz/sparkup
     yaml:
-      - bundle: stephpy/vim-yaml
+      - stephpy/vim-yaml
     python:
-      - bundle: klen/python-mode
-      - bundle: Bogdanp/pyrepl.vim
+      - klen/python-mode
+      - Bogdanp/pyrepl.vim
     tex:
-      - bundle: vim-latex/vim-latex
+      - vim-latex/vim-latex
     markdown:
-      - bundle: tpope/vim-markdown
-      - bundle: blindFS/vim-reveal
+      - tpope/vim-markdown
+      - blindFS/vim-reveal
     php:
-      - bundle: joonty/vdebug
-      - bundle: shawncplus/phpcomplete.vim
-      - bundle: craigemery/vim-autotag
-      - bundle: vim-scripts/taglist.vim
-      - bundle: embear/vim-localvimrc
-      - bundle: alvan/vim-php-manual
-
-# vim: ft=yaml
-# vim: set ft=yaml
+      - embear/vim-localvimrc
+      - shawncplus/phpcomplete.vim
+      - craigemery/vim-autotag
+      - vim-scripts/taglist.vim
+      - alvan/vim-php-manual
+      - joonty/vdebug

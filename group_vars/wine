@@ -9,6 +9,3 @@ wine:
   prefixes:
     - name: heidi
       download_url: "http://www.heidisql.com/installers/HeidiSQL_9.2.0.4947_Setup.exe"
-
-# vim: set ft=yaml
-# vim: ft=yaml

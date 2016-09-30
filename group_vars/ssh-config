@@ -66,20 +66,8 @@ ssh_config:
           machines:
             - host: crawlerdb
               name: crawlerdb1p
-    no_domain:
-        - host: docker-db
-          name: localhost
-          user: lars
-          port: 3022
-        - {name: 192.168.0.66, user: root, host: c42n000}
-        - {name: 192.168.0.66, user: root, host: c420}
-        - {name: 192.168.0.67, user: root, host: c42n001}
-        - {name: 192.168.0.67, user: root, host: c421}
-        - {name: 192.168.0.68, user: root, host: c42n002}
-        - {name: 192.168.0.68, user: root, host: c422}
-        - {name: 192.168.0.69, user: root, host: c42n003}
-        - {name: 192.168.0.69, user: root, host: c423}
-
-
-# vim: set ft=yaml
-# vim: ft=yaml
+    #no_domain:
+        #- host: docker-db
+          #name: localhost
+          #user: lars
+          #port: 3022

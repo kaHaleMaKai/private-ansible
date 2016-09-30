@@ -102,6 +102,3 @@ pyvenvs:
       #eggs:
         #- name: pydot
         #- name: pinball
-
-# vim: set ft=yaml
-# vim: ft=yaml

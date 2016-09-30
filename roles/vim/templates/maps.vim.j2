@@ -18,9 +18,6 @@ nnoremap <silent> gtn :tabn<CR>:
 nnoremap <silent> gtp :tabp<CR>:
 nnoremap <silent> gqc :call setqflist([]) \| exe bufnr('quickfix').'wincmd w' \| wincmd c \| wincmd p<CR>
 
-nnoremap <silent> <C-a> :call <SID>YankAllFromScreen()<CR>
-nnoremap <silent> <C-+> :call <SID>YankAllFromScreen('+')<CR>
-
 " have square brackets side to side with parens and braces
 onoremap iv i[
 onoremap av a[
@@ -29,33 +26,25 @@ inoremap <silent> <C-g> <Esc>
 {% if vim.neobundle is defined %}
 {% for section, bundles in vim.neobundle|dictsort %}
 {% for bundle in bundles %}
-{% if bundle.bundle|lower|search('/nerdtree$') %}
+{% if bundle|lower|search('/nerdtree$') %}
 nnoremap <silent> <leader>nf :NERDTreeFind<CR>
 nnoremap <silent> <leader>nsf :NERDTreeFind<CR> \| :wincmd p<CR>
 nnoremap <silent> <leader>ng :NERDTreeGitRoot<CR>
 nnoremap <silent> <leader>nF :NERDTreeGitRootFind<CR>
 nnoremap <silent> <leader>nsF :NERDTreeGitRootFind<CR> \| :wincmd p<CR>
-{% elif bundle.bundle|lower|search('/easymotion$') %}
+{% elif bundle|lower|search('/easymotion$') %}
 map <Leader>S <Plug>(easymotion-s2)
-{% elif bundle.bundle|lower|search('/ctrlp-funky$') %}
+{% elif bundle|lower|search('/ctrlp-funky$') %}
 nnoremap <Leader>fu :CtrlPFunky<Cr>
 nnoremap <Leader>fU :execute 'CtrlPFunky ' . expand('<cword>')<Cr>
-{% elif bundle.bundle|lower|search('/vim-gitgutter$') %}
+{% elif bundle|lower|search('/vim-gitgutter$') %}
 nnoremap <silent> gs :GitGutterStageHunk<CR>
 nnoremap <silent> gr :GitGutterRevertHunk<CR>
-{% elif bundle.bundle|lower|search('/vim-fugitive$') %}
+{% elif bundle|lower|search('/vim-fugitive$') %}
 nnoremap <silent> GS :Gstatus<CR>
-{% elif bundle.bundle|lower|search('/taglist.vim$') %}
+{% elif bundle|lower|search('/taglist.vim$') %}
 nnoremap <silent> gtt :TlistToggle<CR>
 {% endif %}
 {% endfor %}
 {% endfor %}
 {% endif %}
-
-func! s:YankAllFromScreen(...)
-  let firstLine = line('.') - winline() + 1
-  let lastLine = min([firstLine + winheight('.') - 1, line('$')])
-  let reg = a:0 ? a:1 : 0
-  exe firstLine.','.lastLine.'y "'.reg
-endfunc
-" vim: ft=vim

@@ -131,6 +131,10 @@ let g:vdebug_keymap = {
 \    "eval_under_cursor" : "e",
 \    "eval_visual" : "<Leader>e"
 \}
+
+if !exists('g:vdebug_options')
+  let g:vdebug_options = {}
+endif
 " 2}}}
 " local vimrc settings {{{2
 let g:localvimrc_event = ["BufEnter"]
@@ -156,16 +160,22 @@ call SetColorscheme()
 " 1}}}
 
 " autocommands {{{1
-au BufWrite * :call DeleteTrailingWS()
-au BufNewFile,BufRead *.md  set filetype=markdown
-au BufNewFile,BufRead *.ino set filetype=arduino
-au BufNewFile,BufRead *.jsm set filetype=javascript
-au BufNewFile,BufRead *.j2 set filetype=j2
-au BufNewFile,BufRead *.gradle set filetype=groovy
+augroup fileTypes
+  au!
+  au BufWrite * :call DeleteTrailingWS()
+  au BufNewFile,BufRead *.md  set filetype=markdown
+  au BufNewFile,BufRead *.ino set filetype=arduino
+  au BufNewFile,BufRead *.jsm set filetype=javascript
+  au BufNewFile,BufRead *.j2 set filetype=j2
+  au BufNewFile,BufRead *.gradle set filetype=groovy
+  au BufNewFile,BufRead hosts set filetype=dosini
+  au BufNewFile,BufRead */host_vars/* set filetype=yaml
+  au BufNewFile,BufRead */group_vars/* set filetype=yaml
+augroup END
 " 1}}}
 
 " Add the virtualenv's site-packages to vim path {{{1
-py << EOF
+py3 << EOF
 import os.path
 import sys
 import vim

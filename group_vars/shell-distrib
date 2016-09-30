@@ -2,6 +2,3 @@ zsh:
   config_path: "{{ ansible_user_dir }}/.config/zsh"
   rc: "{{ ansible_user_dir }}/.zshrc"
   autocomplete: "{{ ansible_user_dir }}/.config/zsh/autocomplete"
-
-# vim: set ft=yaml
-# vim: ft=yaml
