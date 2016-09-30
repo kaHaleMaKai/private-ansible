@@ -38,6 +38,7 @@ vim:
       - honza/vim-snippets.git
       - Raimondi/delimitMate.git
       - Yggdroot/indentLine
+      - embear/vim-localvimrc
     clojure:
       - vim-scripts/paredit.vim
       - tpope/vim-fireplace
@@ -58,7 +59,6 @@ vim:
       - tpope/vim-markdown
       - blindFS/vim-reveal
     php:
-      - embear/vim-localvimrc
       - shawncplus/phpcomplete.vim
       - craigemery/vim-autotag
       - vim-scripts/taglist.vim
