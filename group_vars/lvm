@@ -34,7 +34,7 @@ lvm_group_vars:
   volumes:
     - lv: lvroot
       vg: vgroot
-      size: 30G
+      size: 40G
       mountpoint: /
     - lv: lvtmp
       vg: vgroot
