@@ -2,3 +2,5 @@
   roles:
   - role: base
     tags: base
+  - role: manage-users-and-groups
+    tags: [users, groups]
