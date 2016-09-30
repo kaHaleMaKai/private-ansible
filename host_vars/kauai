@@ -23,6 +23,8 @@ user_management:
         - cdrom
         - dialout
         - dip
+        - kvm
+        - libvirtd
         - lpadmin
         - plugdev
         - pyvenv
