@@ -110,26 +110,12 @@ append_last_command_to_file() {
 }
 
 gcd() {
-  startDir="$(pwd)"
-  curPath="$startDir"
-  foundProjectRoot=0
-  exitStatus=0
-
-  projectFile='.git'
-
-  while [[ "$curPath" != '/' ]]; do
-    if [[ -e "${curPath}/${projectFile}" ]]; then
-      foundProjectRoot=1
-      break
-    else
-      curPath="$(dirname "$curPath")"
-    fi
-  done
-  if [[ $foundProjectRoot -eq 1 ]]; then
-    cd "$curPath"
+  local gitRoot="$(git rev-parse --show-toplevel)"
+  local exitStatus="$?"
+  if [[ "$exitStatus" -eq 0 ]]; then
+    cd "$gitRoot"
   else
     echo "[ERROR] not inside a project" >&2
-    exitStatus=1
   fi
 
   return $exitStatus
@@ -145,5 +131,6 @@ for f in ~/.config/zsh/fns/*; do
 done
 
 export GPGKEY=8427FDA8
+export LD_LIBRARY_PATH="${HOME}/Android/Sdk/tools/lib64"
 
 # vim: ft=sh
