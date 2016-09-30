@@ -5,7 +5,7 @@
 {% if vim.neobundle is defined %}
 {% if vim.neobundle[item|basename|replace(".vim", "")] is defined %}
 {% for bundle in vim.neobundle[item|basename|replace(".vim", "")] %}
-NeoBundleSource {{ bundle }}
+NeoBundleSource {{ bundle|basename }}
 {% endfor %}
 {% endif %}
 {% endif %}
