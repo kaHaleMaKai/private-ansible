@@ -34,7 +34,7 @@ awesome:
     DSYSCONFDIR: /etc
   deps:
     - cmake
-    - liblua5.1-dev
+    - liblua5.3-dev
     - imagemagick
     - libxcb-randr0-dev
     - libxcb-xtest0-dev
@@ -49,7 +49,7 @@ awesome:
     - libxcb-image0-dev
     - libxcb-util0-dev
     - libgdk-pixbuf2.0-dev
-    - lua5.1
+    - lua5.3
     - libxcb-cursor-dev
     - libcairo2-dev
     - libdbus-1-dev

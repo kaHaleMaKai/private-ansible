@@ -8,7 +8,7 @@
         owner="{{ item.owner | default(ansible_user_id) }}"
         group="{{ item.group | default(ansible_user_id) }}"
         mode="{{ item.mode | default('0664') }}"
-  sudo: yes
+  become: yes
   with_items:
     -  src: /usr/local/share/xsessions/awesome.desktop
        dest: /usr/share/xsessions/awesome.desktop

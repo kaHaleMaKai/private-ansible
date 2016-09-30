@@ -1,7 +1,8 @@
 - name: install awesomes build dependencies
-  apt: name={{ item }}
-       update_cache=no
-       state=present
-  sudo: yes
+  apt:
+    name="{{ item }}"
+     update_cache=no
+     state=present
+  become: yes
   with_items:
-    awesome.deps
+    - "{{ awesome.deps }}"

@@ -1,9 +1,13 @@
 - name: check if awesome has been installed
-  shell: >
-    type awesome >/dev/null 2>&1
-    && awesome --version
-    | grep -F "v{{ awesome.version }}"
-    >/dev/null 2>&1
+  shell: |
+    if [ {{ awesome_force_install }}]; then
+      exit 1
+    else
+      type awesome >/dev/null 2>&1
+      && awesome --version
+      | grep -F "v{{ awesome.version }}"
+      >/dev/null 2>&1
+    fi
   changed_when: false
   ignore_errors: true
   register: awesome_installed
