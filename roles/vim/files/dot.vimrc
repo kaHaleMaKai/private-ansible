@@ -138,6 +138,11 @@ let g:localvimrc_ask = 0
 let g:localvimrc_whitelist = ["/usr/local/repos/pacs/"]
 "2}}}
 
+" vim-php-manual {{{2
+" don't use the online search shortcut
+let g:php_manual_online_search_shortcut = ''
+"2}}}
+
 " 1}}}
 " source vim resources {{{1
 exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
