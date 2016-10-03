@@ -1,0 +1,13 @@
+- name: disable bluetooth on boot
+  copy:
+    src=script
+    dest=/etc/init.d/disable-bluetooth-on-startup
+    mode=0755
+  become: yes
+
+- name: link script into rc5.d
+  file:
+    src=/etc/init.d/disable-bluetooth-on-startup
+    dest=/etc/rc5.d/S09disable-bluetooth-on-startup
+    state=link
+  become: yes

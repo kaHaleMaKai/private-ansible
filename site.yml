@@ -22,3 +22,5 @@
     url: deb_list.spotify.url
   roles:
     - download-and-install-deb
+    - role: disable-bluetooth-on-startup
+      tags: no-bluetooth
