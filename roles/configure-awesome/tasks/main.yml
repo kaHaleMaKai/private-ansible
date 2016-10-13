@@ -1,3 +1,9 @@
+- name: install xcompmgr
+  apt:
+    name=xcompmgr
+    state=latest
+  become: yes
+
 - name: create config dir for awesome under home dir
   file: path="{{ awesome.config_path }}"
         state=directory
