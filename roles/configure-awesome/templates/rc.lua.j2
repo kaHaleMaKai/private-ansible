@@ -411,17 +411,10 @@ awful.rules.rules = {
                      raise = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
-    { rule = { class = "MPlayer" },
-      properties = { floating = true } },
-    { rule = { class = "pinentry" },
-      properties = { floating = true } },
-    { rule = { class = "gimp" },
+    { rule_any = { class = { "MPlayer", "pinentry", "Gimp", "Shutter" } },
       properties = { floating = true } },
     { rule = { class = "Xfce4-terminal" },
       properties = { opacity = 0.92 } }
-    -- Set Firefox to always map on tags number 2 of screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { tag = tags[1][2] } },
 }
 -- {{ '}}}' }}
 
