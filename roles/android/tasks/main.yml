@@ -1,0 +1,22 @@
+---
+- name: install packages required for the emulator
+  apt:
+    name="{{ item }}"
+    state=present
+  become: yes
+  with_items:
+    - libvirt0
+
+- name: udev rule for phones
+  template:
+    src="udev-rule.j2"
+    dest='/etc/udev/rules.d/51-android.rules'
+    mode=0644
+  become: yes
+
+- name: add developer to plugdev group
+  user:
+    name="{{ android_dev_user }}"
+    append=yes
+    groups=plugdev
+  become: yes

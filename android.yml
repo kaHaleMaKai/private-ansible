@@ -1,0 +1,4 @@
+- hosts: android-dev
+  roles:
+    - role: android
+      tags: android

@@ -1,0 +1,6 @@
+# THIS FILE HAS BEEN CREATED BY ANSIBLE
+# MANUAL CHANGES ARE FUTILE
+
+{% for vendor_id in android_vendor_ids %}
+SUBSYSTEM=="usb", ATTR{idVendor}=="{{ vendor_id }}", MODE="0666", GROUP="plugdev"
+{% endfor %}

@@ -54,3 +54,5 @@ kerberos_keytabs:
     mode: '0440'
     servers:
       - kauai
+
+android_dev_user: lars

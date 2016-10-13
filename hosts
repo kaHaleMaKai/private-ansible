@@ -1,5 +1,7 @@
 kauai ansible_ssh_host=localhost
 
+[android-dev]
+kauai
 [awesome]
 kauai
 [base]
