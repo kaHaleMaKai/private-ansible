@@ -218,7 +218,7 @@ end
 
 -- {{ '{{{' }} Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
+    --awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -325,7 +325,25 @@ clientkeys = awful.util.table.join(
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
-        end)
+        end),
+     awful.key({ modkey, "Shift"   }, "h",
+       function (c)
+           local curidx = awful.tag.getidx()
+           if curidx == 1 then
+               awful.client.movetotag(tags[client.focus.screen][9])
+           else
+               awful.client.movetotag(tags[client.focus.screen][curidx - 1])
+           end
+       end),
+     awful.key({ modkey, "Shift"   }, "l",
+       function (c)
+           local curidx = awful.tag.getidx()
+           if curidx == 9 then
+               awful.client.movetotag(tags[client.focus.screen][1])
+           else
+               awful.client.movetotag(tags[client.focus.screen][curidx + 1])
+           end
+       end)
 )
 
 -- Bind all key numbers to tags.
