@@ -54,7 +54,7 @@ beautiful.init(theme_path .. "/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "{{ awesome.terminal }}"
-editor = os.getenv("EDITOR") or "nano"
+editor = os.getenv("EDITOR") or "vi"
 editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
