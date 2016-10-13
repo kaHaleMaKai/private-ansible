@@ -4,3 +4,5 @@
     tags: base
   - role: manage-users-and-groups
     tags: [users, groups]
+  - role: disable-bluetooth-on-startup
+    tags: disable-bluetooth

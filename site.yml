@@ -7,6 +7,7 @@
 - include: ssh-config.yml
 - include: vim.yml
 - include: wine.yml
+- include: android.yml
 
   # FIXME
 - hosts: kauai
@@ -22,5 +23,3 @@
     url: deb_list.spotify.url
   roles:
     - download-and-install-deb
-    - role: disable-bluetooth-on-startup
-      tags: no-bluetooth
