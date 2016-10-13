@@ -141,12 +141,13 @@ let g:localvimrc_event = ["BufEnter"]
 let g:localvimrc_ask = 0
 let g:localvimrc_whitelist = ["/usr/local/repos/pacs/"]
 "2}}}
-
 " vim-php-manual {{{2
 " don't use the online search shortcut
 let g:php_manual_online_search_shortcut = ''
-"2}}}
-
+" 2}}}
+" python-related {{{2
+let g:SimpylFold_docstring_preview=1
+" 2}}}
 " 1}}}
 " source vim resources {{{1
 exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
@@ -160,7 +161,7 @@ call SetColorscheme()
 " 1}}}
 
 " autocommands {{{1
-augroup fileTypes
+augroup fileTypes "{{{2
   au!
   au BufWrite * :call DeleteTrailingWS()
   au BufNewFile,BufRead *.md  set filetype=markdown
@@ -171,11 +172,16 @@ augroup fileTypes
   au BufNewFile,BufRead hosts set filetype=dosini
   au BufNewFile,BufRead */host_vars/* set filetype=yaml
   au BufNewFile,BufRead */group_vars/* set filetype=yaml
-augroup END
+augroup END "2}}}"
+
+augroup prevFiles "{{{2
+  au BufLeave * if !exists('w:prev_files') | let w:prev_files = [] | endif | call add(w:prev_files, expand('%:p'))
+augroup END "2}}"
+
 " 1}}}
 
 " Add the virtualenv's site-packages to vim path {{{1
-py3 << EOF
+py << EOF
 import os.path
 import sys
 import vim

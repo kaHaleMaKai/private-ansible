@@ -140,5 +140,19 @@ command!
       \  :silent! call <sid>TruncateSpaces(<line1>, <line2>)
 " 1}}}
 
+func! s:GotoPreviousFile() abort "{{{
+  if !exists('w:prev_files')
+    return
+  endif
+  let idx = w:prev_files_idx
+  let prev_file = w:prev_files[idx]
+  exe 'e '.prev_file
+
+
+endfunc "}}}
+
+
+command!
+      \ :silent! call <sid>GotoPreviousFile()
 
 " vim: foldmethod=marker

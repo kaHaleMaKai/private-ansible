@@ -53,6 +53,7 @@ vim:
     python:
       - klen/python-mode
       - Bogdanp/pyrepl.vim
+      - tmhedberg/SimpylFold
     tex:
       - vim-latex/vim-latex
     markdown:
