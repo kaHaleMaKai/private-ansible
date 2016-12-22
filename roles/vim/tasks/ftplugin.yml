@@ -8,6 +8,7 @@
         owner={{ ansible_user_id }}
         group={{ ansible_user_id }}
   when: ft is not defined or (ft~".vim") == "{{ item|basename }}"
+  changed_when: false
   with_fileglob:
     ftplugin/*.vim
 
@@ -18,6 +19,7 @@
   copy: src={{ item }}
         dest={{ vim.tmp_dir }}/{{ item|basename }}/99_main.vim
   when: ft is not defined or (ft~".vim") == "{{ item|basename }}"
+  changed_when: false
   with_fileglob:
     ftplugin/*.vim
 
@@ -28,6 +30,7 @@
   template: src=neobundle-source.vim.j2
             dest={{ vim.tmp_dir }}/{{ item|basename }}/10_neobundle-sources.vim
   when: ft is not defined or (ft~".vim") == "{{ item|basename }}"
+  changed_when: false
   with_fileglob:
     ftplugin/*.vim
 

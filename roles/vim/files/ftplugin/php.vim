@@ -27,6 +27,9 @@ func! s:UpdatePhpCtags() abort "{{{
   endif
 endfunc "}}}
 
-nnoremap <silent> <F9> :call <SID>UpdatePhpCtags()<CR>
+nnoremap <buffer> <silent> <F9> :call <SID>UpdatePhpCtags()<CR>
+inoremap § $this
+inoremap ä ->
+inoremap ł $this->log->
 
 let php_sql_query=1

@@ -1,90 +1,120 @@
 ---
 - name: add primary groups to system
-  group: name={{ item.name }}
-         state={{ item.state|default('present') }}
-         system={{ item.system|default('no') }}
-  when: (item.state|default('present')) != 'absent' and
-        (item.local|default('yes')) == 'yes'
-  with_items:
-    "{{ user_management.users|default([]) }}"
+  group: name="{{ item.key }}"
+         state="{{ item.value.state|default('present') }}"
+         system="{{ item.value.system|default('no') }}"
+  when: (item.value.state|default('present')) != 'absent' and
+        (item.value.local|default('yes')) == 'yes'
+  with_dict:
+    "{{ user_management.users }}"
 
 - name: add secondary groups to system
-  group: name={{ item.name }}
-         state={{ item.state|default('present') }}
-         system={{ item.system|default('no') }}
-  when: (item.state|default('present')) != 'absent'
-  with_items:
-    "{{ user_management.groups|default([]) }}"
+  group: name="{{ item.key }}"
+         state="{{ item.value.state|default('present') }}"
+         system="{{ item.value.system|default('no') }}"
+  when: (item.value.state|default('present')) != 'absent'
+  with_dict:
+    "{{ user_management.groups }}"
 
 - name: add users to system
-  user: name="{{ item.name }}"
-        group="{{ item.group|default(item.name) }}"
-        {% if item.groups is defined %}
-        groups="{{ item.group|join(',') }}"
-        {% endif %}
-        append="{{ item.append|default('yes') }}"
-        comment="{{ item.comment|default(omit) }}"
-        createhome="{{ item.createhome|default('no') }}"
-        expires="{{ item.expires|default(omit) }}"
-        force="{{ item.force|default(omit) }}"
-        generate_ssh_key="{{ item.generate_ssh_key|default(omit) }}"
-        home="{{ item.home|default(item.createhome is defined and item.createhome|ternary('/home/'+item.name, '/nonexistent')) }}"
-        login_class="{{ item.login_class|default(omit) }}"
-        move_home="{{ item.move_home|default(omit) }}"
-        non_unique="{{ item.non_unique|default(omit) }}"
-        password="{{ item.password|default(omit) }}"
-        remove="{{ item.remove|default(omit) }}"
-        shell="{{ item.shell|default('/bin/false') }}"
-        skeleton="{{ item.skeleton|default(omit) }}"
-        ssh_key_bits="{{ item.ssh_key_bits|default(omit) }}"
-        ssh_key_comment="{{ item.ssh_key_comment|default(omit) }}"
-        ssh_key_file="{{ item.ssh_key_file|default(omit) }}"
-        ssh_key_passphrase="{{ item.ssh_key_passphrase|default(omit) }}"
-        ssh_key_type="{{ item.ssh_key_type|default(omit) }}"
-        state="{{ item.state|default('present') }}"
-        system="{{ item.system|default('no') }}"
-        uid="{{ item.uid|default(omit) }}"
-        update_password="{{ item.update_password|default(omit) }}"
-  when: (item.local|default('yes')) == 'yes'
-  with_items:
-    "{{ user_management.users|default([]) }}"
+  user: name="{{ item.key }}"
+        group="{{ item.value.group|default(item.key) }}"
+        groups="{{ item.value.groups|default(omit) }}"
+        append="{{ item.value.append|default('yes') }}"
+        comment="{{ item.value.comment|default(omit) }}"
+        createhome="{{ item.value.createhome|default('no') }}"
+        expires="{{ item.value.expires|default(omit) }}"
+        force="{{ item.value.force|default(omit) }}"
+        generate_ssh_key="{{ item.value.generate_ssh_key|default(omit) }}"
+        home="{{ item.value.home|default(item.value.createhome is defined and item.value.createhome|ternary('/home/'+item.key, '/nonexistent')) }}"
+        login_class="{{ item.value.login_class|default(omit) }}"
+        move_home="{{ item.value.move_home|default(omit) }}"
+        non_unique="{{ item.value.non_unique|default(omit) }}"
+        password="{{ item.value.password|default(omit) }}"
+        remove="{{ item.value.remove|default(omit) }}"
+        shell="{{ item.value.shell|default('/bin/false') }}"
+        skeleton="{{ item.value.skeleton|default(omit) }}"
+        ssh_key_bits="{{ item.value.ssh_key_bits|default(omit) }}"
+        ssh_key_comment="{{ item.value.ssh_key_comment|default(omit) }}"
+        ssh_key_file="{{ item.value.ssh_key_file|default(omit) }}"
+        ssh_key_passphrase="{{ item.value.ssh_key_passphrase|default(omit) }}"
+        ssh_key_type="{{ item.value.ssh_key_type|default(omit) }}"
+        state="{{ item.value.state|default('present') }}"
+        system="{{ item.value.system|default('no') }}"
+        uid="{{ item.value.uid|default(omit) }}"
+        update_password="{{ item.value.update_password|default(omit) }}"
+  when: (item.value.local|default('yes')) == 'yes'
+        and (item.value.state|default('present')) != 'absent'
+  with_dict:
+    "{{ user_management.users }}"
+
+- name: set secondary groups for winbind/ldap users
+  command: usermod -G "{{ item.value.groups }}" "{{ item.key }}"
+  changed_when: false
+  when: ((item.value.local|default('yes')) == 'no' or not (item.value.local|default('yes')))
+        and (item.value.groups|default('')) != ''
+        and ((item.value.append|default('yes')) == 'no' or not (item.value.append|default('yes')))
+        and (item.value.state|default('present')) != 'absent'
+  with_dict:
+    "{{ user_management.users }}"
+
+- name: append secondary groups for winbind/ldap users
+  command: usermod -a -G "{{ item.value.groups }}" "{{ item.key }}"
+  changed_when: false
+  when: ((item.value.local|default('yes')) == 'no' or not (item.value.local|default('yes')))
+        and (item.value.groups|default('')) != ''
+        and ((item.value.append|default('yes')) == 'yes' or (item.value.append|default('yes')))
+        and (item.value.state|default('present')) != 'absent'
+  with_dict:
+    "{{ user_management.users }}"
 
 - name: create homedirs for winbind/ldap users
-  file: path="{{ item.home|default('/home/'+item.name) }}"
+  file: path="{{ item.value.home|default('/home/'+item.key) }}"
         state=directory
-        owner={{ item.name }}
-        group={{ item.group|default(item.name) }}
+        owner="{{ item.key }}"
+        group="{{ item.value.group|default(item.key) }}"
         mode=0700
-  when: (item.createhome|default(False)) and
-        (item.home|default('existent')) != "/nonexistent" and
-        not (item.local|default(True))
-  with_items:
-    "{{ user_management.users|default([]) }}"
+  when: (item.value.createhome|default(False))
+        and (item.value.home|default('existent')) != "/nonexistent"
+        and not (item.value.local|default(True))
+        and (item.value.state|default('present')) != 'absent'
+  with_dict:
+    "{{ user_management.users }}"
 
 - name: add .ssh directories for the inidivual users
-  file: path="{{ item.home|default('/home/'+item.name) }}/.ssh"
+  file: path="{{ item.value.home|default('/home/'+item.key) }}/.ssh"
         state=directory
-        owner={{ item.name }}
-        group={{ item.group|default(item.name) }}
+        owner="{{ item.key }}"
+        group="{{ item.value.group|default(item.key) }}"
         mode=0700
-  when: (item.createhome|default(False)) and
-        (item.home|default('existent')) != "/nonexistent" and
-        (item.create_ssh_dir|default('yes')) == 'yes'
-  with_items:
-    "{{ user_management.users|default([]) }}"
+  when: (item.value.createhome|default(False))
+        and (item.value.home|default('existent')) != "/nonexistent"
+        and (item.value.create_ssh_dir|default('yes')) == 'yes'
+        and (item.value.state|default('present')) != 'absent'
+  with_dict:
+    "{{ user_management.users }}"
+
+- name: remove homedirs for absent users
+  file: path="{{ item.value.home|default('/home/'+item.key) }}"
+        state=absent
+  when: (item.value.home|default('existent')) != "/nonexistent"
+        and (item.value.state|default('present')) == 'absent'
+        and (item.value.removehomedir|default(False))
+  with_dict:
+    "{{ user_management.users }}"
 
 - name: remove primary groups to system
-  group: name={{ item.name }}
-         state={{ item.state|default('present') }}
-         system={{ item.system|default('no') }}
-  when: (item.state|default('present')) == 'absent'
-  with_items:
-    "{{ user_management.users|default([]) }}"
+  group: name="{{ item.key }}"
+         state=absent
+  when: (item.value.state|default('present')) == 'absent'
+        and (item.value.local|default(True))
+  with_dict:
+    "{{ user_management.users }}"
 
-- name: add secondary groups to system
-  group: name={{ item.name }}
-         state={{ item.state|default('present') }}
-         system={{ item.system|default('no') }}
-  when: (item.state|default('present')) == 'absent'
-  with_items:
-    "{{ user_management.groups|default([]) }}"
+- name: remove secondary groups to system
+  group: name="{{ item.key }}"
+         state="{{ item.value.state|default('present') }}"
+         system="{{ item.value.system|default('no') }}"
+  when: (item.value.state|default('present')) == 'absent'
+  with_dict:
+    "{{ user_management.groups }}"

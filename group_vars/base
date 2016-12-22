@@ -1,5 +1,5 @@
 basic_packages:
-  - chromium-browser
+  - "{{ 'chromium' if ansible_distribution == 'Debian' else 'chromium-browser' }}"
   - curl
   - feh
   - git
@@ -13,22 +13,23 @@ basic_packages:
   - nfs-common
   - nfs-kernel-server
   - nmap
-  - padevchooser
+  #- padevchooser # unavailable in stretch
   - parallel
   - pavucontrol
   - redshift
   - screen
   - shutter
   - subversion
-  - thunderbird
+  - evolution
+  - libevolution
   - vagrant
   - vim-gtk
-  - virtualbox
-  - virtualbox-dkms
+    #  - virtualbox
+  #- virtualbox-dkms
   - wget
   - whois
   - wine
-  - xfce4-mixer
+  #- xfce4-mixer
   - youtube-dl
   - zim
   - zsh

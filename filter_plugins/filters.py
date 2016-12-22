@@ -554,6 +554,14 @@ def do_convert_integer(text, pos=1):
     else:
         raise ValueError("could not find a number in string '{}'".format(text))
 
+def do_camel(text):
+    if type(text) == basestring:
+        if not text:
+            return text
+        return text[0].upper() + text[1:]
+    else:
+        raise TypeError("camel got wrong type. expected: basestring, got {}".format(type(text)))
+
 class FilterModule(object):
     """Entry point for ansible jinja filters."""
 
@@ -575,6 +583,7 @@ class FilterModule(object):
             'contains': do_contains,
             'selectattrs': do_selectattrs,
             'convert_integer': do_convert_integer,
+            'camel': do_camel
         }
 
 if __name__ == "__main__":

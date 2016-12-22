@@ -1,7 +1,7 @@
 ---
 - name: Resize filesystem if needed
   shell: >
-    resize2fs "/dev/{{item.vg|default(lvm_vars.vg)}}/{{item.lv}}" 2>&1 |
+    resize2fs "/dev/{{ vg.key }}/{{ item.key }}" 2>&1 |
     awk '
     BEGIN { failed = 1 }
     /The filesystem on.*is now.*long/
@@ -9,11 +9,10 @@
     /Nothing to do!/
     {  print "not changed"; failed = 0 }
     END { if (failed) print "failed" }'
-  when: lvm_vars.volumes is defined and
-        (lvm_vars.vg is defined or lvm_vars.vgs is defined) and
-        (item.state|default('present')) != 'absent'
+  when: item.value.fstype is not defined or
+        item.value.fstype in ('ext3', 'ext4')
   changed_when: resize2fs.stdout == 'changed'
   failed_when: resize2fs.stdout == 'failed'
   register: resize2fs
-  with_items:
-    "{{ lvm_vars.volumes }}"
+  with_dict:
+    "{{ vg.value.lvs }}"

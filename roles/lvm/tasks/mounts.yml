@@ -1,24 +1,20 @@
 ---
 - name: Create mount points
-  file: path="{{item.mountpoint}}"
-        state=directory
-        mode="{{ item.mode|default('0755') }}"
-        owner="{{ item.owner|default(omit) }}"
-        group="{{ item.group|default(omit) }}"
-  when: lvm_vars.volumes is defined and
-        (item.state|default('present')) != 'absent'
-  with_items:
-    "{{ lvm_vars.volumes }}"
+  file:
+    path="{{ item.value.mountpoint }}"
+    state=directory
+    mode="{{ item.value.mode|default('0755') }}"
+    owner="{{ item.value.owner|default(omit) }}"
+    group="{{ item.value.group|default(omit) }}"
+  with_dict:
+    "{{ vg.value.lvs }}"
 
 - name: Mount logical volumes
   mount:
-    name="{{item.mountpoint}}"
-    src="/dev/{{item.vg|default(lvm_vars.vg)}}/{{item.lv}}"
-    fstype="{{item.fstype | default('ext4')}}"
+    name="{{ item.value.mountpoint }}"
+    src="/dev/{{ vg.key }}/{{ item.key }}"
+    fstype="{{ item.value.fstype|default(lvm_default_fstype) }}"
     state=mounted
-    opts="{{ item.options|default(omit) }}"
-  when: lvm_vars.volumes is defined and
-        (lvm_vars.vg is defined or lvm_vars.vgs is defined) and
-        (item.state|default('present')) != 'absent'
-  with_items:
-    "{{ lvm_vars.volumes }}"
+    opts="{{ item.value.options|default(omit) }}"
+  with_dict:
+    "{{ vg.value.lvs }}"

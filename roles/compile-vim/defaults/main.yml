@@ -1,0 +1,94 @@
+vim_src_repo="git@github.com:vim/vim.git"
+vim_src_builddir="/tmp/vim-src"
+vim_src_state="present"
+vim_src_version="HEAD"
+
+vim_features:
+  prefix=/home/lars/vim
+  with-compiledby='Lars Winderling <lars.winderling@gmail.com>'
+  with-features=huge
+  with-python-config-dir=/usr/lib/python2.7/config
+  enable-acl
+  enable-auto-image-base
+  enable-auto-import
+  enable-channel
+  disable-crash-dialog
+  enable-cscope
+  disable-darwin
+  enable-dec-locator
+  disable-desktop-database-update
+  enable-desktop_database_update
+  disable-docs
+  enable-fail-if-missing
+  enable-fail_if_missing
+  enable-fontset
+  disable-futures
+  disable-gems
+  enable-gnome-check
+  enable-gnome2-check
+  disable-gpm
+  enable-gpm
+  disable-gracket
+  disable-gtk
+  disable-gtk-check
+  enable-gtk-check
+  disable-gtk2-check
+  enable-gtk2-check
+  disable-gtk3-check
+  enable-gtk3-check
+  disable-gtktest
+  enable-gtktest
+  disable-gui
+  enable-gui
+  enable-hangulin
+  enable-hangulinput
+  disable-icon-cache-update
+  enable-icon_cache_update
+  disable-largefile
+  enable-largefile
+  enable-luainterp
+  enable-max-features
+  enable-min-features
+  disable-motif
+  disable-motif-check
+  enable-motif-check
+  enable-multibyte
+  enable-mzscheme
+  enable-mzschemeinterp
+  disable-netbeans
+  enable-netbeans
+  disable-nextaw-check
+  enable-nextaw-check
+  disable-nls
+  enable-nls
+  disable-option-checking
+  enable-perlinterp=yes
+  disable-places
+  enable-python3interp
+  enable-pythoninterp=yes
+  enable-rubyinterp=yes
+  disable-selinux
+  enable-selinux
+  enable-shared
+  disable-smack
+  enable-smack
+  disable-sound
+  enable-sound
+  disable-sysmouse
+  enable-sysmouse
+  enable-tcap-query
+  enable-tclinterp
+  enable-wide-chars
+  enable-workshop
+  disable-xim
+  enable-xim
+  disable-xsmp
+  enable-xsmp
+  disable-xsmp-interact
+  enable-xsmp-interact
+
+make VIMRUNTIMEDIR=/home/lars/vim/share/vim/vim80
+make install
+
+# vim: set ft=sh
+# vim: ft=sh

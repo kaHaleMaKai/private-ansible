@@ -1,1 +1,3 @@
 user_management:
+  users: { }
+  groups: { }

@@ -80,6 +80,17 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 " }}}
+"
+" source vim resources {{{1
+exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
+exe "so " . g:vimrc_res_path . "/" . "commands.vim"
+exe "so " . g:vimrc_res_path . "/" . "maps.vim"
+" color scheme {{{2
+let g:current_colorscheme = ''
+let g:default_colorscheme = "synic"
+call SetColorscheme()
+" 2}}}
+" 1}}}
 
 " global variables {{{1
 " syntastic {{{2
@@ -91,7 +102,7 @@ let g:syntastic_mode_map = { 'passive_filetypes': ['java'] }
 " 2}}}
 " CtrlP {{{
 let g:ctrlp_extensions = ['funky']
-let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden --ignore-case --ignore ".git" --ignore ".hg" --ignore ".svn" -g ""'
+let g:ctrlp_user_command = GetCtrlPCommand()
 " 2}}}
 " ultisnippets {{{2
 let g:UltiSnipsJumpBackwardTrigger = '<c-j>'
@@ -149,16 +160,6 @@ let g:php_manual_online_search_shortcut = ''
 let g:SimpylFold_docstring_preview=1
 " 2}}}
 " 1}}}
-" source vim resources {{{1
-exe "so " . g:vimrc_res_path . "/" . "funcs.vim"
-exe "so " . g:vimrc_res_path . "/" . "commands.vim"
-exe "so " . g:vimrc_res_path . "/" . "maps.vim"
-" color scheme {{{2
-let g:current_colorscheme = ''
-let g:default_colorscheme = "synic"
-call SetColorscheme()
-" 2}}}
-" 1}}}
 
 " autocommands {{{1
 augroup fileTypes "{{{2
@@ -181,6 +182,7 @@ augroup END "2}}"
 " 1}}}
 
 " Add the virtualenv's site-packages to vim path {{{1
+function! s:Py2VenvSupport()
 py << EOF
 import os.path
 import sys
@@ -191,4 +193,24 @@ if 'VIRTUAL_ENV' in os.environ:
   activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
   execfile(activate_this, dict(__file__=activate_this))
 EOF
+endfunc
+
+function! s:Py3VenvSupport()
+py3 << EOF
+import os.path
+import sys
+import vim
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  sys.path.insert(0, project_base_dir)
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
+endfunc
+
+if has('python')
+  call s:Py2VenvSupport()
+elseif has('python3')
+  call s:Py3VenvSupport()
+endif
 " 1}}}

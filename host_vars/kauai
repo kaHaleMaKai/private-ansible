@@ -11,39 +11,24 @@ pyvenvs:
 
 user_management:
   groups:
-    - name: sambashare
-    - name: wine
-    - name: pyvenv
+    sambashare:
+    wine:
+    pyvenv:
   users:
-    - name: lars
+    lars:
       append: no
-      groups:
-        - adm
-        - audio
-        - cdrom
-        - dialout
-        - dip
-        - kvm
-        - libvirtd
-        - lpadmin
-        - plugdev
-        - pyvenv
-        - sambashare
-        - sudo
-        - syslog
-        - video
-        - wine
-        - www-data
+      groups: adm,audio,cdrom,dialout,dip,plugdev,pyvenv,sambashare,sudo,wine,www-data
+      #groups: adm,audio,cdrom,dialout,dip,kvm,libvirtd,lpadmin,plugdev,pyvenv,sambashare,sudo,syslog,video,wine,www-data
       createhome: yes
       shell: /usr/bin/zsh
-    - name: wine
+    wine:
       createhome: yes
       shell: /bin/bash
       home: "{{ wine.prefix_dir }}"
-    - name: pyvenv
+    pyvenv:
       createhome: yes
       shell: /bin/bash
-      home: "${{ pvenvs.prefix_dir }}"
+      home: "{{ pyvenvs.prefix_dir }}"
 
 kerberos_keytab_realm: PMD.LOCAL
 kerberos_keytabs:

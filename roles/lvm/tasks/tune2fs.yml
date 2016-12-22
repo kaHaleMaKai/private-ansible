@@ -1,0 +1,13 @@
+---
+- name: Set root reserve percentage
+  shell: >
+    tune2fs -m
+    "{{ item.value.reserved_blocks_percentage
+    |     replace('%', '') }}"
+    "/dev/{{ vg.key }}/{{ item.key }}"
+    2>&1
+  changed_when: false
+  when: item.value.reserved_blocks_percentage is defined
+  with_dict:
+    "{{ vg.value.lvs }}"
+

@@ -1,0 +1,10 @@
+- name: clone the source if absent
+  git:
+    repo="{{ vim_src_repo }}"
+    dest="{{ vim_src_builddir }}"
+    clone=yes
+    depth=1
+    update="{{ true if vim_src_state == 'latest' else false }}"
+    version="{{ vim_src_version }}"
+
+

@@ -1,11 +1,2 @@
+lvm_default_fstype: ext4
 lvm:
-  vgs: []
-  volumes: []
-
-lvm_group_vars:
-  vgs: []
-  volumes: []
-
-lvm_host_vars:
-  vgs: []
-  volumes: []

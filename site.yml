@@ -1,3 +1,5 @@
+- hosts: kauai
+
 - include: awesome.yml
 - include: base.yml
 - include: git.yml

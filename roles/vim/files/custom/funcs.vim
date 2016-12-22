@@ -764,5 +764,18 @@ func! SetOpt(opt, val, ...) abort "{{{
   endif
 endfunc "}}}
 
+func! GetCtrlPCommand(...) abort "{{{
+  let cmd = 'ag %s -l --nocolor --hidden --ignore-case --ignore ".git" --ignore ".hg" --ignore ".svn" -g ""'
+  if a:0
+    let data = a:1
+    if exists('data.noVcsIgnore') && !data.noVcsIgnore
+      let cmd = cmd . ' -U'
+    endif
+  endif
+  return cmd
+endfunc "}}}
+
+
+
 " vim: ft=vim
 

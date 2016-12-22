@@ -1,4 +1,5 @@
 - hosts: lvm
+  become: yes
   roles:
   - role: lvm
     tags: lvm

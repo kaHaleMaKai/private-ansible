@@ -1,3 +1,0 @@
-lvm_vars: "{{ lvm
-              | dict_merge(lvm_group_vars, merge_fn='merge_lists')
-              | dict_merge(lvm_host_vars, merge_fn='merge_lists') }}"

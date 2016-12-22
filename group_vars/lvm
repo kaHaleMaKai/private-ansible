@@ -1,60 +1,36 @@
-# settings for new os
-# lvm_group_vars:
-#   vgs:
-#     - vg: vgmain
-#       pvs: ...
-#   volumes:
-#     - lv: lvroot
-#       vg: vgmain
-#       size: 10G
-#       mountpoint: /
-#     - lv: lvtmp
-#       vg: vgmain
-#       size: 1G
-#       mountpoint: /tmp
-#       owner: root
-#       group: root
-#       mode: '1777'
-#     - lv: home
-#       vg: vgmain
-#       size: 5G
-#       mountpoint: /home
-#     - lv: /var
-#       vg: vgmain
-#       size: 1G
-#       mountpoint: /var
-
-# settings for old os
-lvm_group_vars:
-  vgs:
-    - vg: vgroot
-      pvs:
+lvm:
+  vgroot:
+    pvs:
       - /dev/sda1
       - /dev/sda2
-  volumes:
-    - lv: lvroot
-      vg: vgroot
-      size: 40G
-      mountpoint: /
-    - lv: lvtmp
-      vg: vgroot
-      size: 5G
-      mountpoint: /tmp
-      owner: root
-      group: root
-      mode: '1777'
-    - lv: lvhome
-      vg: vgroot
-      size: 30G
-      mountpoint: /home
-      root_reserve: 0
-    - lv: lvboot
-      vg: vgroot
-      size: 300M
-      mountpoint: /boot
-    - lv: lvoblivion
-      vg: vgroot
-      size: 5G
-      mountpoint: /media/oblivion
-      options: noatime
-      root_reserve: 0
+    lvs:
+      lvroot:
+        size: 40G
+        mountpoint: /
+      lvtmp:
+        size: 5G
+        mountpoint: /tmp
+        owner: root
+        group: root
+        mode: '1777'
+      lvhome:
+        size: 40G
+        mountpoint: /home
+        root_reserve: 0
+      lvboot:
+        size: 300M
+        mountpoint: /boot
+      lvoblivion:
+        size: 5G
+        mountpoint: /media/oblivion
+        options: noatime
+        reserved_blocks_percentage: 0%
+      lvhdfs:
+        size: 1G
+        mountpoint: /srv/hdfs
+        options: noatime,acl
+        reserved_blocks_percentage: 0%
+      lvwine:
+        size: 25G
+        mountpoint: /usr/local/wine
+        options: noatime

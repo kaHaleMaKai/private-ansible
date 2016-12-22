@@ -2,15 +2,35 @@
 # Set up partitions using logical volume management (LVM)
 
 - name: Install LVM package
-  apt: name=lvm2 state=present
+  apt: name=lvm2 state=installed
 
 - include: vgs.yml
-  become: yes
+
 - include: lvs.yml
-  become: yes
+  when: vg.value.lvs is defined and vg.value.lvs
+  with_dict:
+    "{{ lvm }}"
+  loop_control:
+    loop_var: vg
+
 - include: mounts.yml
-  become: yes
+  when: vg.value.lvs is defined and vg.value.lvs
+  with_dict:
+    "{{ lvm }}"
+  loop_control:
+    loop_var: vg
+
 - include: resize-fs.yml
-  become: yes
-- include: root-reserve.yml
-  become: yes
+  tags: qwex
+  when: vg.value.lvs is defined and vg.value.lvs
+  with_dict:
+    "{{ lvm }}"
+  loop_control:
+    loop_var: vg
+
+- include: tune2fs.yml
+  when: vg.value.lvs is defined and vg.value.lvs
+  with_dict:
+    "{{ lvm }}"
+  loop_control:
+    loop_var: vg
